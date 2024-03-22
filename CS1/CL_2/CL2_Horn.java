@@ -1,13 +1,14 @@
 import java.io.File;
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class CL2_Horn {
-    static String[] fileNames = {"maze1.txt","maze1.txt","maze1.txt"};
+    static File[] fileNames;
     static char[][] loadedMaze;
     static char[][][] mazes;
 
-    public static File[] readFiles(String FilePath){
+    public static File[] loadTxtFiles(String FilePath){
         //This line takes the file path and returns the parent directory
         String directoryName = new File(FilePath).getParent();
         //This creates a file out of the directory path
@@ -25,15 +26,39 @@ public class CL2_Horn {
             ii = 0;
             for (int i = 0;i<files.length;i++){
                 if (files[i].getName().endsWith(".txt")){
-                MazeFiles[ii] = new File(files[i].getName());ii++;}}
+                MazeFiles[ii] = files[i];ii++;}}
         };
         return(MazeFiles);
     }
-    public static void loadFile(){}
+    public static char[][][] readTxtFiles(File[] txtFiles){
+        char[][][] mazes = new char[txtFiles.length][][];
+        for(int i = 0; i < txtFiles.length; i++){
+            try {
+            Scanner mazeScanner = new Scanner(txtFiles[i]);
+            int ii = 0;
+            while(mazeScanner.hasNextLine()){mazeScanner.nextLine();ii++;}
+            char[][] mazeLines = new char[ii][];
+            mazeScanner = new Scanner(txtFiles[i]);
+            ii = 0;
+            while(mazeScanner.hasNextLine()){
+                String line = mazeScanner.nextLine();
+                char[] mazeChars = new char[line.length()];
+            }
+            } catch (Exception FileNotFoundException) {
+                System.out.println("file:" + txtFiles[i] + "was not found");
+            }
+        }
+        return(mazes);
+    }
+    public static void loadFile(){
+
+    }
     public static void printmaze(){}
     public static void readFile(){}
     
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(readFiles("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java")));
-    }
+    fileNames = loadTxtFiles("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+    mazes = readTxtFiles(fileNames);
+    System.out.println(Arrays.toString(fileNames));
+}
 }
