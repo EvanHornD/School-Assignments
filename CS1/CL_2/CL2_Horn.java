@@ -6,7 +6,11 @@ import java.util.Scanner;
 public class CL2_Horn {
     static File[] fileNames;
     static char[][] loadedMaze;
+    static char[][] loadedMazeTemplate;
     static char[][][] mazes;
+    static char[] specialChars;
+    static int[][] charCoords;
+    static int[] playerCoords;
 
     public static File[] loadTxtFiles(String FilePath){
         //This line takes the file path and returns the parent directory
@@ -43,22 +47,43 @@ public class CL2_Horn {
             while(mazeScanner.hasNextLine()){
                 String line = mazeScanner.nextLine();
                 char[] mazeChars = new char[line.length()];
+                for(int iii=0;iii<line.length();iii++){mazeChars[iii] = line.charAt(iii);}
+                mazeLines[ii] = mazeChars;
+                ii++;
             }
+            mazeScanner.close();
+            mazes[i] = mazeLines;
             } catch (Exception FileNotFoundException) {
                 System.out.println("file:" + txtFiles[i] + "was not found");
             }
+
         }
         return(mazes);
     }
-    public static void loadFile(){
-
+    public static void findSpecialChars(int mazeNum){
+        String memoryCell1 = "";
+        String memoryCell2 = "";
+        String memoryCell3 = "";
+        for(int i=0;i<mazes[mazeNum].length;i++){for(int ii=0;ii<mazes[mazeNum][i].length;ii++){
+            switch (mazes[mazeNum][i][ii]) {
+                case 'S': memoryCell1+='S';memoryCell2+=(i+" ");memoryCell3+=(ii+" "); break;
+                case 'F': memoryCell1+='F';memoryCell2+=(i+" ");memoryCell3+=(ii+" "); break;
+                default: break;
+            }
+        
+            }}
+    }
+    
+    public static void loadFile(int mazeNum){
+        loadedMaze = mazes[mazeNum];
+        loadedMazeTemplate = mazes[mazeNum];
     }
     public static void printmaze(){}
-    public static void readFile(){}
     
     public static void main(String[] args) {
     fileNames = loadTxtFiles("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
     mazes = readTxtFiles(fileNames);
     System.out.println(Arrays.toString(fileNames));
+    System.out.println(Arrays.deepToString(mazes));
 }
 }
