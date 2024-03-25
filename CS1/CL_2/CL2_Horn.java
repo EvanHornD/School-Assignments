@@ -80,6 +80,7 @@ public class CL2_Horn {
         mazeDimenstions[0] = loadedMaze.length;
         mazeDimenstions[1] = loadedMaze[0].length;
         loadedMazeTemplate = mazes[mazeNum];
+        
     }
 
     public static void findSpecialChars(int mazeNum){
@@ -153,19 +154,19 @@ public class CL2_Horn {
     public static char[][] updateMaze(){
         char[][] updatedMaze = new char[loadedMazeTemplate.length][loadedMazeTemplate[0].length];
         for(int i=0;i<loadedMazeTemplate.length;i++){
-            for(int ii=0;ii<loadedMazeTemplate.length;ii++){
+            for(int ii=0;ii<loadedMazeTemplate[0].length;ii++){
                 updatedMaze[i][ii]=loadedMazeTemplate[i][ii];}}
         updatedMaze[playerCoords[0]][playerCoords[1]]='P';
         return(updatedMaze);
     }
     
-    public static void clearconsole(){
-        try { new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();}
-        catch (Exception e) {}
-    }
+    // public static void clearconsole(){
+    //     try { new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();}
+    //     catch (Exception e) {}
+    // }
 
     public static void printMenu(int cursor){
-        clearconsole();
+        //clearconsole();
         for(int i=0;i<fileNames.length;i++){
             if(i==cursor){System.out.println("-->"+fileNames[i].getName().replace(".txt",""));}
             else{System.out.println(fileNames[i].getName().replace(".txt",""));}}
@@ -174,7 +175,7 @@ public class CL2_Horn {
     }
 
     public static void printmaze(){
-        clearconsole();
+        //clearconsole();
         String mazeLine = "";
         for(int i=0;i<loadedMaze.length;i++){
             mazeLine = "";
