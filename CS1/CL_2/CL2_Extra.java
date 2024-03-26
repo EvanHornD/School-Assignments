@@ -226,20 +226,42 @@ public class CL2_Extra {
     }
 
     public static void main(String[] args) {
-        fileNames = loadTxtFiles("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Extra.java");
-        mazes = readTxtFiles(fileNames);
+        String lapTop = "C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
+        String deskTop = "C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
+        System.out.println("do you want to put in the directory manually or use one of the 2 built in directories\n1. manual\n2. automatic");
+        switch(userInput.nextLine()){
+            case"1":gameState="directoryInput";break;
+            default:
+                gameState="mazeSelect";
+                System.out.println("which directory do you want to use:\n1. laptop\n2. desktop");
+                switch(userInput.nextLine()){
+                    case"1":fileNames = loadTxtFiles(lapTop);break;
+                    default:fileNames = loadTxtFiles(deskTop);break;
+                }
+            mazes = readTxtFiles(fileNames);
+            break;
+        }
+        File[] invalidDirectory = {null};
         int menuCursor = 0;
         while(gameState!="Exit"){
             switch (gameState) {
+                case "directoryInput":
+                    while(gameState=="directoryInput"){
+                        System.out.println("Insert the path to the comprehensive lab 2 file EX:\nC:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+                        gameState="mazeSelect";
+                        fileNames = loadTxtFiles(userInput.nextLine());
+                        mazes = readTxtFiles(fileNames);
+                        if(fileNames==invalidDirectory){System.out.println("invalid directory");gameState="maze";}
+                    }break;
                 case "mazeSelect":
                     printMenu(menuCursor);
                     while(gameState=="mazeSelect"){
                         int input = getInput();
                         menuCursor = moveCursor(menuCursor,input);
-                        printMenu(menuCursor);
                         if(input == 4){
-                            if(menuCursor==fileNames.length){gameState="Exit";clearconsole();}
+                            if(menuCursor==fileNames.length){gameState="Exit";}
                             else{gameState="runningMaze";}}
+                        if(gameState!="Exit"){printMenu(menuCursor);}
                     }break;
                 case "runningMaze":
                     boolean mazeComplete = false;
