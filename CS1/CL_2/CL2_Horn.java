@@ -146,7 +146,8 @@ public class CL2_Horn {
         int[] newPos = new int[2];
         if(input>=0&&input<4){
             for(int i=0;i<playerCoords.length;i++){
-                // the player movement array stores the changes that a specific input would have on the player {{-1,0},{0,-1},{1,0},{0,1}}
+                // the player movement array stores the changes on each axis that a specific input would have on the player {{-1,0},{0,-1},{1,0},{0,1}}
+                //this applies the changes from the index that the input points to in the player movement array
                 newPos[i] = playerCoords[i]+playerMovement[input][i];}}
         if(checkPos(newPos)){
             playerCoords[0]=newPos[0];
@@ -199,7 +200,7 @@ public class CL2_Horn {
     }
 
     public static void main(String[] args) {
-        fileNames = loadTxtFiles("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+        fileNames = loadTxtFiles("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
         mazes = createSquareMazes(fileNames);
         int menuCursor = 0;
         while(gameState!="Exit"){

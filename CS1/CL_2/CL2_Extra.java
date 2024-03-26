@@ -7,7 +7,7 @@ public class CL2_Extra {
     static String gameState = "mazeSelect";
     static File[] fileNames;
     static char[][] loadedMaze;
-    static char[][] loadedMazeBitMap;
+    static boolean[][] loadedMazeBitMap;
     static int[] mazeDimenstions = new int[2];
     static char[][] loadedMazeTemplate;
     static char[][][] mazes;
@@ -52,11 +52,12 @@ public class CL2_Extra {
         char[][][] mazes = new char[txtFiles.length][][];
         for(int i = 0; i < txtFiles.length; i++){
             try {
-            Scanner mazeScanner = new Scanner(txtFiles[i]);
+            Scanner mazeLengthScanner = new Scanner(txtFiles[i]);
             int ii = 0;
-            while(mazeScanner.hasNextLine()){mazeScanner.nextLine();ii++;}
+            while(mazeLengthScanner.hasNextLine()){mazeLengthScanner.nextLine();ii++;}
             char[][] mazeLines = new char[ii][];
-            mazeScanner = new Scanner(txtFiles[i]);
+            mazeLengthScanner.close();
+            Scanner mazeScanner = new Scanner(txtFiles[i]);
             ii = 0;
             while(mazeScanner.hasNextLine()){
                 String line = mazeScanner.nextLine();
@@ -142,7 +143,13 @@ public class CL2_Extra {
                 newPos[i] = playerCoords[i]+playerMovement[input][i];}}
         if(checkPos(newPos)){
             playerCoords[0]=newPos[0];
-            playerCoords[1]=newPos[1];}
+            playerCoords[1]=newPos[1];
+            for(int i=0;i<playerMovement.length;i++){
+                int[] playerVision = {newPos[0]+playerMovement[i][0],newPos[1]+playerMovement[i][1]};
+                if(checkPos(playerVision)){
+                revealTile(playerVision);}}
+            revealTile(playerCoords);
+        }
     }
 
     public static int moveCursor(int cursor,int input){
@@ -155,9 +162,29 @@ public class CL2_Extra {
     public static boolean[][] createBitMap(){
         boolean[][] Bitmap = new boolean[loadedMaze.length][loadedMaze[0].length];
         for(int i=0;i<Bitmap.length;i++){
-            for(int ii=0;ii<Bitmap.length;ii++){Bitmap[i][ii]=false;}}
-        for(int i=0;i<Bitmap.length;i++){
-            for(int ii=0;ii<Bitmap.length;ii++){}}
+            for(int ii=0;ii<Bitmap[0].length;ii++){Bitmap[i][ii]=false;}}
+        return(Bitmap);
+    }
+
+    public static void revealMaze(){
+        for(int i=0;i<loadedMazeBitMap.length;i++){
+            for(int ii=0;ii<loadedMazeBitMap[0].length;ii++){
+                int[] tile = {i,ii};
+                switch(loadedMaze[i][ii]){
+                    case '.':revealTile(tile);break;
+                    case 'S':revealTile(tile);break;
+                    case 'F':revealTile(tile);break;
+                    default:break;
+                }
+        }} 
+    }
+
+    public static void revealTile(int[] tile){
+        loadedMazeBitMap[tile[0]][tile[1]] = true;
+        for(int i=0;i<playerMovement.length;i++){
+            if(((tile[0]+playerMovement[i][0]<mazeDimenstions[0])&&(tile[0]+playerMovement[i][0]>=0)&&(tile[1]+playerMovement[i][1]<mazeDimenstions[1])&&(tile[1]+playerMovement[i][1]>=0))){
+            loadedMazeBitMap[tile[0]+playerMovement[i][0]][tile[1]+playerMovement[i][1]]=true;
+        }}
     }
 
     public static char[][] updateMaze(){
@@ -186,17 +213,20 @@ public class CL2_Extra {
         else{System.out.println("Exit");}
     }
 
-    public static void printmaze(){
+    public static void printmaze(boolean mazeComplete){
         clearconsole();
         String mazeLine = "";
         for(int i=0;i<loadedMaze.length;i++){
             mazeLine = "";
-            for(int ii=0;ii<loadedMaze[i].length;ii++){mazeLine+=loadedMaze[i][ii];}
-            System.out.println(mazeLine);}
+            for(int ii=0;ii<loadedMaze[i].length;ii++){
+                if(loadedMazeBitMap[i][ii]){mazeLine+=loadedMaze[i][ii];}
+                else{mazeLine+=' ';}}
+            if(mazeLine.trim()!=""){System.out.println(mazeLine);}}
+        if(mazeComplete){System.out.println("Congrats you completed the maze\nPress  -E-  to exit the maze");}
     }
 
     public static void main(String[] args) {
-        fileNames = loadTxtFiles("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+        fileNames = loadTxtFiles("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Extra.java");
         mazes = readTxtFiles(fileNames);
         int menuCursor = 0;
         while(gameState!="Exit"){
@@ -208,21 +238,24 @@ public class CL2_Extra {
                         menuCursor = moveCursor(menuCursor,input);
                         printMenu(menuCursor);
                         if(input == 4){
-                            if(menuCursor==fileNames.length){gameState="Exit";}
+                            if(menuCursor==fileNames.length){gameState="Exit";clearconsole();}
                             else{gameState="runningMaze";}}
                     }break;
                 case "runningMaze":
+                    boolean mazeComplete = false;
                     loadFile(menuCursor);
                     setPlayerCoords();
                     loadedMaze=updateMaze();
-                    printmaze();
+                    loadedMazeBitMap=createBitMap();
+                    revealTile(playerCoords);
+                    printmaze(mazeComplete);
                     while (gameState=="runningMaze") {
                         int input = getInput();
                         if(input == 4){gameState="mazeSelect";break;}
                         movePlayer(input);
                         loadedMaze=updateMaze();
-                        printmaze();
-                        if(Arrays.equals(playerCoords,getCoords('F'))){gameState="mazeSelect";break;}
+                        if(Arrays.equals(playerCoords,getCoords('F'))){mazeComplete=true;revealMaze();}
+                        printmaze(mazeComplete);
                         // System.out.println(Arrays.toString(playerCoords));
                         // System.out.println(Arrays.toString(getCoords('F')));
                     } break;
