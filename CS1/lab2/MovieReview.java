@@ -1,18 +1,15 @@
-import java.util.Scanner;
-
 class MovieReview {
 	public static void main(String[] args) {
 		//----------
 		// Example
 		//----------
-		String myName = "Evan H";  // TODO: Change to your own name.
+		String myName = "Evan H";  
 		System.out.println("Hi, my name is " + myName + ".");
 
 		//----------
 		// Q1
 		//----------
 
-		// TODO: intialize variables to fill in the two FIXMEs in the following print.
 		String movieName = "Mega Mind";
 		String directorName = "Tom McGrath";
 		System.out.println("My favorite movie is " + movieName + " directed by " + directorName + ".");
@@ -21,7 +18,7 @@ class MovieReview {
 		// Q2
 		//----------
 
-		// TODO: initialize variables to fill in the FIXMEs.
+		
 		// You may not declare/initialize any strings for this question.
 		// int, char, double, long
 		// Each variable type initialized in this question can only be used once.
@@ -37,8 +34,6 @@ class MovieReview {
 		//----------
 		// Q3
 		//----------
-
-		// TODO: update the previous ticket count variable, incrementing it by 1, and fill in the FIXME.
 
 		tickets = tickets + 1;
 

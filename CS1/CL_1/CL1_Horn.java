@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class CL1_Horn {
+    @SuppressWarnings("resource")
     public static void main(String[] args) throws FileNotFoundException {
         File myFile = new File("food.txt");
         Scanner food = new Scanner(myFile);
@@ -269,7 +270,7 @@ public class CL1_Horn {
             }
         }
         System.out.println("Ending program");
-        food.close();
+        food.close();food.close();
         input.close();
     }
 }

@@ -17,7 +17,6 @@ class MovieReviewTwo {
 		//----------
 		// Q1
 		//----------
-		// TODO: Adding onto last lab, we will initialize variables to fill in the FIXME's
 		// This time you will be using user input from the scanner to do so!
 		// Start by adding in the prompts for your user, as seen in the example above
 		Scanner userInput = new Scanner(System.in);
@@ -46,7 +45,6 @@ class MovieReviewTwo {
 		System.out.println(" ");
 		System.out.println("give the movie a letter grade");
 		String movieRating = userInput.nextLine();
-		// Below FIXME should be S, A, B, C, D, or F.
 		System.out.println("Overall, this movie should be considered " + movieRating + " tier.");
 		System.out.println(" ");
 
@@ -54,7 +52,6 @@ class MovieReviewTwo {
 		// Q3
 		//----------
 
-		// TODO: checking if the price is over $20.00
 		// Below should be a single variable including dollars and some cents.
 	
 		System.out.println("Enter the price of the movie: ");
@@ -62,7 +59,7 @@ class MovieReviewTwo {
 		// Initialize a boolean variable to check if the price is above $20.00
 		// Using the boolean, answer the question below (expensive is above $20.00)
 		boolean isExpensive = (ticketPrice > 20.00);
-
+		userInput.close();
 		System.out.println("Is the movie expensive? " + isExpensive);
 
 	}

@@ -129,5 +129,6 @@ public class HW3 {
             }
             startYear++;
         }
+        scanner.close();
     }
 }
