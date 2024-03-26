@@ -230,9 +230,11 @@ public class CL2_Horn {
                     case"1":fileNames = loadTxtFiles(lapTop);break;
                     default:fileNames = loadTxtFiles(deskTop);break;
                 }
-                mazes = createSquareMazes(fileNames);
+            mazes = createSquareMazes(fileNames);
+            if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
             break;
         }
+        
         File[] invalidDirectory = {null};
         int menuCursor = 0;
         while(gameState!="Exit"){
@@ -243,7 +245,7 @@ public class CL2_Horn {
                         gameState="mazeSelect";
                         fileNames = loadTxtFiles(userInput.nextLine());
                         mazes = createSquareMazes(fileNames);
-                        if(fileNames==invalidDirectory){System.out.println("invalid directory");gameState="maze";}
+                        if(fileNames==invalidDirectory||fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
                     }break;
                 case "mazeSelect":
                     printMenu(menuCursor);

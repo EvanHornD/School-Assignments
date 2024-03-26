@@ -239,6 +239,7 @@ public class CL2_Extra {
                     default:fileNames = loadTxtFiles(deskTop);break;
                 }
             mazes = readTxtFiles(fileNames);
+            if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
             break;
         }
         
@@ -252,7 +253,7 @@ public class CL2_Extra {
                         gameState="mazeSelect";
                         fileNames = loadTxtFiles(userInput.nextLine());
                         mazes = readTxtFiles(fileNames);
-                        if(fileNames==invalidDirectory){System.out.println("invalid directory");gameState="maze";}
+                        if(fileNames==invalidDirectory||fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
                     }break;
                 case "mazeSelect":
                     printMenu(menuCursor);
@@ -279,8 +280,6 @@ public class CL2_Extra {
                         loadedMaze=updateMaze();
                         if(Arrays.equals(playerCoords,getCoords('F'))){mazeComplete=true;revealMaze();}
                         printmaze(mazeComplete);
-                        // System.out.println(Arrays.toString(playerCoords));
-                        // System.out.println(Arrays.toString(getCoords('F')));
                     } break;
             }}
     }
