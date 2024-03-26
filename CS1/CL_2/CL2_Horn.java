@@ -206,13 +206,29 @@ public class CL2_Horn {
     }
 
     public static void main(String[] args) {
+        String lapTop = "C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
+        String deskTop = "C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
+        System.out.println("do you want to put in the directory manually or use one of the 2 built in directories\n1. manual\n2. automatic");
+        switch(userInput.nextLine()){
+            case"1":gameState="directoryInput";break;
+            default:
+                gameState="mazeSelect";
+                System.out.println("which directory do you want to use:\n1. laptop\n2. desktop");
+                switch(userInput.nextLine()){
+                    case"1":fileNames = loadTxtFiles(lapTop);
+                    mazes = createSquareMazes(fileNames);break;
+                    default:fileNames = loadTxtFiles(deskTop);
+                    mazes = createSquareMazes(fileNames);break;
+                }
+            break;
+        }
         File[] invalidDirectory = {null};
         int menuCursor = 0;
         while(gameState!="Exit"){
             switch (gameState) {
                 case "directoryInput":
                     while(gameState=="directoryInput"){
-                        System.out.println("Insert the path to the comprehensive lab file EX:\nC:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+                        System.out.println("Insert the path to the comprehensive lab 2 file EX:\nC:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
                         gameState="mazeSelect";
                         fileNames = loadTxtFiles(userInput.nextLine());
                         mazes = createSquareMazes(fileNames);
