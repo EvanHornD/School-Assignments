@@ -241,6 +241,7 @@ public class CL2_Extra {
             mazes = readTxtFiles(fileNames);
             break;
         }
+        
         File[] invalidDirectory = {null};
         int menuCursor = 0;
         while(gameState!="Exit"){
