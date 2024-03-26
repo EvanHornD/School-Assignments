@@ -67,5 +67,6 @@ class MSR {
 		else { 
 			println("Thank you for your feedback! Here is the code for a 50% discount on your next movie ticket: KFH34J5J ");
 		}
+		userInput.close();
 	}
 }
