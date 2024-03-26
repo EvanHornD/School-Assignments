@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 
 public class CL2_Horn {
-    static String gameState = "mazeSelect";
+    static String gameState = "directoryInput";
     static File[] fileNames;
     static char[][] loadedMaze;
     static int[] mazeDimenstions = new int[2];
@@ -16,9 +16,10 @@ public class CL2_Horn {
     static int[][] playerMovement = {{-1,0},{0,-1},{1,0},{0,1}};
     static Scanner userInput = new Scanner(System.in);
 
-    // The purpose of this method is to get all of the maze files and add them to an array without the user having to type the name of the file
+    //The purpose of this method is to get all of the maze files and add them to an array without the user having to type the name of the file
     public static File[] loadTxtFiles(String FilePath){
         //This line takes the file path and returns the parent directory
+        try{
         String directoryName = new File(FilePath).getParent();
 
         //This creates a file out of the directory path
@@ -44,7 +45,11 @@ public class CL2_Horn {
                 if (files[i].getName().endsWith(".txt")){
                 MazeFiles[ii] = files[i];ii++;}}
         };
-        return(MazeFiles);
+        return(MazeFiles);}
+        catch(Exception e){
+            File[] invalidDirectory = {null};
+            return(invalidDirectory);
+        }
     }
 
     //reads all of the text files that were created in the loadtext files method and stores them into 1 large 3 dimensional array of mazes
@@ -52,11 +57,12 @@ public class CL2_Horn {
         char[][][] mazes = new char[txtFiles.length][][];
         for(int i = 0; i < txtFiles.length; i++){
             try {
-            Scanner mazeScanner = new Scanner(txtFiles[i]);
+            Scanner mazeLengthScanner = new Scanner(txtFiles[i]);
             int ii = 0;
-            while(mazeScanner.hasNextLine()){mazeScanner.nextLine();ii++;}
+            while(mazeLengthScanner.hasNextLine()){mazeLengthScanner.nextLine();ii++;}
             char[][] mazeLines = new char[ii][];
-            mazeScanner = new Scanner(txtFiles[i]);
+            mazeLengthScanner.close();
+            Scanner mazeScanner = new Scanner(txtFiles[i]);
             ii = 0;
             while(mazeScanner.hasNextLine()){
                 String line = mazeScanner.nextLine();
@@ -146,7 +152,7 @@ public class CL2_Horn {
         int[] newPos = new int[2];
         if(input>=0&&input<4){
             for(int i=0;i<playerCoords.length;i++){
-                // the player movement array stores the changes on each axis that a specific input would have on the player {{-1,0},{0,-1},{1,0},{0,1}}
+                //the player movement array stores the changes on each axis that a specific input would have on the player {{-1,0},{0,-1},{1,0},{0,1}}
                 //this applies the changes from the index that the input points to in the player movement array
                 newPos[i] = playerCoords[i]+playerMovement[input][i];}}
         if(checkPos(newPos)){
@@ -172,7 +178,7 @@ public class CL2_Horn {
         return(updatedMaze);
     }
     
-    // this method would have cleared the console right before printing out the maze but I would probably be deducted points for having it because I dont know how it works
+    // this method would have cleared the console right before printing out the maze but I would probably be deducted points for having it because I dont know how it works very well
     // public static void clearconsole(){
     //     try { new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();}
     //     catch (Exception e) {}
@@ -184,7 +190,7 @@ public class CL2_Horn {
         for(int i=0;i<fileNames.length;i++){
             if(i==cursor){System.out.println("-->"+fileNames[i].getName().replace(".txt",""));}
             else{System.out.println(fileNames[i].getName().replace(".txt",""));}}
-        if(cursor==5){System.out.println("-->Exit");}
+        if(cursor==fileNames.length){System.out.println("-->Exit");}
         else{System.out.println("Exit");}
         System.out.println("Use W and S to traverse the files\nPress E to choose a maze");
     }
@@ -200,20 +206,27 @@ public class CL2_Horn {
     }
 
     public static void main(String[] args) {
-        fileNames = loadTxtFiles("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
-        mazes = createSquareMazes(fileNames);
+        File[] invalidDirectory = {null};
         int menuCursor = 0;
         while(gameState!="Exit"){
             switch (gameState) {
+                case "directoryInput":
+                    while(gameState=="directoryInput"){
+                        System.out.println("Insert the path to the comprehensive lab file EX:\nC:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+                        gameState="mazeSelect";
+                        fileNames = loadTxtFiles(userInput.nextLine());
+                        mazes = createSquareMazes(fileNames);
+                        if(fileNames==invalidDirectory){System.out.println("invalid directory");gameState="maze";}
+                    }break;
                 case "mazeSelect":
                     printMenu(menuCursor);
                     while(gameState=="mazeSelect"){
                         int input = getInput();
                         menuCursor = moveCursor(menuCursor,input);
-                        printMenu(menuCursor);
                         if(input == 4){
                             if(menuCursor==fileNames.length){gameState="Exit";}
                             else{gameState="runningMaze";}}
+                        if(gameState!="Exit"){printMenu(menuCursor);}
                     }break;
                 case "runningMaze":
                     loadSquareMaze(menuCursor);
@@ -228,6 +241,7 @@ public class CL2_Horn {
                         displayMaze();
                         if(Arrays.equals(playerCoords,getCoords('F'))){gameState="mazeSelect";System.out.println("Congrats you beat: " + fileNames[menuCursor].getName().replace(".txt",""));break;}
                     } break;
+                default:gameState="Exit";break;
             }}
     }
 }
