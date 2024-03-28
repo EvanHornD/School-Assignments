@@ -140,7 +140,7 @@ public class CL2_Extra {
         int[] newPos = new int[2];
         if(input>=0&&input<4){
             for(int i=0;i<playerCoords.length;i++){
-                newPos[i] = playerCoords[i]+playerMovement[input][i];}}
+                newPos[i] = playerCoords[i]+playerMovement[input][i];}
         if(checkPos(newPos)){
             playerCoords[0]=newPos[0];
             playerCoords[1]=newPos[1];
@@ -149,7 +149,7 @@ public class CL2_Extra {
                 if(checkPos(playerVision)){
                 revealTile(playerVision);}}
             revealTile(playerCoords);
-        }
+        }}
     }
 
     public static int moveCursor(int cursor,int input){
@@ -228,32 +228,37 @@ public class CL2_Extra {
     public static void main(String[] args) {
         String lapTop = "C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
         String deskTop = "C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
-        System.out.println("do you want to put in the directory manually or use one of the 2 built in directories\n1. manual\n2. automatic");
-        switch(userInput.nextLine()){
-            case"1":gameState="directoryInput";break;
-            default:
-                gameState="mazeSelect";
-                System.out.println("which directory do you want to use:\n1. laptop\n2. desktop");
-                switch(userInput.nextLine()){
-                    case"1":fileNames = loadTxtFiles(lapTop);break;
-                    default:fileNames = loadTxtFiles(deskTop);break;
-                }
-            mazes = readTxtFiles(fileNames);
-            if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
-            break;
-        }
-        
-        File[] invalidDirectory = {null};
+        gameState = "directoryInput";
         int menuCursor = 0;
+        clearconsole();
         while(gameState!="Exit"){
             switch (gameState) {
                 case "directoryInput":
                     while(gameState=="directoryInput"){
-                        System.out.println("Insert the path to the comprehensive lab 2 file EX:\nC:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
-                        gameState="mazeSelect";
-                        fileNames = loadTxtFiles(userInput.nextLine());
-                        mazes = readTxtFiles(fileNames);
-                        if(fileNames==invalidDirectory||fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
+                        System.out.println("do you want to put in the directory manually or use one of the 2 built in directories\n1. manual\n2. automatic");
+                        switch(userInput.nextLine()){
+                            case"1":
+                            clearconsole();
+                            System.out.println("Insert the path to the comprehensive lab 2 file EX:\nC:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+                            gameState="mazeSelect";
+                            fileNames = loadTxtFiles(userInput.nextLine());
+                            mazes = readTxtFiles(fileNames);
+                            clearconsole();
+                            if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
+                            break;
+                            default:
+                                clearconsole();
+                                gameState="mazeSelect";
+                                System.out.println("which directory do you want to use:\n1. laptop\n2. desktop");
+                                switch(userInput.nextLine()){
+                                    case"1":fileNames = loadTxtFiles(lapTop);break;
+                                    default:fileNames = loadTxtFiles(deskTop);break;
+                                }
+                            mazes = readTxtFiles(fileNames);
+                            clearconsole();
+                            if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
+                            break;
+                        }
                     }break;
                 case "mazeSelect":
                     printMenu(menuCursor);
