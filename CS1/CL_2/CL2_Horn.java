@@ -12,6 +12,7 @@ the student.
 */
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -19,6 +20,7 @@ import java.util.Scanner;
 public class CL2_Horn {
     static String gameState = "directoryInput";
     static File[] fileNames;
+    static File scoresFile;
     static char[][] loadedMaze;
     static int[] mazeDimenstions = new int[2];
     static char[][] loadedMazeTemplate;
@@ -52,16 +54,19 @@ public class CL2_Horn {
             for (int i = 0;i<files.length;i++){if (files[i].getName().endsWith(".txt")){ii++;}}
 
             //This creates an array with a length that matches the number of txt files
-            MazeFiles = new File[ii];
+            MazeFiles = new File[ii-1];
 
             //This loop adds the txt files to the maze files array
             ii = 0;
             for (int i = 0;i<files.length;i++){
-                if (files[i].getName().endsWith(".txt")){
-                MazeFiles[ii] = files[i];ii++;}}
+                if((files[i].getName().equals("highScores.txt"))){
+                    scoresFile=files[i];}
+                else if (files[i].getName().endsWith(".txt")){
+                    MazeFiles[ii] = files[i];ii++;}}
             };
             return(MazeFiles);}
         catch(Exception e){
+            System.out.println(e);
             File[] invalidDirectory = {};
             return(invalidDirectory);
         }
@@ -73,7 +78,9 @@ public class CL2_Horn {
         String fileString = "";
         while(fileScanner.hasNextLine()){
             fileString +=(fileScanner.nextLine()+"\n");}
-        for(int i=0;i<numLines;i++){fileString +=("0"+"\n");}
+        for(int i=0;i<numLines;i++){
+            if(i==numLines-1){fileString +="0";}
+            else{fileString +=("0"+"\n");}}
         FileWriter fileUpdater = new FileWriter(file);
         fileUpdater.write(fileString);
         fileUpdater.close();
@@ -81,77 +88,77 @@ public class CL2_Horn {
         }catch(Exception e){System.out.println(e);}
     }
 
-    //reads all of the text files that were created in the loadtext files method and stores them into 1 large 3 dimensional array of mazes
-    public static char[][][] createSquareMazes(File[] txtFiles){
-        bestMoveCounts = new String[txtFiles.length-1];
-        char[][][] mazes = new char[txtFiles.length-1][][];
-        for(int i = 0; i < txtFiles.length; i++){
-            try {
-            if(txtFiles[i].getName().replace(".txt","")!="highScores"){
-                //gets the number of lines in a text file
-                Scanner mazeLengthScanner = new Scanner(txtFiles[i]);
-                int ii = 0;
-                while(mazeLengthScanner.hasNextLine()){mazeLengthScanner.nextLine();ii++;}
-                char[][] mazeLines = new char[ii-1][];
-                mazeLengthScanner.close();
-
-                //adds those lines to the 3 dimensional array character by character
-                Scanner mazeScanner = new Scanner(txtFiles[i]);
-                ii = 0;
-                while(mazeScanner.hasNextLine()){
-                    String line = mazeScanner.nextLine();
-                    char[] mazeChars = new char[line.length()];
-                    for(int iii=0;iii<line.length();iii++){mazeChars[iii] = line.charAt(iii);}
-                    mazeLines[ii] = mazeChars;}
-                mazeScanner.close();
-                mazes[i] = mazeLines;
-            }else{
-                Scanner numScoresLen = new Scanner(txtFiles[i]);
-                int ii = 0;
-                while(numScoresLen.hasNextLine()){numScoresLen.nextLine();ii++;}
-                if(ii-1<txtFiles.length-1){addLinesToFile(txtFiles[i], (txtFiles.length-1)-(ii-1));}
-                numScoresLen.close();
-                Scanner numHighScores = new Scanner(txtFiles[i]);
-                String[] highScores = new String[txtFiles.length-1];
-                ii = 0;
-                while(numHighScores.hasNextLine()){highScores[ii]=(numHighScores.nextLine());ii++;}
-                numHighScores.close();
-                bestMoveCounts = highScores;
-            }
-            }catch (Exception FileNotFoundException) {
-                System.out.println(FileNotFoundException);
-                System.out.println("file:" + txtFiles[i] + "was not found");
-            }
-
-        }
-        
-        return(mazes);
+    public static void loadHighScores(){
+        try{
+            //gets the list of high scores from the highScores txt file
+            System.out.println(scoresFile);
+            Scanner numScoresLen = new Scanner(scoresFile);
+            int i = 0;
+            while(numScoresLen.hasNextLine()){numScoresLen.nextLine();i++;}
+            if(i<fileNames.length){addLinesToFile(scoresFile, (fileNames.length)-i);}
+            numScoresLen.close();
+            Scanner numHighScores = new Scanner(scoresFile);
+            String[] highScores = new String[fileNames.length];
+            i = 0;
+            while(numHighScores.hasNextLine()){highScores[i]=(numHighScores.nextLine());i++;}
+            numHighScores.close();
+            bestMoveCounts = highScores;
+        }catch(FileNotFoundException e){System.out.println(e);}
     }
 
     public static void addHighScore(int mazeIndex, int Score){
-        if(Integer.parseInt(bestMoveCounts[mazeIndex])>Score){
+        if(Integer.parseInt(bestMoveCounts[mazeIndex])<Score){
             bestMoveCounts[mazeIndex] =""+Score;
         }
     }
 
     public static void SaveHighScores(){
         try{
-            File highScoreFile = fileNames[0];
-            for(int i=0;i<fileNames.length;i++){
-                if(fileNames[i].getName().replace(".txt","")=="highScores"){highScoreFile=fileNames[i];}}
-            Scanner highScoreScanner = new Scanner(highScoreFile);
+            Scanner highScoreScanner = new Scanner(scoresFile);
             String highScores = "";
-            while(highScoreScanner.hasNextLine()){
-                   highScores+=highScoreScanner+"\n";
-            }
-            FileWriter mazeUpdater = new FileWriter(highScoreFile);
-            mazeUpdater.write(highScores);
-            mazeUpdater.close();
+
+            for(int i=0;i<bestMoveCounts.length;i++){
+                if(i==bestMoveCounts.length-1){highScores+=""+bestMoveCounts[i];}
+                else{highScores+=bestMoveCounts[i]+"\n";}}
+            FileWriter scoresUpdater = new FileWriter(scoresFile);
+            scoresUpdater.write(highScores);
+            scoresUpdater.close();
             highScoreScanner.close();
-            System.out.println(highScores);
         }catch(Exception e){
             System.out.println(e);
         }
+    }
+
+    //reads all of the text files that were created in the loadtext files method and stores them into 1 large 3 dimensional array of mazes
+    public static char[][][] createSquareMazes(File[] txtFiles){
+        char[][][] mazes = new char[txtFiles.length][][];
+        for(int i = 0; i < txtFiles.length; i++){
+            try {
+                //gets the number of lines in a text file
+            Scanner mazeLengthScanner = new Scanner(txtFiles[i]);
+            int ii = 0;
+            while(mazeLengthScanner.hasNextLine()){mazeLengthScanner.nextLine();ii++;}
+            char[][] mazeLines = new char[ii][];
+            mazeLengthScanner.close();
+            Scanner mazeScanner = new Scanner(txtFiles[i]);
+
+            //adds those lines to the 3 dimensional array character by character
+            ii = 0;
+            while(mazeScanner.hasNextLine()){
+                String line = mazeScanner.nextLine();
+                char[] mazeChars = new char[line.length()];
+                for(int iii=0;iii<line.length();iii++){mazeChars[iii] = line.charAt(iii);}
+                mazeLines[ii] = mazeChars;
+                ii++;
+            }
+            mazeScanner.close();
+            mazes[i] = mazeLines;
+            } catch (FileNotFoundException e) {
+                System.out.println(e);
+                System.out.println("file:" + txtFiles[i] + "was not found");
+            }
+        }
+        return(mazes);
     }
 
     //loades a maze into 2 separate arrays, one that will be updated and displayed and another that will be used to store the original maze without any changes made to it
@@ -167,11 +174,12 @@ public class CL2_Horn {
     //loops through all of the characters in the maze template and stores the char and its coordinates into separate arrays for later use
     public static void findStartAndEndPostion(int mazeNum){
         int numOfChars = 0;
-        for(int i=0;i<mazes[mazeNum].length;i++){for(int ii=0;ii<mazes[mazeNum][i].length;ii++){
-            switch (mazes[mazeNum][i][ii]) {
-                case 'S': numOfChars++;break;
-                case 'F': numOfChars++; break;
-                default: break;
+        for(int i=0;i<mazes[mazeNum].length;i++){
+            for(int ii=0;ii<mazes[mazeNum][i].length;ii++){
+                switch (mazes[mazeNum][i][ii]) {
+                    case 'S': numOfChars++;break;
+                    case 'F': numOfChars++; break;
+                    default: break;
             }}}
         specialChars = new char[numOfChars];
         specialCharCoords = new int[numOfChars][2];
@@ -224,6 +232,7 @@ public class CL2_Horn {
     public static void movePlayer(int input){
         int[] newPos = new int[2];
         if(input>=0&&input<4){
+            moveCount++;
             for(int i=0;i<playerCoords.length;i++){
                 //the player movement array stores the changes on each axis that a specific input would have on the player {{-1,0},{0,-1},{1,0},{0,1}}
                 //this applies the changes from the index that the input points to in the player movement array
@@ -265,7 +274,7 @@ public class CL2_Horn {
             else{System.out.println(fileNames[i].getName().replace(".txt",""));}}
         if(cursor==fileNames.length){System.out.println("-->Exit");}
         else{System.out.println("Exit");}
-        System.out.println("Use W and S to traverse the files\nPress E to choose a maze\nyour current move count is: "+ moveCount);
+        System.out.println("Use W and S to traverse the files\nPress E to choose a maze");
     }
 
     //prints the loaded maze
@@ -276,6 +285,7 @@ public class CL2_Horn {
             mazeLine = "";
             for(int ii=0;ii<loadedMaze[i].length;ii++){mazeLine+=loadedMaze[i][ii];}
             System.out.println(mazeLine);}
+        System.out.println("your current move count is: "+ moveCount);
     }
 
     public static void main(String[] args) {
@@ -305,6 +315,7 @@ public class CL2_Horn {
                                 }
                             mazes = createSquareMazes(fileNames);
                             if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
+                            loadHighScores();
                             break;
                         }
                     }break;
@@ -326,11 +337,15 @@ public class CL2_Horn {
                     displayMaze();
                     while (gameState=="runningMaze") {
                         int input = getInput();
-                        if(input == 4){gameState="mazeSelect";break;}
+                        if(input == 4){gameState="mazeSelect"; break;}
                         movePlayer(input);
                         loadedMaze=updateMaze();
                         displayMaze();
-                        if(Arrays.equals(playerCoords,getCoords('F'))){gameState="mazeSelect";System.out.println("Congrats you beat: " + fileNames[menuCursor].getName().replace(".txt",""));break;}
+                        if(Arrays.equals(playerCoords,getCoords('F'))){
+                            System.out.println("Congrats you beat: " + fileNames[menuCursor].getName().replace(".txt",""));
+                            addHighScore(menuCursor, moveCount);
+                            SaveHighScores();
+                        }
                     } break;
                 default:gameState="Exit";break;
             }}

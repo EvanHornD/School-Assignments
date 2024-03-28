@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class CL2_Extra {
     static String gameState = "mazeSelect";
     static File[] fileNames;
+    static File scoresFile;
     static char[][] loadedMaze;
     static boolean[][] loadedMazeBitMap;
     static int[] mazeDimenstions = new int[2];
@@ -37,13 +38,15 @@ public class CL2_Extra {
             for (int i = 0;i<files.length;i++){if (files[i].getName().endsWith(".txt")){ii++;}}
 
             //This creates an array with a length that matches the number of txt files
-            MazeFiles = new File[ii];
+            MazeFiles = new File[ii-1];
 
             //This loop adds the txt files to the maze files array
             ii = 0;
             for (int i = 0;i<files.length;i++){
-                if (files[i].getName().endsWith(".txt")){
-                MazeFiles[ii] = files[i];ii++;}}
+                if((files[i].getName().equals("highScores.txt"))){
+                    scoresFile=files[i];}
+                else if (files[i].getName().endsWith(".txt")){
+                    MazeFiles[ii] = files[i];ii++;}}
         };
         return(MazeFiles);
     }
@@ -71,7 +74,6 @@ public class CL2_Extra {
             } catch (Exception FileNotFoundException) {
                 System.out.println("file:" + txtFiles[i] + "was not found");
             }
-
         }
         return(mazes);
     }
