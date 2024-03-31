@@ -1,3 +1,5 @@
+//Evan Horn CS1 Lab
+
 import java.util.Scanner;
 import java.util.Random;
 
