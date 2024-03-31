@@ -106,6 +106,7 @@ public class CL2_Horn {
         }catch(FileNotFoundException e){System.out.println(e);}
     }
 
+    //updates the array of highscores
     public static void addHighScore(int mazeIndex, int Score){
         if(Integer.parseInt(bestMoveCounts[mazeIndex])<Score){
             bestMoveCounts[mazeIndex] =""+Score;
