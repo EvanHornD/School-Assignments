@@ -145,6 +145,11 @@ public class TicTacToe {
         return(winningBoard);
     }
 
+    //clears the console by running the cls command but I dont know exactly how that happens so I commented it out anyways
+    public static void clearconsole(){
+         try {new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();} catch(Exception e){}
+    }
+
     public static void main(String[] args) {
         String gameState = "choosingAI";
         int boardSize = 3;
@@ -153,7 +158,7 @@ public class TicTacToe {
         Scanner userInput = new Scanner(System.in);
         Random rng = new Random();
         while(!(gameState=="exit")){
-
+            clearconsole();
             switch (gameState) {
                 // this game state allows the player to choose whether or not they want to play vs an AI
                 case "choosingAI":
@@ -180,7 +185,6 @@ public class TicTacToe {
                             boardSize = Integer.parseInt(userInput.nextLine());
                                 if(boardSize<63){
                                 currentBoard = resetBoard(boardSize);
-                                printBoard(currentBoard);
                                 gameState = "playingGame";
                             } else{ System.out.println("Board size too large.\nTry again.");}
                         }
@@ -194,6 +198,7 @@ public class TicTacToe {
                 //this game state is where the user actually plays tic tac toe
                 case "playingGame":
                     char player = 'X';
+                    printBoard(currentBoard);
                     while(gameState=="playingGame"){
                         try{
                             String playerCoords;
@@ -208,13 +213,16 @@ public class TicTacToe {
                                 }else if(playerCoords.toLowerCase().equals("e")){
                                     gameState="choosingAI";
                                 } else{
-                                    coordinate = parseCoords(playerCoords, boardSize);}
+                                    coordinate = parseCoords(playerCoords, boardSize);
+                                    clearconsole();
+                                }
                             }else{
                                 //repeatedly rolls random coordinates until one of them is valid if the player is playing AI
                                 while(!checkCoords(currentBoard, coordinate, boardSize)){
                                     coordinate[0]=rng.nextInt(boardSize);
                                     coordinate[1]=rng.nextInt(boardSize);
                                 }
+                                clearconsole();
                             }
                             
                             //checks if the players coordinates are valid
