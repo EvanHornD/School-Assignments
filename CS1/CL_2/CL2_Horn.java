@@ -154,7 +154,7 @@ public class CL2_Horn {
             }
             mazeScanner.close();
             mazes[i] = mazeLines;
-            } catch (FileNotFoundException e) {
+            } catch (FileNotFoundException e) { 
                 System.out.println(e);
                 System.out.println("file:" + txtFiles[i] + "was not found");
             }
@@ -343,7 +343,7 @@ public class CL2_Horn {
                         loadedMaze=updateMaze();
                         displayMaze();
                         if(Arrays.equals(playerCoords,getCoords('F'))){
-                            System.out.println("Congrats you beat: " + fileNames[menuCursor].getName().replace(".txt",""));
+                            System.out.println("Congrats you beat: " + fileNames[menuCursor].getName().replace(".txt","")+"\nPress E to return to the list of mazes");
                             addHighScore(menuCursor, moveCount);
                             SaveHighScores();
                         }
