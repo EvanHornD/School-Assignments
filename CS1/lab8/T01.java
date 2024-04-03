@@ -19,6 +19,7 @@ class T01{
         Scanner i01 = new Scanner(System.in);
         System.out.println("Enter a number: ");
         System.out.println("Result " +isPrime(i01.nextInt()));
+        i01.close();
     }
 }
 
