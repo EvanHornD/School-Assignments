@@ -1,9 +1,12 @@
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Scanner;
 
 
 public class CL2_Extra {
+    //#region   variable initialization
     static String gameState = "mazeSelect";
     static File[] fileNames;
     static File scoresFile;
@@ -17,74 +20,147 @@ public class CL2_Extra {
     static int[] playerCoords;
     static int[][] playerMovement = {{-1,0},{0,-1},{1,0},{0,1}};
     static Scanner userInput = new Scanner(System.in);
+    static String[] bestMoveCounts;
+    static int moveCount = 0;
+    //#endregion
 
-    // The purpose of this method is to
-    public static File[] loadTxtFiles(String FilePath){
-        //This line takes the file path and returns the parent directory
-        String directoryName = new File(FilePath).getParent();
 
-        //This creates a file out of the directory path
-        File directory = new File(directoryName);
-        File[] MazeFiles = {};
+    //#region   file reading and writing
 
-        //This checks if the file is a directory
-        if (directory.isDirectory()){
+        // The purpose of this method is to take in the directory the user inputs and then load all the necesary files from that directory
+        public static File[] loadTxtFiles(String FilePath){
+            //This line takes the file path and returns the parent directory
+            try{
+                String directoryName = new File(FilePath).getParent();
+        
+                //This creates a file out of the directory path
+                File directory = new File(directoryName);
+                File[] MazeFiles = {};
+        
+                //This checks if the file is a directory
+                if (directory.isDirectory()){
+        
+                    //this creates on array of files that contains the path to every file in the directory
+                    File[] files = directory.listFiles();
+                    int ii = 0;
+        
+                    //This for loop gets the number of txt files in the directory
+                    for (int i = 0;i<files.length;i++){if (files[i].getName().endsWith(".txt")){ii++;}}
+        
+                    //This creates an array with a length that matches the number of txt files
+                    MazeFiles = new File[ii-1];
+        
+                    //This loop adds the txt files to the maze files array
+                    ii = 0;
+                    for (int i = 0;i<files.length;i++){
+                        if((files[i].getName().equals("highScores.txt"))){
+                            scoresFile=files[i];}
+                        else if (files[i].getName().endsWith(".txt")){
+                            MazeFiles[ii] = files[i];ii++;}}
+                    };
+                    return(MazeFiles);}
+                    catch(Exception e){
+                        System.out.println(e);
+                        File[] invalidDirectory = {};
+                        return(invalidDirectory);
+                    }
+        }
 
-            //this creates on array of files that contains the path to every file in the directory
-            File[] files = directory.listFiles();
-            int ii = 0;
-
-            //This for loop gets the number of txt files in the directory
-            for (int i = 0;i<files.length;i++){if (files[i].getName().endsWith(".txt")){ii++;}}
-
-            //This creates an array with a length that matches the number of txt files
-            MazeFiles = new File[ii-1];
-
-            //This loop adds the txt files to the maze files array
-            ii = 0;
-            for (int i = 0;i<files.length;i++){
-                if((files[i].getName().equals("highScores.txt"))){
-                    scoresFile=files[i];}
-                else if (files[i].getName().endsWith(".txt")){
-                    MazeFiles[ii] = files[i];ii++;}}
-        };
-        return(MazeFiles);
-    }
-
-    public static char[][][] readTxtFiles(File[] txtFiles){
-        char[][][] mazes = new char[txtFiles.length][][];
-        for(int i = 0; i < txtFiles.length; i++){
-            try {
-            Scanner mazeLengthScanner = new Scanner(txtFiles[i]);
-            int ii = 0;
-            while(mazeLengthScanner.hasNextLine()){mazeLengthScanner.nextLine();ii++;}
-            char[][] mazeLines = new char[ii][];
-            mazeLengthScanner.close();
-            Scanner mazeScanner = new Scanner(txtFiles[i]);
-            ii = 0;
-            while(mazeScanner.hasNextLine()){
-                String line = mazeScanner.nextLine();
-                char[] mazeChars = new char[line.length()];
-                for(int iii=0;iii<line.length();iii++){mazeChars[iii] = line.charAt(iii);}
-                mazeLines[ii] = mazeChars;
-                ii++;
+        public static char[][][] readTxtFiles(File[] txtFiles){
+            char[][][] mazes = new char[txtFiles.length][][];
+            for(int i = 0; i < txtFiles.length; i++){
+                try {
+                Scanner mazeLengthScanner = new Scanner(txtFiles[i]);
+                int ii = 0;
+                while(mazeLengthScanner.hasNextLine()){mazeLengthScanner.nextLine();ii++;}
+                char[][] mazeLines = new char[ii][];
+                mazeLengthScanner.close();
+                Scanner mazeScanner = new Scanner(txtFiles[i]);
+                ii = 0;
+                while(mazeScanner.hasNextLine()){
+                    String line = mazeScanner.nextLine();
+                    char[] mazeChars = new char[line.length()];
+                    for(int iii=0;iii<line.length();iii++){mazeChars[iii] = line.charAt(iii);}
+                    mazeLines[ii] = mazeChars;
+                    ii++;
+                }
+                mazeScanner.close();
+                mazes[i] = mazeLines;
+                } catch (Exception FileNotFoundException) {
+                    System.out.println("file:" + txtFiles[i] + "was not found");
+                }
             }
-            mazeScanner.close();
-            mazes[i] = mazeLines;
-            } catch (Exception FileNotFoundException) {
-                System.out.println("file:" + txtFiles[i] + "was not found");
+            return(mazes);
+        }
+        
+        public static void addLinesToFile(File file,int numLines){
+            try{
+            Scanner fileScanner = new Scanner(file);
+            String fileString = "";
+            while(fileScanner.hasNextLine()){
+                fileString +=(fileScanner.nextLine()+"\n");}
+            for(int i=0;i<numLines;i++){
+                if(i==numLines-1){fileString +="0";}
+                else{fileString +=("0"+"\n");}}
+            FileWriter fileUpdater = new FileWriter(file);
+            fileUpdater.write(fileString);
+            fileUpdater.close();
+            fileScanner.close();
+            }catch(Exception e){System.out.println(e);}
+        }
+
+        public static void loadHighScores(){
+            try{
+                //gets the list of high scores from the highScores txt file
+                System.out.println(scoresFile);
+                Scanner numScoresLen = new Scanner(scoresFile);
+                int i = 0;
+                while(numScoresLen.hasNextLine()){numScoresLen.nextLine();i++;}
+                if(i<fileNames.length){addLinesToFile(scoresFile, (fileNames.length)-i);}
+                numScoresLen.close();
+                Scanner numHighScores = new Scanner(scoresFile);
+                String[] highScores = new String[fileNames.length];
+                i = 0;
+                while(numHighScores.hasNextLine()){highScores[i]=(numHighScores.nextLine());i++;}
+                numHighScores.close();
+                bestMoveCounts = highScores;
+            }catch(FileNotFoundException e){System.out.println(e);}
+        }
+
+        //updates the array of highscores
+        public static void addHighScore(int mazeIndex, int Score){
+            if(Integer.parseInt(bestMoveCounts[mazeIndex])<Score){
+                bestMoveCounts[mazeIndex] =""+Score;
             }
         }
-        return(mazes);
-    }
 
-    public static void loadFile(int mazeNum){
+        public static void SaveHighScores(){
+            try{
+                Scanner highScoreScanner = new Scanner(scoresFile);
+                String highScores = "";
+
+                for(int i=0;i<bestMoveCounts.length;i++){
+                    if(i==bestMoveCounts.length-1){highScores+=""+bestMoveCounts[i];}
+                    else{highScores+=bestMoveCounts[i]+"\n";}}
+                FileWriter scoresUpdater = new FileWriter(scoresFile);
+                scoresUpdater.write(highScores);
+                scoresUpdater.close();
+                highScoreScanner.close();
+            }catch(Exception e){
+                System.out.println(e);
+            }
+        }
+
+    //#endregion
+
+
+    //#region   maze initialization
+    public static void loadMaze(int mazeNum){
         findSpecialChars(mazeNum);
         loadedMaze = mazes[mazeNum];
         mazeDimenstions[0] = loadedMaze.length;
         mazeDimenstions[1] = loadedMaze[0].length;
         loadedMazeTemplate = mazes[mazeNum];
-        
     }
 
     public static void findSpecialChars(int mazeNum){
@@ -117,7 +193,10 @@ public class CL2_Extra {
             if(C==specialChars[i]){return(specialCharCoords[i]);}}
         return(specialCharCoords[0]);
     }
+    //#endregion
 
+
+    //#region   maze collisions and movement
     public static int getInput(){
         switch (userInput.nextLine().toLowerCase()) {
             case "w": return(0);
@@ -141,6 +220,7 @@ public class CL2_Extra {
     public static void movePlayer(int input){
         int[] newPos = new int[2];
         if(input>=0&&input<4){
+            moveCount++;
             for(int i=0;i<playerCoords.length;i++){
                 newPos[i] = playerCoords[i]+playerMovement[input][i];}
         if(checkPos(newPos)){
@@ -153,14 +233,32 @@ public class CL2_Extra {
             revealTile(playerCoords);
         }}
     }
+    
+    public static char[][] updateMaze(){
+        char[][] updatedMaze = new char[loadedMazeTemplate.length][loadedMazeTemplate[0].length];
+        for(int i=0;i<loadedMazeTemplate.length;i++){
+            for(int ii=0;ii<loadedMazeTemplate[0].length;ii++){
+                updatedMaze[i][ii]=' ';}}
+        for(int i=0;i<loadedMazeTemplate.length;i++){
+            for(int ii=0;ii<loadedMazeTemplate[0].length;ii++){
+                updatedMaze[i][ii]=loadedMazeTemplate[i][ii];}}
+        updatedMaze[playerCoords[0]][playerCoords[1]]='P';
+        return(updatedMaze);
+    }
+    //#endregion
 
+
+    //#region   menu traversal
     public static int moveCursor(int cursor,int input){
         switch (input) {
             case 0:if(cursor-1>=0){return(cursor-1);}return(cursor);
             case 2:if(cursor+1<=fileNames.length){return(cursor+1);}return(cursor);
             default:return(cursor);}
     }
+    //#endregion
 
+
+    //#region   bitmap manipulation
     public static boolean[][] createBitMap(){
         boolean[][] Bitmap = new boolean[loadedMaze.length][loadedMaze[0].length];
         for(int i=0;i<Bitmap.length;i++){
@@ -188,19 +286,10 @@ public class CL2_Extra {
             loadedMazeBitMap[tile[0]+playerMovement[i][0]][tile[1]+playerMovement[i][1]]=true;
         }}
     }
-
-    public static char[][] updateMaze(){
-        char[][] updatedMaze = new char[loadedMazeTemplate.length][loadedMazeTemplate[0].length];
-        for(int i=0;i<loadedMazeTemplate.length;i++){
-            for(int ii=0;ii<loadedMazeTemplate[0].length;ii++){
-                updatedMaze[i][ii]=' ';}}
-        for(int i=0;i<loadedMazeTemplate.length;i++){
-            for(int ii=0;ii<loadedMazeTemplate[0].length;ii++){
-                updatedMaze[i][ii]=loadedMazeTemplate[i][ii];}}
-        updatedMaze[playerCoords[0]][playerCoords[1]]='P';
-        return(updatedMaze);
-    }
+    //#endregion
+   
     
+    //#region   printing and clearing lines
     public static void clearconsole(){
         try { new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();}
         catch (Exception e) {}
@@ -209,7 +298,7 @@ public class CL2_Extra {
     public static void printMenu(int cursor){
         clearconsole();
         for(int i=0;i<fileNames.length;i++){
-            if(i==cursor){System.out.println("-->"+fileNames[i].getName().replace(".txt",""));}
+            if(i==cursor){System.out.println("-->"+fileNames[i].getName().replace(".txt","")+" HighScore: "+ bestMoveCounts[i]);}
             else{System.out.println(fileNames[i].getName().replace(".txt",""));}}
         if(cursor==5){System.out.println("-->Exit");}
         else{System.out.println("Exit");}
@@ -226,6 +315,8 @@ public class CL2_Extra {
             if(mazeLine.trim()!=""){System.out.println(mazeLine);}}
         if(mazeComplete){System.out.println("Congrats you completed the maze\nPress  -E-  to exit the maze");}
     }
+    //#endregion
+
 
     public static void main(String[] args) {
         String lapTop = "C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
@@ -259,6 +350,7 @@ public class CL2_Extra {
                             mazes = readTxtFiles(fileNames);
                             clearconsole();
                             if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
+                            loadHighScores();
                             break;
                         }
                     }break;
@@ -274,7 +366,7 @@ public class CL2_Extra {
                     }break;
                 case "runningMaze":
                     boolean mazeComplete = false;
-                    loadFile(menuCursor);
+                    loadMaze(menuCursor);
                     setPlayerCoords();
                     loadedMaze=updateMaze();
                     loadedMazeBitMap=createBitMap();
@@ -285,7 +377,10 @@ public class CL2_Extra {
                         if(input == 4){gameState="mazeSelect";break;}
                         movePlayer(input);
                         loadedMaze=updateMaze();
-                        if(Arrays.equals(playerCoords,getCoords('F'))){mazeComplete=true;revealMaze();}
+                        if(Arrays.equals(playerCoords,getCoords('F'))){
+                            mazeComplete=true;revealMaze();
+                            addHighScore(menuCursor, moveCount);
+                            SaveHighScores();}
                         printmaze(mazeComplete);
                     } break;
             }}
