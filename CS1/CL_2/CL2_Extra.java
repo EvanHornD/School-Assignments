@@ -341,9 +341,9 @@ public class CL2_Extra {
         clearconsole();
         for(int i=0;i<fileNames.length;i++){
             if(i==cursor){System.out.println("-->"+fileNames[i].getName().replace(".txt","")+" HighScore: "+ bestMoveCounts[i]);}
-            else{System.out.println(fileNames[i].getName().replace(".txt",""));}}
+            else{System.out.println("\u001b[38;5;8m"+fileNames[i].getName().replace(".txt","")+"\u001b[0m");}}
         if(cursor==5){System.out.println("-->Exit");}
-        else{System.out.println("Exit");}
+        else{System.out.println("\u001b[38;5;8m"+"Exit"+"\u001b[0m");}
     }
 
     public static void printmaze(boolean mazeComplete){
