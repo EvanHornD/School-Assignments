@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class CL2_Horn {
+    //#region   variable initialization
     static String gameState = "directoryInput";
     static File[] fileNames;
     static File scoresFile;
@@ -32,7 +33,10 @@ public class CL2_Horn {
     static Scanner userInput = new Scanner(System.in);
     static int moveCount = 0;
     static String[] bestMoveCounts;
+    //#endregion
 
+
+    //#region   file editing and loading
     //because arrays have a set length a method is needed to add the contents of 2 arrays into 1 array
     //this is done by creating a new array with the length being set to the length of both arrays conbined and then adding all of the objects from both arrays 1 by one into the new array
     public static File[] addFileArrays(File[] arr1,File[] arr2){
@@ -208,7 +212,10 @@ public class CL2_Horn {
         }
         return(mazes);
     }
+    //#endregion
 
+
+    //#region   maze loading and updating
     //loades a maze into 2 separate arrays, one that will be updated and displayed and another that will be used to store the original maze without any changes made to it
     public static void loadSquareMaze(int mazeNum){
         findStartAndEndPostion(mazeNum);
@@ -247,6 +254,19 @@ public class CL2_Horn {
             if(specialChars[i]=='S'){playerCoords=specialCharCoords[i];break;}}
     }
 
+    //updates the loaded maze with players coordinates applied to the template.  this has to be done as a for loop to avoid the 2 arrays being assigned to the same memory location
+    public static char[][] updateMaze(){
+        char[][] updatedMaze = new char[loadedMazeTemplate.length][loadedMazeTemplate[0].length];
+        for(int i=0;i<loadedMazeTemplate.length;i++){
+            for(int ii=0;ii<loadedMazeTemplate[0].length;ii++){
+                updatedMaze[i][ii]=loadedMazeTemplate[i][ii];}}
+        updatedMaze[playerCoords[0]][playerCoords[1]]='P';
+        return(updatedMaze);
+    }
+    //#endregion
+
+
+    //#region   character movement and collision
     //when given a special character it will give you the coordinates that were stored instead of having to traverse the entire mazes array
     public static int[] getCoords(char C){
         for(int i=0;i<specialChars.length;i++){
@@ -289,7 +309,10 @@ public class CL2_Horn {
             playerCoords[0]=newPos[0];
             playerCoords[1]=newPos[1];}}
     }
+    //#endregion
 
+
+    //#region   menu manipulation
     //updates the menu cursor based on the input the player gives
     public static int moveCursor(int cursor,int input){
         switch (input) {
@@ -297,17 +320,10 @@ public class CL2_Horn {
             case 2:if(cursor+1<=fileNames.length){return(cursor+1);}return(cursor);
             default:return(cursor);}
     }
+    //#endregion
 
-    //updates the loaded maze with players coordinates applied to the template.  this has to be done as a for loop to avoid the 2 arrays being assigned to the same memory location
-    public static char[][] updateMaze(){
-        char[][] updatedMaze = new char[loadedMazeTemplate.length][loadedMazeTemplate[0].length];
-        for(int i=0;i<loadedMazeTemplate.length;i++){
-            for(int ii=0;ii<loadedMazeTemplate[0].length;ii++){
-                updatedMaze[i][ii]=loadedMazeTemplate[i][ii];}}
-        updatedMaze[playerCoords[0]][playerCoords[1]]='P';
-        return(updatedMaze);
-    }
 
+    //#region   printing
     //loops throught all of the maze names and prints them in order adding in an arrow if the index of the maze is the same as the cursor
     public static void printMenu(int cursor){
 
@@ -328,7 +344,9 @@ public class CL2_Horn {
             System.out.println(mazeLine);}
         System.out.println("your current move count is: "+ moveCount);
     }
-
+    //#endregion
+    
+    
     public static void main(String[] args) {
         gameState="directoryInput";
         int menuCursor = 0;
