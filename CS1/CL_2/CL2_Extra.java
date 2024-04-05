@@ -27,44 +27,87 @@ public class CL2_Extra {
 
     //#region   file reading and writing
 
-        // The purpose of this method is to take in the directory the user inputs and then load all the necesary files from that directory
-        public static File[] loadTxtFiles(String FilePath){
-            //This line takes the file path and returns the parent directory
-            try{
-                String directoryName = new File(FilePath).getParent();
-        
-                //This creates a file out of the directory path
-                File directory = new File(directoryName);
-                File[] MazeFiles = {};
-        
-                //This checks if the file is a directory
-                if (directory.isDirectory()){
-        
-                    //this creates on array of files that contains the path to every file in the directory
-                    File[] files = directory.listFiles();
-                    int ii = 0;
-        
-                    //This for loop gets the number of txt files in the directory
-                    for (int i = 0;i<files.length;i++){if (files[i].getName().endsWith(".txt")){ii++;}}
-        
-                    //This creates an array with a length that matches the number of txt files
-                    MazeFiles = new File[ii-1];
-        
-                    //This loop adds the txt files to the maze files array
-                    ii = 0;
-                    for (int i = 0;i<files.length;i++){
-                        if((files[i].getName().equals("highScores.txt"))){
-                            scoresFile=files[i];}
-                        else if (files[i].getName().endsWith(".txt")){
-                            MazeFiles[ii] = files[i];ii++;}}
-                    };
-                    return(MazeFiles);}
-                    catch(Exception e){
-                        System.out.println(e);
-                        File[] invalidDirectory = {};
-                        return(invalidDirectory);
+    public static File[] addFileArrays(File[] arr1,File[] arr2){
+        File[] newArr = new File[arr1.length+arr2.length];
+        int arrIndex = 0;
+            for(int i=0;i<arr1.length;i++){newArr[arrIndex]=arr1[i];arrIndex++;}
+            for(int i=0;i<arr2.length;i++){newArr[arrIndex]=arr2[i];arrIndex++;}
+        return newArr;
+    }
+
+    public static File[] addFileToArray(File[] arr1,File file){
+        File[] newArr = new File[arr1.length+1];
+            for(int i=0;i<arr1.length;i++){newArr[i]=arr1[i];}
+            newArr[arr1.length] = file;
+        return newArr;
+    }
+
+    //this method uses recursion to loop over every file and folder in the directory returning the files
+    public static File[] getFilesInPath(File dir){
+        //creates an array that contains every file and folder in the directory
+        File[] files = dir.listFiles();
+        File[] newFiles = new File[0];
+            for(int i=0;i<files.length;i++){
+                //checks if a file in the directory is a folder and if it is it recursively calls the get files in path on the folder
+                if(files[i].isDirectory()&&!(files[i].getName().equals(".git"))){
+                    //this adds the 2 arrays of files into 1
+                    newFiles = addFileArrays(newFiles,getFilesInPath(files[i]));
+                }else{
+                    //this adds the file into the array
+                    newFiles = addFileToArray(newFiles, files[i]);
+                }
+            }
+        return(newFiles);
+    }
+
+    //This gets all of the maze files and add them to an array without the user having to type the name of the file
+    public static File[] loadTxtFiles(String FolderPath,boolean automatic){
+        try{
+            //this initializes the directory to be the manually enter path to the folder
+            File directory = new File(FolderPath);
+
+            //this checks if the file loading is set the automatic
+            if(automatic){
+
+                //this runs the getFilesInPath method on the active directory which creates an array that contains every file in the directory
+                File[] filesInActiveDirectory = getFilesInPath(new File(System.getProperty("user.dir")));
+
+                //this loop checks every file in the active directory array to see if it matches the CL2_Horn file name
+                for(int i=0;i<filesInActiveDirectory.length;i++){
+                    if(filesInActiveDirectory[i].getName().equals("CL2_Horn.java")){
+
+                        // sets the folder the CL2_horn.java file is in to be the active directory
+                        directory = new File(filesInActiveDirectory[i].getParent());
                     }
+                }
+            }
+            File[] MazeFiles = {};
+            if (directory.isDirectory()){
+
+                //this creates on array of files that contains the path to every file in the directory
+                File[] files = directory.listFiles();
+                int ii = 0;
+
+                //This for loop gets the number of txt files in the directory
+                for (int i = 0;i<files.length;i++){if (files[i].getName().endsWith(".txt")){ii++;}}
+
+                //This creates an array with a length that matches the number of txt files
+                MazeFiles = new File[ii-1];
+
+                //This loop adds the txt files to the maze files array and properly initializes the high scores file
+                ii = 0;
+                for (int i = 0;i<files.length;i++){
+                    if((files[i].getName().equals("highScores.txt"))){
+                        scoresFile=files[i];}
+                    else if (files[i].getName().endsWith(".txt")){
+                        MazeFiles[ii] = files[i];ii++;}}
+                };
+                return(MazeFiles);}
+        catch(Exception e){
+            System.out.println(e);
+            return(new File[0]);
         }
+    }
 
         public static char[][][] readTxtFiles(File[] txtFiles){
             char[][][] mazes = new char[txtFiles.length][][];
@@ -127,7 +170,6 @@ public class CL2_Extra {
             }catch(FileNotFoundException e){System.out.println(e);}
         }
 
-        //updates the array of highscores
         public static void addHighScore(int mazeIndex, int Score){
             if(Integer.parseInt(bestMoveCounts[mazeIndex])<Score){
                 bestMoveCounts[mazeIndex] =""+Score;
@@ -291,8 +333,8 @@ public class CL2_Extra {
     
     //#region   printing and clearing lines
     public static void clearconsole(){
-        try { new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();}
-        catch (Exception e) {}
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 
     public static void printMenu(int cursor){
@@ -319,41 +361,32 @@ public class CL2_Extra {
 
 
     public static void main(String[] args) {
-        String lapTop = "C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
-        String deskTop = "C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java";
         gameState = "directoryInput";
         int menuCursor = 0;
         clearconsole();
         while(gameState!="Exit"){
             switch (gameState) {
                 case "directoryInput":
-                    while(gameState=="directoryInput"){
-                        System.out.println("do you want to put in the directory manually or use one of the 2 built in directories\n1. manual\n2. automatic");
-                        switch(userInput.nextLine()){
-                            case"1":
-                            clearconsole();
-                            System.out.println("Insert the path to the comprehensive lab 2 file EX:\nC:\\Users\\ehorn\\GitRepositories\\School-Assignments\\CS1\\CL_2\\CL2_Horn.java");
+                while(gameState=="directoryInput"){
+                    System.out.println("do you want to put in the directory manually or automatically detect the directory which the CL2_Horn.java file is in\n1. manual\n2. automatic");
+                    switch(userInput.nextLine()){
+                        case"1":
+                            System.out.println("Type the path to the comprehensive lab 2 folder \nEX:  C:\\Users\\ehorn\\School-Assignments\\CS1\\CL_2");
                             gameState="mazeSelect";
-                            fileNames = loadTxtFiles(userInput.nextLine());
+                            fileNames = loadTxtFiles(userInput.nextLine(),false);
                             mazes = readTxtFiles(fileNames);
-                            clearconsole();
                             if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
-                            break;
-                            default:
-                                clearconsole();
-                                gameState="mazeSelect";
-                                System.out.println("which directory do you want to use:\n1. laptop\n2. desktop");
-                                switch(userInput.nextLine()){
-                                    case"1":fileNames = loadTxtFiles(lapTop);break;
-                                    default:fileNames = loadTxtFiles(deskTop);break;
-                                }
+                            else{loadHighScores();} 
+                        break;
+                        default:
+                            gameState="mazeSelect";
+                            fileNames = loadTxtFiles("",true);
                             mazes = readTxtFiles(fileNames);
-                            clearconsole();
                             if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
-                            loadHighScores();
-                            break;
-                        }
-                    }break;
+                            else{loadHighScores();} 
+                        break;
+                    }
+                }break;
                 case "mazeSelect":
                     printMenu(menuCursor);
                     while(gameState=="mazeSelect"){
@@ -383,6 +416,7 @@ public class CL2_Extra {
                             SaveHighScores();}
                         printmaze(mazeComplete);
                     } break;
-            }}
+            }
+        }
     }
 }
