@@ -74,7 +74,7 @@ public class CL2_Extra {
 
                 //this loop checks every file in the active directory array to see if it matches the CL2_Horn file name
                 for(int i=0;i<filesInActiveDirectory.length;i++){
-                    if(filesInActiveDirectory[i].getName().equals("CL2_Horn.java")){
+                    if(filesInActiveDirectory[i].getName().equals("CL2_Extra.java")){
 
                         // sets the folder the CL2_horn.java file is in to be the active directory
                         directory = new File(filesInActiveDirectory[i].getParent());
