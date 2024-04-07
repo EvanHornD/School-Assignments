@@ -5,7 +5,7 @@ import java.awt.*;
 public class testCode {
     public static int[] getScreenDimensions(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int[] dimensions = {(int)screenSize.getWidth()/7,(int)screenSize.getHeight()/15};
+        int[] dimensions = {(int)screenSize.getWidth()/7,(int)screenSize.getHeight()/14};
         return (dimensions);
     }
 
@@ -19,11 +19,18 @@ public class testCode {
         String screenWidth ="";
         int[] dimensions = getScreenDimensions();
         for(int i=0; i<dimensions[0]-3;i++){
-            screenWidth+="#";
+            if(i==0 ||i==dimensions[0]-4){screenWidth+="|";}
+            else{screenWidth+=" ";}
         }
         clearConsole();
-        for(int i=0; i<dimensions[1]-3;i++){
+        String screenEdge ="";
+        for(int i=0; i<dimensions[0]-3;i++){
+            screenEdge+="-";
+        }
+        System.out.println(screenEdge);
+        for(int i=0; i<dimensions[1]-10;i++){
             System.out.println(screenWidth);
         }
+        System.out.println(screenEdge);
     }
 }
