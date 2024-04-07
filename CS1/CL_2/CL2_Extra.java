@@ -333,8 +333,10 @@ public class CL2_Extra {
     
     //#region   printing and clearing lines
     public static void clearconsole(){
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        // System.out.print("\033[H\033[2J");
+        // System.out.flush();
+        try { new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();}
+        catch (Exception e) {}
     }
 
     public static void printMenu(int cursor){
