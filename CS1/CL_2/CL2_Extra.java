@@ -3,6 +3,9 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
 
 
 public class CL2_Extra {
@@ -171,7 +174,7 @@ public class CL2_Extra {
         }
 
         public static void addHighScore(int mazeIndex, int Score){
-            if(Integer.parseInt(bestMoveCounts[mazeIndex])<Score){
+            if((Integer.parseInt(bestMoveCounts[mazeIndex])>Score)||(Integer.parseInt(bestMoveCounts[mazeIndex])==0)){
                 bestMoveCounts[mazeIndex] =""+Score;
             }
         }
@@ -239,8 +242,8 @@ public class CL2_Extra {
 
 
     //#region   maze collisions and movement
-    public static int getInput(){
-        switch (userInput.nextLine().toLowerCase()) {
+    public static int getInput(String[] inputMap,int input){
+        switch (inputMap[input].toLowerCase()) {
             case "w": return(0);
             case "a": return(1);
             case "s": return(2);
@@ -361,64 +364,133 @@ public class CL2_Extra {
     }
     //#endregion
 
+    
+    //#region   KeyListener
+
+    public static int[] getScreenDimensions(){
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int[] dimensions = {(int)screenSize.getWidth(),(int)screenSize.getHeight()};
+        return (dimensions);
+    }
+
+    public static void applyFrameDelay(int ms){
+        try {Thread.sleep(ms);} 
+        catch (InterruptedException e) {e.printStackTrace();}
+    }
+
+    static JFrame window;
+    static int keyIndex = -1;
+    static boolean keyState = false;
+    public static void createWindow(int[] screenDimensions,int[] gameDimensions) {
+            window = new JFrame("mazeGame");
+            window.setSize(gameDimensions[1],gameDimensions[1]); // Set size screen width
+            window.setLocation(0, screenDimensions[1]-(gameDimensions[1]+40)); // Position at bottom of screen
+            window.setFocusable(true);
+            window.requestFocus();
+            window.setResizable(false);
+            window.setUndecorated(true);
+            window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            window.setVisible(true);
+            window.setAlwaysOnTop(true);
+
+            window.addKeyListener(new KeyAdapter() {public void keyPressed(KeyEvent e) {
+                keyState = true;
+                keyIndex = e.getKeyCode();
+            }});
+
+            window.addFocusListener( new FocusListener() {
+                public void focusGained(FocusEvent e) {
+                    window.setLocation(0, screenDimensions[1]);
+                }
+                public void focusLost(FocusEvent e) {
+                    window.setLocation(0, screenDimensions[1]-(gameDimensions[1]+40));
+                }
+            });
+    }
+
+    public static void closeWindow() {
+        window.dispose();
+    }
+
+    public static String[] getKeyText(){
+        String[] codeToString = new String[227];
+        for(int i=0;i<codeToString.length;i++){
+            String text = java.awt.event.KeyEvent.getKeyText(i);
+            if(!text.contains("Unknown")){codeToString[i]=text;}
+            else{codeToString[i]=" ";}
+        }
+        return(codeToString);
+    }
+
+    //#endregion
+
 
     public static void main(String[] args) {
-        gameState = "directoryInput";
-        int menuCursor = 0;
         clearconsole();
-        while(gameState!="Exit"){
-            switch (gameState) {
-                case "directoryInput":
-                while(gameState=="directoryInput"){
-                    System.out.println("do you want to put in the directory manually or automatically detect the directory which the CL2_Horn.java file is in\n1. manual\n2. automatic");
-                    switch(userInput.nextLine()){
-                        case"1":
-                            System.out.println("Type the path to the comprehensive lab 2 folder \nEX:  C:\\Users\\ehorn\\School-Assignments\\CS1\\CL_2");
-                            gameState="mazeSelect";
-                            fileNames = loadTxtFiles(userInput.nextLine(),false);
-                            mazes = readTxtFiles(fileNames);
-                            if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
-                            else{loadHighScores();} 
-                        break;
-                        default:
-                            gameState="mazeSelect";
-                            fileNames = loadTxtFiles("",true);
-                            mazes = readTxtFiles(fileNames);
-                            if(fileNames.length==0){System.out.println("invalid directory");gameState="directoryInput";}
-                            else{loadHighScores();} 
-                        break;
-                    }
-                }break;
-                case "mazeSelect":
-                    printMenu(menuCursor);
-                    while(gameState=="mazeSelect"){
-                        int input = getInput();
-                        menuCursor = moveCursor(menuCursor,input);
-                        if(input == 4){
-                            if(menuCursor==fileNames.length){gameState="Exit";}
-                            else{gameState="runningMaze";}}
-                        if(gameState!="Exit"){printMenu(menuCursor);}
-                    }break;
-                case "runningMaze":
-                    boolean mazeComplete = false;
-                    loadMaze(menuCursor);
-                    setPlayerCoords();
-                    loadedMaze=updateMaze();
-                    loadedMazeBitMap=createBitMap();
-                    revealTile(playerCoords);
-                    printmaze(mazeComplete);
-                    while (gameState=="runningMaze") {
-                        int input = getInput();
-                        if(input == 4){gameState="mazeSelect";break;}
-                        movePlayer(input);
+        String[] keyTextCodes = getKeyText();
+        int[] screenDimensions = getScreenDimensions();
+        int[] gameDimensions = {screenDimensions[0],50};
+        createWindow(screenDimensions,gameDimensions);
+
+
+        Thread gameThread = new Thread(() -> {
+            gameState = "directoryInput";
+            int menuCursor = 0;
+            //#region   runs the game logic
+            while(gameState!="Exit"){
+                switch (gameState) {
+                    case "directoryInput":
+                        gameState="mazeSelect";
+                        fileNames = loadTxtFiles("",true);
+                        mazes = readTxtFiles(fileNames);
+                        if(fileNames.length==0){System.out.println("couldn't find maze files");gameState="Exit";}
+                        else{loadHighScores();} 
+                    break;
+                    case "mazeSelect":
+                        printMenu(menuCursor);
+                        while(gameState=="mazeSelect"){ applyFrameDelay(10);
+                            if(keyState){ keyState=false;
+
+                                int input = getInput(keyTextCodes,keyIndex);
+                                menuCursor = moveCursor(menuCursor,input);
+                                if(input == 4){
+                                    if(menuCursor==fileNames.length){gameState="Exit";}
+                                    else{gameState="runningMaze";}}
+                                if(gameState!="Exit"){printMenu(menuCursor);}
+                        
+                            } 
+                        }break;
+                    case "runningMaze":
+                        moveCount = 0;
+                        boolean mazeComplete = false;
+                        loadMaze(menuCursor);
+                        setPlayerCoords();
                         loadedMaze=updateMaze();
-                        if(Arrays.equals(playerCoords,getCoords('F'))){
-                            mazeComplete=true;revealMaze();
-                            addHighScore(menuCursor, moveCount);
-                            SaveHighScores();}
+                        loadedMazeBitMap=createBitMap();
+                        revealTile(playerCoords);
                         printmaze(mazeComplete);
-                    } break;
+                        while (gameState=="runningMaze") { applyFrameDelay(10);
+                            if(keyState){ keyState=false;
+
+                                int input = getInput(keyTextCodes,keyIndex);
+                                if(input == 4){gameState="mazeSelect";break;}
+                                movePlayer(input);
+                                loadedMaze=updateMaze();
+                                if(Arrays.equals(playerCoords,getCoords('F'))){
+                                    mazeComplete=true;revealMaze();
+                                    addHighScore(menuCursor, moveCount);
+                                    SaveHighScores();}
+                                printmaze(mazeComplete);
+
+                            }
+                        } break;
+                }
             }
-        }
+            closeWindow();
+            System.exit(0);
+
+            //#endregion
+        });
+        gameThread.start();
     }
 }

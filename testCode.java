@@ -1,5 +1,3 @@
-import java.io.File;
-import java.util.Arrays;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
@@ -50,6 +48,10 @@ public class testCode {
                 }
             });
     }
+
+    public static void closeWindow() {
+        window.dispose(); // Close the window
+    }
     
     public static void drawConsole(int[] dimensions){
         clearConsole();
@@ -74,20 +76,23 @@ public class testCode {
         int[] gameDimensions = {screenDimensions[0],50};
         drawConsole(screenDimensions);
         createWindow(screenDimensions,gameDimensions);
+
         Thread inputThread = new Thread(() -> {
             while(true){
+                
                 //System.out.println(keyState);
                 if(keyState==true){
                     System.out.println(keyIndex);
                     keyState=false;
+                    break;
                 }
-                try {
-                    Thread.sleep(10); // Adjust delay as needed
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                try {Thread.sleep(10);} 
+                catch (InterruptedException e) {e.printStackTrace();}
             }
+            closeWindow();
+            System.exit(0);
         });
         inputThread.start();
+        
     }
 }
