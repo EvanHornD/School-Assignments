@@ -383,7 +383,7 @@ public class CL2_Extra {
     static boolean keyState = false;
     public static void createWindow(int[] screenDimensions,int[] gameDimensions) {
             window = new JFrame("mazeGame");
-            window.setSize(gameDimensions[1],gameDimensions[1]); // Set size screen width
+            window.setSize(0,gameDimensions[1]); // Set size screen width
             window.setLocation(0, screenDimensions[1]-(gameDimensions[1]+40)); // Position at bottom of screen
             window.setFocusable(true);
             window.requestFocus();
