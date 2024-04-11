@@ -326,7 +326,6 @@ public class CL2_Horn {
     //#region   printing
     //loops throught all of the maze names and prints them in order adding in an arrow if the index of the maze is the same as the cursor
     public static void printMenu(int cursor){
-
         for(int i=0;i<fileNames.length;i++){
             if(i==cursor){System.out.println("-->"+fileNames[i].getName().replace(".txt","")+" HighScore: "+ bestMoveCounts[i]);}
             else{System.out.println(fileNames[i].getName().replace(".txt",""));}}
