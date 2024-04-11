@@ -4,7 +4,7 @@
 
 import java.util.Scanner;
 
-public class calculator2 {
+public class calculator {
 
     // this is the println method I made so I dont have to type System.out.println every time
     static void println(String string){
