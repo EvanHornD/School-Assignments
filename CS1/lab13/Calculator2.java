@@ -1,6 +1,4 @@
 //Evan H
-// I am turning this in late because I found a couple of errors in the code I submited before
-// and I forgot to comment the code
 
 import java.util.Scanner;
 import java.util.Random;
