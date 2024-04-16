@@ -1,4 +1,7 @@
-public class RECURSION {
+package luctureAssignments;
+
+
+public class recursion {
     public static int exp(int base,int expo){
         if(expo==0){return 1;}
         return(base*exp(base, expo-1)); 

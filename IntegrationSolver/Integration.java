@@ -1,3 +1,5 @@
+package integrationSolver;
+
 public class Integration {
 
     static double function1(double x) {

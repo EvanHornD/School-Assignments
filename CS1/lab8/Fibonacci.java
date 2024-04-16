@@ -1,3 +1,5 @@
+package lab8;
+
 public class Fibonacci {
     public static int fibonacciN(int n){
         int i1 = 0, i2 = 0,temp1 = 0,temp2 = 0;

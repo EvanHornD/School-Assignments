@@ -1,3 +1,5 @@
+package lab12;
+
 //Evan Horn CS1 Lab
 
 import java.util.Scanner;

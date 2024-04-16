@@ -1,3 +1,5 @@
+package luctureAssignments;
+
 import java.util.Scanner;
 
 public class HW3 {

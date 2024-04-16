@@ -1,3 +1,5 @@
+package lab13;
+
 //Evan H
 
 import java.util.Scanner;

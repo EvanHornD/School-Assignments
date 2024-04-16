@@ -1,3 +1,5 @@
+package lab5;
+
 //Evan Horn
 //CS1101
 //2/6/2024

@@ -1,4 +1,4 @@
-//
+package luctureAssignments;
 
 public class HW6 {
 

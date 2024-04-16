@@ -1,3 +1,5 @@
+package luctureAssignments;
+
 import java.util.Arrays;
 public class HW5 {
     // 1 -----------------------------------------------------------------------------------------

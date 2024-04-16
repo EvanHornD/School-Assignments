@@ -1,3 +1,5 @@
+package lab8;
+
 public class Factorial {
     public static int factorial(int n){
         int fact = 1;

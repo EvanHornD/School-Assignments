@@ -1,3 +1,5 @@
+package CL_2;
+
 
 /* Evan Horn
 [CS1101] Comprehensive Lab 2

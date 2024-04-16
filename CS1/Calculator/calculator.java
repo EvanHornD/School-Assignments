@@ -1,6 +1,4 @@
-//Evan Horn
-//CS1101
-//2/15/2024
+package Calculator;
 
 import java.util.Scanner;
 
@@ -59,3 +57,4 @@ public class calculator {
     }
 
 }
+

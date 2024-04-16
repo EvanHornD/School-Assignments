@@ -1,3 +1,5 @@
+package lab2;
+
 class MovieReview {
 	public static void main(String[] args) {
 		//----------

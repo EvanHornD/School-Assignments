@@ -1,3 +1,5 @@
+package luctureAssignments;
+
 public class Methods {
     public static int robotAntennas(int n){
         int antennas = 0;

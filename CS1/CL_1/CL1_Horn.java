@@ -1,3 +1,5 @@
+package CL_1;
+
 /* Evan Horn
  [CS1101] Comprehensive Lab 1
  This work is to be done individually. It is not permitted to.

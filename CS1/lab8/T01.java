@@ -1,3 +1,5 @@
+package lab8;
+
 import java.util.Scanner;
 class T01{
     public static boolean isPrime(int num){
