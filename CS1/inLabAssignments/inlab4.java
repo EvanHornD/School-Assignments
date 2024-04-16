@@ -1,4 +1,4 @@
-package class;
+package inLabAssignments;
 
 
 public class inlab4 {

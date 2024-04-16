@@ -1,4 +1,4 @@
-package integrationSolver;
+package IntegrationSolver;
 
 public class Integration {
 
