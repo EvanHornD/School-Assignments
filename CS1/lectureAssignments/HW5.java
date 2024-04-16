@@ -1,4 +1,4 @@
-package luctureAssignments;
+package lectureAssignments;
 
 import java.util.Arrays;
 public class HW5 {

@@ -1,4 +1,4 @@
-package luctureAssignments;
+package lectureAssignments;
 
 import java.util.ArrayList;
 import java.util.Scanner;

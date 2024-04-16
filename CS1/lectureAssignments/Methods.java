@@ -1,4 +1,4 @@
-package luctureAssignments;
+package lectureAssignments;
 
 public class Methods {
     public static int robotAntennas(int n){
