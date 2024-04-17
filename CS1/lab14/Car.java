@@ -14,6 +14,13 @@ public class Car {
 
     public Car() {
     }
+    public Car(Car car){
+        this.year = car.getYear();
+        this.make = car.getMake();
+        this.model = car.getModel();
+        this.isElectric = car.getIsElectric();
+        this.cost = car.getCost();
+    }
     public Car(int yearIn, String makeIn,String modelIn) {
         this.year = yearIn;
         this.make = makeIn;
@@ -63,15 +70,17 @@ public class Car {
         this.cost = costIn;
     }
 
-    // Flight information
+    // Car information
 
-    void printCarInfo(){
-        System.out.println("------Car Information------");
-        System.out.println("Number: "+year);
-        System.out.println("make: "+make);
-        System.out.println("model: "+model);
-        System.out.println("Electric (true or false): "+isElectric);
-        System.out.println("Ticket Price: "+cost);
+    public void printCarInfo(int index){
+        System.out.println("------Car "+index+"'s Information------");
+        System.out.println("Year: "+this.year);
+        System.out.println("make: "+this.make);
+        System.out.println("model: "+this.model);
+        System.out.println("Electric (true or false): "+this.isElectric);
+        System.out.println("Car Price: "+this.cost);
         System.out.println("---------------------------");
     }
+
+
 }
