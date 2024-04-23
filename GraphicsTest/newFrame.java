@@ -26,10 +26,10 @@ public class newFrame extends JFrame {
         this.setVisible(true);
     }
 
-    newFrame(Dimension dimensions){
+    newFrame(Dimension dimensions,double[] scale){
         this.setPreferredSize(dimensions);
         setStartingValues();
-        panel = new newPanel();
+        panel = new newPanel(dimensions,scale);
         this.add(panel);
         this.pack();
         this.setVisible(true);

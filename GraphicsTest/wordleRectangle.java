@@ -9,7 +9,8 @@ public class wordleRectangle {
     int height = 0;
     String text = "";
     Color textColor = Color.WHITE;
-    Font textFont = new Font("ariel",0,0);
+    int textSize = 0;
+    String textFont = "ariel";
     int outLineThickness = 0;
     Color outLineColor = Color.WHITE;
 
@@ -41,8 +42,12 @@ public class wordleRectangle {
         return this.textColor;
     }
 
-    public Font getTextFont() {
+    public String getTextFont() {
         return this.textFont;
+    }
+
+    public int getTextSize(){
+        return this.textSize;
     }
 
     public int getOutLineThickness() {
@@ -61,7 +66,7 @@ public class wordleRectangle {
         this.fillColor = fillColorIn;
     }
 
-    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn, String textIn, Color textColorIn, Font fontIn){
+    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn, String textIn, Color textColorIn, String fontIn, int textSizeIn){
         this.xCoordinate = xIn;
         this.yCoordinate = yIn;
         this.width = widthIn;
@@ -69,9 +74,10 @@ public class wordleRectangle {
         this.text = textIn;
         this.textColor = textColorIn;
         this.textFont = fontIn;
+        this.textSize = textSizeIn;
     }
 
-    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn,Color fillColorIn, String textIn, Color textColorIn, Font fontIn){
+    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn,Color fillColorIn, String textIn, Color textColorIn, String fontIn, int textSizeIn){
         this.xCoordinate = xIn;
         this.yCoordinate = yIn;
         this.width = widthIn;
@@ -80,9 +86,10 @@ public class wordleRectangle {
         this.text = textIn;
         this.textColor = textColorIn;
         this.textFont = fontIn;
+        this.textSize = textSizeIn;
     }
 
-    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn, int outLineThicknessIn, Color outColorIn, String textIn, Color textColorIn, Font fontIn){
+    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn, int outLineThicknessIn, Color outColorIn, String textIn, Color textColorIn, String fontIn, int textSizeIn){
         this.xCoordinate = xIn;
         this.yCoordinate = yIn;
         this.width = widthIn;
@@ -90,11 +97,12 @@ public class wordleRectangle {
         this.text = textIn;
         this.textColor = textColorIn;
         this.textFont = fontIn;
+        this.textSize = textSizeIn;
         this.outLineThickness = outLineThicknessIn;
         this.outLineColor = outColorIn;
     }
 
-    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn,Color fillColorIn, int outLineThicknessIn, Color outLineColorIn, String textIn, Color textColorIn, Font fontIn){
+    wordleRectangle(int xIn, int yIn, int widthIn, int heightIn,Color fillColorIn, int outLineThicknessIn, Color outLineColorIn, String textIn, Color textColorIn, String fontIn, int textSizeIn){
         this.xCoordinate = xIn;
         this.yCoordinate = yIn;
         this.width = widthIn;
@@ -103,6 +111,7 @@ public class wordleRectangle {
         this.text = textIn;
         this.textColor = textColorIn;
         this.textFont = fontIn;
+        this.textSize = textSizeIn;
         this.outLineThickness = outLineThicknessIn;
         this.outLineColor = outLineColorIn;
     }
@@ -135,7 +144,7 @@ public class wordleRectangle {
         this.textColor = textColor;
     }
 
-    public void setTextFont(Font textFont) {
+    public void setTextFont(String textFont) {
         this.textFont = textFont;
     }
 
