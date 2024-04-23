@@ -1,6 +1,7 @@
 package GraphicsTest;
 
 import java.awt.*;
+
 import javax.swing.*;
 
 public class newFrame extends JFrame {
@@ -32,5 +33,9 @@ public class newFrame extends JFrame {
         this.add(panel);
         this.pack();
         this.setVisible(true);
+    }
+
+    public newPanel getPanel(){
+        return(panel);
     }
 }
