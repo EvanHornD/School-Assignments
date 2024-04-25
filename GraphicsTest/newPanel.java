@@ -15,8 +15,20 @@ public class newPanel extends JPanel implements KeyListener{
         return this.lastKeyPressed;
     }
 
+    public void resetLastKeyPressed(){
+        this.lastKeyPressed="";
+    }
+
     public wordleRectangle[][] getRectangles() {
         return this.rectangles;
+    }
+
+    public void updateRectangleText(int row,int collumn,String character){
+        rectangles[1][row*5+collumn].setText(character);
+    }
+
+    public void updateRectangleColor(int row,int collumn,String character){
+        rectangles[1][row*5+collumn].setText(character);
     }
 
     newPanel(){
@@ -24,6 +36,8 @@ public class newPanel extends JPanel implements KeyListener{
         this.setPreferredSize(dimensions);
         panelSize=dimensions;
         this.addKeyListener(this);
+        this.setFocusable(true);
+        this.requestFocus();
         keyCodes = createKeyCodesArray();
     }
 
@@ -32,6 +46,8 @@ public class newPanel extends JPanel implements KeyListener{
         this.setPreferredSize(dimensions);
         panelSize=dimensions;
         this.addKeyListener(this);
+        this.setFocusable(true);
+        this.requestFocus();
         keyCodes = createKeyCodesArray();
     }
 
@@ -148,5 +164,4 @@ public class newPanel extends JPanel implements KeyListener{
         }
         return keyCodes;
     }
-
 }
