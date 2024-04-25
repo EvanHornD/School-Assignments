@@ -10,8 +10,6 @@ public class newFrame extends JFrame {
     public void setStartingValues(){
         this.setTitle("");
         this.setLocation(0, 0);
-        this.setFocusable(true);
-        this.requestFocus();
         this.setResizable(true);
         this.setUndecorated(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
