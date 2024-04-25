@@ -1,10 +1,8 @@
 package GraphicsTest;
 
 import java.awt.*;
-import javax.swing.*;
 import java.util.Scanner;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Random;
 
 public class testCode {

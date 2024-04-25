@@ -27,7 +27,7 @@ public class newFrame extends JFrame {
     newFrame(Dimension dimensions){
         this.setPreferredSize(dimensions);
         setStartingValues();
-        panel = new newPanel();
+        panel = new newPanel(dimensions);
         this.add(panel);
         this.pack();
         this.setVisible(true);

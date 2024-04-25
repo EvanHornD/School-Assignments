@@ -57,8 +57,17 @@ public class wordleRectangle {
 
     wordleRectangle( int widthIn, int heightIn, Color fillColorIn){
         this.width = widthIn;
-        this.height = heightIn;
+        this.height = heightIn; 
         this.fillColor = fillColorIn;
+    }
+
+    wordleRectangle(int xIn, int yIn, Color fillColorIn, String textIn, Color textColorIn, Font fontIn){
+        this.xCoordinate = xIn;
+        this.yCoordinate = yIn;
+        this.fillColor = fillColorIn;
+        this.text = textIn;
+        this.textColor = textColorIn;
+        this.textFont = fontIn;
     }
 
     wordleRectangle(int xIn, int yIn, int widthIn, int heightIn, String textIn, Color textColorIn, Font fontIn){

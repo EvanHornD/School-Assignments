@@ -14,6 +14,10 @@ public class newPanel extends JPanel implements KeyListener{
         return this.lastKeyPressed;
     }
 
+    public Dimension getSize(){
+        return this.panelSize;
+    }
+
     public void resetLastKeyPressed(){
         this.lastKeyPressed="";
     }
@@ -57,11 +61,17 @@ public class newPanel extends JPanel implements KeyListener{
                 int rectY = rectangles[i][ii].getY();
                 int rectWidth = rectangles[i][ii].getWidth();
                 int rectHeight = rectangles[i][ii].getHeight();
+                String text = rectangles[i][ii].getText();
+                if(rectWidth==0&&rectHeight==0&&!(text.equals(""))){
+                    rectWidth = graphicsPen.getFontMetrics(rectangles[i][ii].getTextFont()).stringWidth(text)+40;
+                    rectHeight = graphicsPen.getFontMetrics(rectangles[i][ii].getTextFont()).getHeight()+40;
+                    rectX-=rectWidth/2;
+                    rectY-=rectHeight/2;
+                }
                 if(!(rectColor==Color.WHITE)){
                     graphicsPen.setColor(rectColor);
                     graphicsPen.fillRect(rectX,rectY,rectWidth,rectHeight);
                 }
-                String text = rectangles[i][ii].getText();
                 if(!text.equals("")){
                     Font textFont = rectangles[i][ii].getTextFont();
                     int textWidth = graphicsPen.getFontMetrics(textFont).stringWidth(text);

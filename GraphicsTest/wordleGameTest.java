@@ -36,6 +36,14 @@ public class wordleGameTest {
 
     }
 
+    public static void checkForWinOrLoseCondition(){
+        if(currentGuess.toLowerCase().equals(answer)){
+            state = "gameWon";
+        } else if(numberOfGuesses==6){
+            state = "gameLost";
+        }
+    }
+
     public static void makeGuess(){
         String lowerCaseGuess = currentGuess.toLowerCase();
         if(checkGuessInDictionary(lowerCaseGuess)){
@@ -54,6 +62,7 @@ public class wordleGameTest {
             }
             if(numberOfGuesses<6){
                 numberOfGuesses++;
+                checkForWinOrLoseCondition();
                 currentGuess="";
             }
         }
@@ -113,10 +122,26 @@ public class wordleGameTest {
         wordlePanel = panel;
         rectangles = wordlePanel.getRectangles();
         while(!(state.equals("end"))){
-            try {   
+            try {
                 keyPressed = wordlePanel.getLastKeyPressed();
-                checkInput(keyPressed);
-                wordlePanel.triggerRepaint();
+                if(state.equals("running")){
+                    checkInput(keyPressed);
+                    wordlePanel.triggerRepaint();
+                } else if(state.equals("gameWon")){
+                    Dimension panelSize = panel.getSize();
+                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Won!!", white, new Font("Franklin Gothic",0,50)),3);
+                    wordlePanel.triggerRepaint();
+                    state = "gameOver";
+                } else if(state.equals("gameLost")){
+                    Dimension panelSize = panel.getSize();
+                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Lost :'( the answer was: "+answer.toUpperCase(), white, new Font("Franklin Gothic",0,50)),3);
+                    wordlePanel.triggerRepaint();
+                    state = "gameOver";
+                } else if(state.equals("gameOver")) {
+                    if(keyPressed.equals("Escape")){
+                        state = "end";
+                    }
+                }
                 Thread.sleep(10);} 
             catch (InterruptedException e) {e.printStackTrace();}
         }
