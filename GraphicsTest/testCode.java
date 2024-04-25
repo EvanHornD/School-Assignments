@@ -77,7 +77,7 @@ public class testCode {
 
         int screenWidth = 1920;
         int screenHeight = 1080;
-        screenHeight-=75 ;
+        screenHeight-=75;
 
         newFrame frame = new newFrame(screenDimensions,new double[]{horizontalScale,verticalScale});
         newPanel panel = frame.getPanel();
