@@ -1,42 +1,31 @@
 package CL_3;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
-  public static void main(String[] args) {
-    Scanner scanner = new Scanner(System.in);
-    WordleGame game = startGame(scanner);
-    playGame(game, scanner);
-    reportGameOutcome(game);
-    scanner.close();
-  }
 
-  public static WordleGame startGame(Scanner scanner) {
-    System.out.println("Enter an integer for which puzzle number you would like to play (between 0 and 2315):");
-    int puzzleNumber = scanner.nextInt();
-    return new WordleGame(puzzleNumber);
-  }
-
-  public static void playGame(WordleGame game, Scanner scanner) {
-    while (!game.isGameOver()) {
-      System.out.println("Enter a 5 letter guess:");
-      String guess = scanner.next();
-
-      while (!WordBank.checkInDictionary(guess)) {
-        System.out.println("Invalid guess. Enter a 5 letter guess:");
-        guess = scanner.next();
-      }
-
-      game.guess(guess);
-      System.out.println(game);
+    /* Do not modify the method signature. */ 
+    public static WordleGame startGame(Scanner scanner)  {
+        return null;  /*------ TODO - implement and replace me -------*/ 
     }
-  }
 
-  public static void reportGameOutcome(WordleGame game) {
-    if (game.isGameWin()) {
-      System.out.println("You won!");
-    } else {
-      System.out.println("The answer was " + game.getAnswer());
+    /* Do not modify the method signature. */ 
+    public static void playGame(Scanner scanner, WordleGame game)  {
+        /*------ TODO - implement -------*/ 
     }
-  }
+
+    /* Do not modify the method signature. */ 
+    public static void reportGameOutcome(WordleGame game) {
+        /*------ TODO - implement -------*/ 
+    }
+
+    /* This main method body should not be modified. */ 
+    public static void main(String[] args) {
+        /* Only use this Scanner for user input, do not create new ones via new Scanner(System.in).*/ 
+        Scanner scanner = new Scanner(System.in);
+        WordleGame game = startGame(scanner);
+        playGame(scanner, game);
+        reportGameOutcome(game);
+    }
 }
