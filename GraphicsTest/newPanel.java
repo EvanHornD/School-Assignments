@@ -9,6 +9,7 @@ public class newPanel extends JPanel implements KeyListener{
     Dimension panelSize;
     wordleRectangle[][] rectangles = {};
     String lastKeyPressed = "";
+    double[] scale = {1.,1.};
 
     public String getLastKeyPressed(){
         return this.lastKeyPressed;
@@ -44,7 +45,8 @@ public class newPanel extends JPanel implements KeyListener{
         keyCodes = createKeyCodesArray();
     }
 
-    newPanel(Dimension dimensions){
+    newPanel(Dimension dimensions,double[] scaleIn){
+        this.scale = scaleIn;
         this.setPreferredSize(dimensions);
         panelSize=dimensions;
         this.addKeyListener(this);
@@ -54,6 +56,7 @@ public class newPanel extends JPanel implements KeyListener{
     }
 
     public void drawRectangleArray(Graphics2D graphicsPen,wordleRectangle[][] rectangles){
+        System.out.println(scale[0]+"\n"+scale[1]);
         for (int i = 0; i < rectangles.length; i++) {
             for (int ii = 0; ii < rectangles[i].length; ii++) {
                 Color rectColor = rectangles[i][ii].getFillColor();
@@ -68,15 +71,21 @@ public class newPanel extends JPanel implements KeyListener{
                     rectX-=rectWidth/2;
                     rectY-=rectHeight/2;
                 }
+                int rectX = (int)(rectangles[i][ii].getX()*scale[0]);
+                int rectY = (int)(rectangles[i][ii].getY()*scale[1]);
+                int rectWidth = (int)(rectangles[i][ii].getWidth()*scale[0]);
+                int rectHeight = (int)(rectangles[i][ii].getHeight()*scale[1]);
                 if(!(rectColor==Color.WHITE)){
                     graphicsPen.setColor(rectColor);
                     graphicsPen.fillRect(rectX,rectY,rectWidth,rectHeight);
                 }
                 if(!text.equals("")){
-                    Font textFont = rectangles[i][ii].getTextFont();
-                    int textWidth = graphicsPen.getFontMetrics(textFont).stringWidth(text);
-                    int textheight = graphicsPen.getFontMetrics(textFont).getHeight();
-                    graphicsPen.setFont(textFont);
+                    String textFont = rectangles[i][ii].getTextFont();
+                    int textSize = (int)(rectangles[i][ii].getTextSize()*scale[1]);
+                    Font newTextFont = new Font(textFont,0,textSize);
+                    int textWidth = graphicsPen.getFontMetrics(newTextFont).stringWidth(text);
+                    int textheight = graphicsPen.getFontMetrics(newTextFont).getHeight();
+                    graphicsPen.setFont(newTextFont);
                     graphicsPen.setColor(rectangles[i][ii].getTextColor());
                     graphicsPen.drawString(text,rectX+((rectWidth-textWidth)/2),rectY+((rectHeight+(3*(textheight))/4)/2));
                 }

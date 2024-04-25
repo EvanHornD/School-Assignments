@@ -46,11 +46,11 @@ public class testCode {
             int keyRowLength = keyBoardStrings[i].length;
             for (int j = 0; j < keyBoardStrings[i].length; j++) { 
                 if(i==0&&j==0){
-                    panel.addRectangle(new wordleRectangle((screenWidth/2)-(10*(keyWidth+keyGap)/2)+j*(keyWidth+keyGap), screenHeight-(keyHeight+45), keyWidth+(keyWidth+keyGap)/2, keyHeight, lightGrey, keyBoardStrings[i][j], white, new Font("Franklin Gothic",0,20)),2);
+                    panel.addRectangle(new wordleRectangle((screenWidth/2)-(10*(keyWidth+keyGap)/2)+j*(keyWidth+keyGap), screenHeight-(keyHeight+45), keyWidth+(keyWidth+keyGap)/2, keyHeight, lightGrey, keyBoardStrings[i][j], white, "Franklin Gothic", 20),2);
                 }else if(i==0&&j==8){
-                    panel.addRectangle(new wordleRectangle((screenWidth/2)-(keyRowLength*(keyWidth+keyGap)/2)+j*(keyWidth+keyGap), screenHeight-(keyHeight+45), keyWidth+(keyWidth+keyGap)/2, keyHeight, lightGrey, keyBoardStrings[i][j], white, new Font("Franklin Gothic",0,20)),2);
+                    panel.addRectangle(new wordleRectangle((screenWidth/2)-(keyRowLength*(keyWidth+keyGap)/2)+j*(keyWidth+keyGap), screenHeight-(keyHeight+45), keyWidth+(keyWidth+keyGap)/2, keyHeight, lightGrey, keyBoardStrings[i][j], white,  "Franklin Gothic", 20),2);
                 } else{
-                panel.addRectangle(new wordleRectangle((screenWidth/2)-(keyRowLength*(keyWidth+keyGap)/2)+j*(keyWidth+keyGap), screenHeight-(((i+1)*(keyHeight+keyGap))+30), keyWidth, keyHeight, lightGrey, keyBoardStrings[i][j], white, new Font("Franklin Gothic",0,30)),2);
+                panel.addRectangle(new wordleRectangle((screenWidth/2)-(keyRowLength*(keyWidth+keyGap)/2)+j*(keyWidth+keyGap), screenHeight-(((i+1)*(keyHeight+keyGap))+30), keyWidth, keyHeight, lightGrey, keyBoardStrings[i][j], white,  "Franklin Gothic", 30),2);
                 }
             }
         } 
@@ -61,22 +61,27 @@ public class testCode {
         int wordGap = 15;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                panel.addRectangle(new wordleRectangle(((screenWidth/2)-(5*(wordlength+wordGap)/2))+j*(wordlength+wordGap), (screenHeight/16+48)+((i)*(wordlength+wordGap)), wordlength, wordlength, black,2,darkGrey," ", white, new Font("Franklin Gothic",0,45)),1);
+                panel.addRectangle(new wordleRectangle(((screenWidth/2)-(5*(wordlength+wordGap)/2))+j*(wordlength+wordGap), (screenHeight/16+48)+((i)*(wordlength+wordGap)), wordlength, wordlength, black,2,darkGrey," ", white, "Franklin Gothic",45),1);
             }
         }
     }
 
     public static void main(String[] args) {
         Dimension screenDimensions = getScreenDimensions();
-        int screenWidth = (int)screenDimensions.getWidth();
-        int screenHeight = (int)screenDimensions.getHeight();
-        screenHeight-=60;
+        int width = (int)screenDimensions.getWidth();
+        int height = (int)screenDimensions.getHeight();
+        double horizontalScale = width/1920.;
+        double verticalScale = height/1080.;
 
-        newFrame frame = new newFrame(screenDimensions);
+        int screenWidth = 1920;
+        int screenHeight = 1080;
+        screenHeight-=75;
+
+        newFrame frame = new newFrame(screenDimensions,new double[]{horizontalScale,verticalScale});
         newPanel panel = frame.getPanel();
 
         panel.addRectangle(new wordleRectangle( screenWidth, screenHeight, black), 0);
-        panel.addRectangle(new wordleRectangle(-4, -4, screenWidth+8, (screenHeight/16)+8, 1, darkGrey, "WORDLE", white, new Font("Franklin Gothic",0,50)),0);
+        panel.addRectangle(new wordleRectangle(-4, -4, screenWidth+8, (screenHeight/16)+8, 1, darkGrey, "WORDLE", white,"Franklin Gothic",50),0);
         createKeyBoard(panel, screenWidth, screenHeight);
         createWordleRows(panel, screenWidth, screenHeight);
         Thread mainGame = new Thread(() -> {
