@@ -172,7 +172,7 @@ public class Main {
         return -1;
     }
 
-    // lets the 
+    // lets the user choose what information to edit in a student
     public static void editStudentInformation(Scanner input, Student[] students, Student student){
         String state = "editing information";
         while(state.equals("editing information")){
