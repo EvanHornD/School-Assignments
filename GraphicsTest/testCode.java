@@ -61,7 +61,7 @@ public class testCode {
         int wordGap = 15;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 5; j++) {
-                panel.addRectangle(new wordleRectangle(((screenWidth/2)-(5*(wordlength+wordGap)/2))+j*(wordlength+wordGap), (screenHeight/16+48)+((i)*(wordlength+wordGap)), wordlength, wordlength, black,2,darkGrey," ", white, "Franklin Gothic",45),1);
+                panel.addRectangle(new wordleRectangle(((screenWidth/2)-(5*(wordlength+wordGap)/2))+j*(wordlength+wordGap), (screenHeight/16+48)+((i)*(wordlength+wordGap)), wordlength, wordlength, black,2,darkGrey,"", white, "Franklin Gothic",45),1);
             }
         }
     }
@@ -75,9 +75,9 @@ public class testCode {
 
         int screenWidth = 1920;
         int screenHeight = 1080;
-        screenHeight-=75;
+        screenHeight-=60;
 
-        newFrame frame = new newFrame(screenDimensions,new double[]{horizontalScale,verticalScale});
+        newFrame frame = new newFrame(width, height-30, new double[]{horizontalScale,verticalScale});
         newPanel panel = frame.getPanel();
 
         panel.addRectangle(new wordleRectangle( screenWidth, screenHeight, black), 0);

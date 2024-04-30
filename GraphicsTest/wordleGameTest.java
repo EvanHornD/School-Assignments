@@ -44,18 +44,63 @@ public class wordleGameTest {
         }
     }
 
+    public static int[] getAmountOfEachCharacterInString(String string){
+        int[] charAmount = new int[string.length()];
+        for (int i = 0; i < string.length(); i++) {
+            for (int j = 0; j < string.length(); j++) {
+                if(string.charAt(j)==string.charAt(i)){
+                    charAmount[i]++;
+                }
+            }
+        }
+        return charAmount;
+    }
+
+    public static int getNumberOfCorrectChars(char character){
+        int correctGuesses = 0;
+        for (int i = 0; i < answer.length(); i++) {
+            if((answer.charAt(i)==(character))&&(currentGuess.toLowerCase().charAt(i)==character)){
+                correctGuesses++;
+            }
+        }
+        return correctGuesses;
+    }
+
     public static void makeGuess(){
         String lowerCaseGuess = currentGuess.toLowerCase();
         if(checkGuessInDictionary(lowerCaseGuess)){
+            int[] keyBoardIndexes = {9,5,3,11,20,12,13,14,25,15,16,17,7,6,26,27,18,21,10,22,24,4,19,2,23,1};
+            int[] charInGuess = getAmountOfEachCharacterInString(currentGuess);
+            int[] charInAnswer = getAmountOfEachCharacterInString(answer);
             for (int i = 0; i < lowerCaseGuess.length(); i++) {
                 char currentChar = lowerCaseGuess.charAt(i);
+                Color keyboardColor = rectangles[2][keyBoardIndexes[currentChar-97]].getFillColor();
                 if(currentChar==answer.charAt(i)){
+                    if(!(keyboardColor.equals(green))){
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(green);
+                    }
                     rectangles[1][numberOfGuesses*5+(i)].setFillColor(green);
                     rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(green);
                 } else if(answer.contains(""+currentChar)){
-                    rectangles[1][numberOfGuesses*5+(i)].setFillColor(yellow);
-                    rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(yellow);
+                    int numCorrectChars = getNumberOfCorrectChars(currentChar);
+                    if(keyboardColor.equals(lightGrey)){
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(yellow);
+                    }
+                    if((charInAnswer[answer.indexOf(currentChar)]>=charInGuess[i])){
+                        rectangles[1][numberOfGuesses*5+(i)].setFillColor(yellow);
+                        rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(yellow);
+                    }else if(charInAnswer[answer.indexOf(currentChar)]>numCorrectChars){
+                        rectangles[1][numberOfGuesses*5+(i)].setFillColor(yellow);
+                        rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(yellow);
+                        charInAnswer[answer.indexOf(currentChar)]--;
+                    } else {
+                        rectangles[1][numberOfGuesses*5+(i)].setFillColor(darkGrey);
+                        rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(darkGrey);
+                    }
                 } else {
+                    if(keyboardColor.equals(lightGrey)){
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(darkGrey);
+                    }
                     rectangles[1][numberOfGuesses*5+(i)].setFillColor(darkGrey);
                     rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(darkGrey);
                 }
@@ -129,12 +174,12 @@ public class wordleGameTest {
                     wordlePanel.triggerRepaint();
                 } else if(state.equals("gameWon")){
                     Dimension panelSize = panel.getSize();
-                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Won!!", white, new Font("Franklin Gothic",0,50)),3);
+                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Won!!", white, "Franklin Gothic", 50), 3);
                     wordlePanel.triggerRepaint();
                     state = "gameOver";
                 } else if(state.equals("gameLost")){
                     Dimension panelSize = panel.getSize();
-                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Lost :'( the answer was: "+answer.toUpperCase(), white, new Font("Franklin Gothic",0,50)),3);
+                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Lost :'( the answer was: "+answer.toUpperCase(), white,  "Franklin Gothic", 50),3);
                     wordlePanel.triggerRepaint();
                     state = "gameOver";
                 } else if(state.equals("gameOver")) {
