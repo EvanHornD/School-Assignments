@@ -169,7 +169,7 @@ public class newPanel extends JPanel implements KeyListener{
     }
 
     public int[] createKeyCodesArray(){
-        int[] keyCodes = new int[28];
+        int[] keyCodes = new int[29];
         for (int i = 0; i < keyCodes.length; i++) {
             if(i==0){keyCodes[i]=10;}
             else if(i==1){keyCodes[i]=27;}

@@ -148,7 +148,7 @@ public class wordleGameTest {
 
     public static boolean checkGuessInDictionary(String guess) {
         try {
-            Scanner scanner = new Scanner(new File("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\GraphicsTest\\dictionary.txt"));
+            Scanner scanner = new Scanner(new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\dictionary.txt"));
             while (scanner.hasNextLine()) {
                 if (scanner.nextLine().equals(guess.toLowerCase())) {
                     scanner.close();
@@ -173,13 +173,11 @@ public class wordleGameTest {
                     checkInput(keyPressed);
                     wordlePanel.triggerRepaint();
                 } else if(state.equals("gameWon")){
-                    Dimension panelSize = panel.getSize();
-                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Won!!", white, "Franklin Gothic", 50), 3);
+                    panel.addRectangle(new wordleRectangle(960, 540, lightGrey, "You Won!!", white, "Franklin Gothic", 50), 3);
                     wordlePanel.triggerRepaint();
                     state = "gameOver";
                 } else if(state.equals("gameLost")){
-                    Dimension panelSize = panel.getSize();
-                    panel.addRectangle(new wordleRectangle((int)panelSize.getWidth()/2, ((int)panelSize.getHeight()/2), lightGrey, "You Lost :'( the answer was: "+answer.toUpperCase(), white,  "Franklin Gothic", 50),3);
+                    panel.addRectangle(new wordleRectangle(960, 540, lightGrey, "You Lost :'( the answer was: "+answer.toUpperCase(), white,  "Franklin Gothic", 50),3);
                     wordlePanel.triggerRepaint();
                     state = "gameOver";
                 } else if(state.equals("gameOver")) {
