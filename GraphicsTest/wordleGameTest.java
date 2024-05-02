@@ -79,6 +79,7 @@ public class wordleGameTest {
                 if(currentChar==answer.charAt(i)){
                     if(!(keyboardColor.equals(green))){
                         rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(green);
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,false));
                     }
                     rectangles[1][numberOfGuesses*5+(i)].setFillColor(green);
                     rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(green);
@@ -86,6 +87,7 @@ public class wordleGameTest {
                     int numCorrectChars = getNumberOfCorrectChars(currentChar);
                     if(keyboardColor.equals(lightGrey)){
                         rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(yellow);
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,false));
                     }
                     if((charInAnswer[answer.indexOf(currentChar)]>=charInGuess[i])){
                         rectangles[1][numberOfGuesses*5+(i)].setFillColor(yellow);
@@ -101,6 +103,7 @@ public class wordleGameTest {
                 } else {
                     if(keyboardColor.equals(lightGrey)){
                         rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(darkGrey);
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,false));
                     }
                     rectangles[1][numberOfGuesses*5+(i)].setFillColor(darkGrey);
                     rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(darkGrey);
