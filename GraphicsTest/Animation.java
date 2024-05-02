@@ -1,5 +1,7 @@
 package GraphicsTest;
 
+import java.awt.Color;
+
 public class Animation {
     String animationType;
     boolean loops = false;
@@ -10,6 +12,8 @@ public class Animation {
     int yOffset = 0;
     double xScale = 1;
     double yScale = 1;
+    Color startColor;
+    Color targetColor;
 
     Animation(String typeIn, int durationIn){
         this.animationType = typeIn;
@@ -27,6 +31,14 @@ public class Animation {
         this.delay = delayIn;
         this.duration = durationIn;
         this.loops = loopsIn;
+    }
+
+    Animation(String typeIn, int delayIn, int durationIn, Color startColorIn, Color targetColorIn){
+        this.animationType = typeIn;
+        this.delay = delayIn;
+        this.duration = durationIn;
+        this.startColor = startColorIn;
+        this.targetColor = targetColorIn;
     }
 
     public String getAnimationType(){
@@ -59,6 +71,13 @@ public class Animation {
 
     public double getYScale(){
         return this.yScale;
+    }
+
+    public Color getStartColor(){
+        return this.startColor;
+    }
+    public Color getTargetColor(){
+        return this.targetColor;
     }
 
     public void increaseFrameCounter(){
@@ -97,6 +116,9 @@ public class Animation {
         if(curFrame<=curDuration/2){
             this.yScale = 1-(curFrame*(4./curDuration));
         }else{
+            if(this.getStartColor()!=null){
+                this.startColor = this.targetColor;
+            }
             this.yScale = -1+(curFrame-curDuration/2)*(4./curDuration);
         }
     }
@@ -105,5 +127,8 @@ public class Animation {
         int curFrame = this.frame;
         int curDuration = this.duration;
         this.yOffset = (int)((-10)*Math.sqrt(1-(1/(Math.pow(curDuration/2.,2)))*Math.pow((curFrame-curDuration/2.),2)));
+        if(this.getStartColor()!=null&&curFrame>=curDuration){
+            this.startColor = this.targetColor;
+        }
     }
 }
