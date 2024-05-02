@@ -22,7 +22,7 @@ public class testCode {
     public static String getRandomAnswer() {
         try {
             Random rng = new Random();
-            Scanner scanner = new Scanner(new File("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_3\\answers.txt"));
+            Scanner scanner = new Scanner(new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\answers.txt"));
             for (int i = 0; i < rng.nextInt(2314); i++) {
             scanner.next();
             }
