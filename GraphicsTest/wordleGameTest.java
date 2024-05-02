@@ -111,6 +111,10 @@ public class wordleGameTest {
                 checkForWinOrLoseCondition();
                 currentGuess="";
             }
+        } else{
+            for (int i = 0; i < lowerCaseGuess.length(); i++) {
+                rectangles[1][numberOfGuesses*5+i].setAnimation(new Animation("hop",i*2,8,false));
+            }
         }
     }
 
