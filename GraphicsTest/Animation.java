@@ -81,6 +81,10 @@ public class Animation {
                     verticalRotation();
                 break;
             
+                case "hop":
+                    hop();
+                break;
+
                 default:
                 break;
             }
@@ -95,5 +99,11 @@ public class Animation {
         }else{
             this.yScale = -1+(curFrame-curDuration/2)*(4./curDuration);
         }
+    }
+
+    public void hop(){
+        int curFrame = this.frame;
+        int curDuration = this.duration;
+        this.yOffset = (int)((-10)*Math.sqrt(1-(1/(Math.pow(curDuration/2.,2)))*Math.pow((curFrame-curDuration/2.),2)));
     }
 }
