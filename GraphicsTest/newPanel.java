@@ -60,17 +60,31 @@ public class newPanel extends JPanel implements KeyListener{
         keyCodes = createKeyCodesArray();
     }
 
-    public void drawRectangleArray(Graphics2D graphicsPen,wordleRectangle[][] rectangles){
+    public void drawRectangleArray(Graphics g,wordleRectangle[][] rectangles){
+        Graphics2D graphicsPen = (Graphics2D) g;
         for (int i = 0; i < rectangles.length; i++) {
             for (int ii = 0; ii < rectangles[i].length; ii++) {
-                Color rectColor = rectangles[i][ii].getFillColor();
-                int rectX = (int)(rectangles[i][ii].getX()*scale[0]);
-                int rectY = (int)(rectangles[i][ii].getY()*scale[1]);
-                int rectWidth = (int)(rectangles[i][ii].getWidth()*scale[0]);
-                int rectHeight = (int)(rectangles[i][ii].getHeight()*scale[1]);
-                String text = rectangles[i][ii].getText();
-                String textFont = rectangles[i][ii].getTextFont();
-                int textSize = (int)(rectangles[i][ii].getTextSize()*scale[1]);
+                wordleRectangle curRect = rectangles[i][ii];
+                Color rectColor = curRect.getFillColor();
+                int rectX, rectY, rectWidth, rectHeight;
+                if(curRect.getAnimation()==null){
+                    rectX = (int)(curRect.getX()*scale[0]);
+                    rectY = (int)(curRect.getY()*scale[1]);
+                } else {
+                    int animXOffset = curRect.getAnimation().getXOffset();
+                    int animYOffset = curRect.getAnimation().getYOffset();
+                    double animXScale = curRect.getAnimation().getXScale();
+                    double animYScale = curRect.getAnimation().getYScale();
+                    rectX = (int)(((curRect.getX()+animXOffset-((animXScale-1)/2*curRect.getWidth()))*1/animXScale)*scale[0]);
+                    rectY = (int)(((curRect.getY()+animYOffset-((animYScale-1)/2*curRect.getHeight()))*1/animYScale)*scale[1]);
+                    graphicsPen = (Graphics2D) g.create();
+                    graphicsPen.scale(animXScale, animYScale);
+                }
+                rectWidth = (int)(curRect.getWidth()*scale[0]);
+                rectHeight = (int)(curRect.getHeight()*scale[1]);
+                int textSize = (int)(curRect.getTextSize()*scale[1]);
+                String text = curRect.getText();
+                String textFont = curRect.getTextFont();
                 Font newTextFont = new Font(textFont,0,textSize);
                 if(rectWidth==0&&rectHeight==0&&!(text.equals(""))){
                     rectWidth = graphicsPen.getFontMetrics(newTextFont).stringWidth(text)+(int)(40*scale[0]);
@@ -95,6 +109,13 @@ public class newPanel extends JPanel implements KeyListener{
                     graphicsPen.setColor(rectOutLineColor);
                     graphicsPen.setStroke(new BasicStroke(rectOutLineThickness,1,0));
                     graphicsPen.drawRect(rectX,rectY,rectWidth,rectHeight);
+                }
+                if(curRect.getAnimation()!=null){
+                    curRect.getAnimation().increaseFrameCounter();
+                    if(curRect.getAnimation().getAnimationType()==""){
+                        curRect.removeAnimation();
+                    }
+                    graphicsPen = (Graphics2D) g.create();
                 }
             }
         }
@@ -138,8 +159,7 @@ public class newPanel extends JPanel implements KeyListener{
     }
 
     public void paint(Graphics g){
-        Graphics2D g2D = (Graphics2D) g;
-        drawRectangleArray(g2D, rectangles);
+        drawRectangleArray(g, rectangles);
     }
 
     public void triggerRepaint() {

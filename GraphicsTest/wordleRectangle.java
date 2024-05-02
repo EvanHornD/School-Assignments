@@ -13,6 +13,7 @@ public class wordleRectangle {
     int textSize = 0;
     int outLineThickness = 0;
     Color outLineColor = Color.WHITE;
+    Animation animation = null;
 
     public Color getFillColor() {
         return this.fillColor;
@@ -56,6 +57,10 @@ public class wordleRectangle {
 
     public Color getOutLineColor() {
         return this.outLineColor;
+    }
+
+    public Animation getAnimation(){
+        return this.animation;
     }
 
     wordleRectangle(){}
@@ -170,4 +175,11 @@ public class wordleRectangle {
         this.outLineColor = outLineColor;
     }
 
+    public void setAnimation(Animation animationIn){
+        this.animation = animationIn;
+    }
+
+    public void removeAnimation(){
+        this.animation = null;
+    }
 }
