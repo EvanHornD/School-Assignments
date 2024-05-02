@@ -77,16 +77,14 @@ public class wordleGameTest {
                 Color keyboardColor = rectangles[2][keyBoardIndexes[currentChar-97]].getFillColor();
                 if(currentChar==answer.charAt(i)){
                     if(!(keyboardColor.equals(green))){
-                        rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(green);
-                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,false));
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,keyboardColor, green));
                     }
                     rectangles[1][numberOfGuesses*5+i].setAnimation(new Animation("verticalRotation",i*6,50,black,green));
                     rectangles[1][numberOfGuesses*5+(i)].setOutLineColor(green);
                 } else if(answer.contains(""+currentChar)){
                     int numCorrectChars = getNumberOfCorrectChars(currentChar);
                     if(keyboardColor.equals(lightGrey)){
-                        rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(yellow);
-                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,false));
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,lightGrey, yellow));
                     }
                     if((charInAnswer[answer.indexOf(currentChar)]>=charInGuess[i])){
                         rectangles[1][numberOfGuesses*5+i].setAnimation(new Animation("verticalRotation",i*6,50,black,yellow));
@@ -98,8 +96,7 @@ public class wordleGameTest {
                     }
                 } else {
                     if(keyboardColor.equals(lightGrey)){
-                        rectangles[2][keyBoardIndexes[currentChar-97]].setFillColor(darkGrey);
-                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,false));
+                        rectangles[2][keyBoardIndexes[currentChar-97]].setAnimation(new Animation("hop",i*2,8,lightGrey,darkGrey));
                     }
                     rectangles[1][numberOfGuesses*5+i].setAnimation(new Animation("verticalRotation",i*6,50,black,darkGrey));
                 }

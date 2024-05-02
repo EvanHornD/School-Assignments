@@ -127,7 +127,7 @@ public class Animation {
         int curFrame = this.frame;
         int curDuration = this.duration;
         this.yOffset = (int)((-10)*Math.sqrt(1-(1/(Math.pow(curDuration/2.,2)))*Math.pow((curFrame-curDuration/2.),2)));
-        if(this.getStartColor()!=null&&curFrame>=curDuration){
+        if(this.getStartColor()!=null&&curFrame>=curDuration-1){
             this.startColor = this.targetColor;
         }
     }
