@@ -3,11 +3,11 @@ package IntegrationSolver;
 public class Integration {
 
     static double function1(double x) {
-        return Math.sin(x)+1;
+        return (x/Math.cos(x));
     }
 
     static double function2(double x) {
-        return Math.sin(x);
+        return 0;
     }
 
     static double calculateIntegral(double start,double end,int n){
@@ -24,7 +24,7 @@ public class Integration {
     public static void main(String[] args)
     {
         double start = 0;
-        double end = Math.PI;
+        double end = Math.PI/3;
         int numberOfIterations = 1000000;
         System.out.println(calculateIntegral(start,end,numberOfIterations));
 
