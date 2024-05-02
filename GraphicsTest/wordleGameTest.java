@@ -73,7 +73,7 @@ public class wordleGameTest {
             int[] charInGuess = getAmountOfEachCharacterInString(currentGuess);
             int[] charInAnswer = getAmountOfEachCharacterInString(answer);
             for (int i = 0; i < lowerCaseGuess.length(); i++) {
-                rectangles[1][numberOfGuesses*5+i].setAnimation(new Animation("verticalRotation",i*12,50,false));
+                rectangles[1][numberOfGuesses*5+i].setAnimation(new Animation("verticalRotation",i*6,50,false));
                 char currentChar = lowerCaseGuess.charAt(i);
                 Color keyboardColor = rectangles[2][keyBoardIndexes[currentChar-97]].getFillColor();
                 if(currentChar==answer.charAt(i)){
