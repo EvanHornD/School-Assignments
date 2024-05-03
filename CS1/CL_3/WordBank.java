@@ -3,7 +3,6 @@ package CL_3;
 
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class WordBank {
@@ -14,7 +13,7 @@ public class WordBank {
   	public static String getAnswerForPuzzleNumber(int puzzleNumber) {
     	try {
       		/* Create a file scanner to read answers.txt */
-    		Scanner scanner = new Scanner(new File("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_3\\answers.txt"));
+			Scanner scanner = new Scanner(new File("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_3\\answers.txt"));
 
       		/* Skip the first puzzleNumber number of words in the file */
       		for (int i = 0; i < puzzleNumber; i++) {
@@ -33,12 +32,14 @@ public class WordBank {
   	public static boolean checkInDictionary(String proposed) {
 		try {
 			/* Create a file scanner to read answers.txt */
-		  	Scanner scanner = new Scanner(new File("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_3\\answers.txt"));
+		  	Scanner scanner = new Scanner(new File("C:\\Users\\Evan Horn\\GitRepositories\\School-Assignments\\CS1\\CL_3\\dictionary.txt"));
 			while (scanner.hasNextLine()) {
 				if(proposed.equals(scanner.nextLine())){
+					scanner.close();
 					return true;
 				}
 			}
+			scanner.close();
 			return false;
 	  	} catch (Exception e) {
 			/* Handle exception */

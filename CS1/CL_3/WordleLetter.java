@@ -14,20 +14,10 @@ public class WordleLetter {
 		}
 	}
 
-	public boolean isColorSet(){
-		if(!this.color.equals(null)){
-			return true;
-		}
-		return false;
+	//gets the character that this letter has assigned to it, I replaced the methods that get the color of the letter with this.
+	public char getChar(){
+		return this.letter;
 	}
-
-	public boolean isGreen(){
-		if(this.color.equals("green")){
-			return true;
-		}
-		return false;
-	}
-
 
 	public String toString() {
 		/*	Determine the special characters to add at the beginning of the String
