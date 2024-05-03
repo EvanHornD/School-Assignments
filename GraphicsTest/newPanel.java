@@ -6,6 +6,14 @@ import java.awt.event.KeyListener;
 import java.util.Arrays;
 
 public class newPanel extends JPanel implements KeyListener{
+    final static Color green = new Color(84,140,78);
+    final static Color yellow = new Color(181,159,59);
+    final static Color black = new Color(18,18,19);
+    final static Color lightGrey = new Color(129,131,132);
+    final static Color darkGrey = new Color(58,58,60,255);
+    final static Color white = new Color(248,248,248);
+
+
     int[] keyCodes = {};
     Dimension panelSize;
     wordleRectangle[][] rectangles = {};
@@ -75,10 +83,15 @@ public class newPanel extends JPanel implements KeyListener{
                     int animYOffset = curRect.getAnimation().getYOffset();
                     double animXScale = curRect.getAnimation().getXScale();
                     double animYScale = curRect.getAnimation().getYScale();
+                    Color animationColor = curRect.getAnimation().getStartColor();
                     rectX = (int)(((curRect.getX()+animXOffset-((animXScale-1)/2*curRect.getWidth()))*1/animXScale)*scale[0]);
                     rectY = (int)(((curRect.getY()+animYOffset-((animYScale-1)/2*curRect.getHeight()))*1/animYScale)*scale[1]);
                     graphicsPen = (Graphics2D) g.create();
                     graphicsPen.scale(animXScale, animYScale);
+                    if(animationColor!=null){
+                        curRect.setFillColor(animationColor);
+                        curRect.setOutLineColor(animationColor);
+                    }
                 }
                 rectWidth = (int)(curRect.getWidth()*scale[0]);
                 rectHeight = (int)(curRect.getHeight()*scale[1]);
