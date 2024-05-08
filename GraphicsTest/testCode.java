@@ -13,16 +13,54 @@ public class testCode {
     final static Color darkGrey = new Color(58,58,60,255);
     final static Color white = new Color(248,248,248);
 
+    static File answersFile = new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\answers.txt");
+    static File dictionaryFile = new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\dictionary.txt");
+
+
+
     // gets your screen width and height
     public static Dimension getScreenDimensions(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         return (screenSize);
     }
 
-    public static String getRandomAnswer() {
+    public static File[] addFileArrays(File[] arr1,File[] arr2){
+        File[] newArr = new File[arr1.length+arr2.length];
+        int arrIndex = 0;
+            for(int i=0;i<arr1.length;i++){newArr[arrIndex]=arr1[i];arrIndex++;}
+            for(int i=0;i<arr2.length;i++){newArr[arrIndex]=arr2[i];arrIndex++;}
+        return newArr;
+    }
+
+    public static File[] addFileToArray(File[] arr1,File file){
+        File[] newArr = new File[arr1.length+1];
+            for(int i=0;i<arr1.length;i++){newArr[i]=arr1[i];}
+            newArr[arr1.length] = file;
+        return newArr;
+    }
+
+    //this method uses recursion to loop over every file and folder in the directory returning the files
+    public static File[] getFilesInPath(File dir){
+        //creates an array that contains every file and folder in the directory
+        File[] files = dir.listFiles();
+        File[] newFiles = new File[0];
+            for(int i=0;i<files.length;i++){
+                //checks if a file in the directory is a folder and if it is it recursively calls the get files in path on the folder
+                if(files[i].isDirectory()&&!(files[i].getName().equals(".git"))){
+                    //this adds the 2 arrays of files into 1
+                    newFiles = addFileArrays(newFiles,getFilesInPath(files[i]));
+                }else{
+                    //this adds the file into the array
+                    newFiles = addFileToArray(newFiles, files[i]);
+                }
+            }
+        return(newFiles);
+    }
+
+    public static String getRandomAnswer(File answers) {
         try {
             Random rng = new Random();
-            Scanner scanner = new Scanner(new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\answers.txt"));
+            Scanner scanner = new Scanner(answers);
             for (int i = 0; i < rng.nextInt(2314); i++) {
             scanner.next();
             }
@@ -84,8 +122,36 @@ public class testCode {
         panel.addRectangle(new wordleRectangle(-4, -4, screenWidth+8, (screenHeight/16)+8, 1, darkGrey, "WORDLE", white,"Franklin Gothic",50),0);
         createKeyBoard(panel, screenWidth, screenHeight);
         createWordleRows(panel, screenWidth, screenHeight);
+
+
+        try {
+            File[] filesInActiveDirectory = getFilesInPath(new File(System.getProperty("user.dir")));
+            File directory = new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest");
+            //this loop checks every file in the active directory array to see if it matches the CL2_Horn file name
+            for(int i=0;i<filesInActiveDirectory.length;i++){
+                if(filesInActiveDirectory[i].getName().equals("testCode.java")){
+    
+                    // sets the folder the CL2_horn.java file is in to be the active directory
+                    directory = new File(filesInActiveDirectory[i].getParent());
+                }
+            }
+            File[] files = directory.listFiles();
+            for (int i = 0;i<files.length;i++){
+                if((files[i].getName().equals("answers.txt"))){
+                    answersFile=files[i];
+                    System.out.println("found answers");
+                }
+                else if ((files[i].getName().equals("dictionary.txt"))){
+                    dictionaryFile=files[i];
+                    System.out.println("found dictionary");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("couldn't find file");
+        }
+
         Thread mainGame = new Thread(() -> {
-            new wordleGameTest(getRandomAnswer(),panel);
+            new wordleGameTest(getRandomAnswer(answersFile),dictionaryFile,panel);
         });
         mainGame.start();
     }

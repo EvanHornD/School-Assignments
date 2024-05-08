@@ -20,6 +20,7 @@ public class wordleGameTest {
     private static int numberOfGuesses = 0;
     private static String keyPressed;
     private static String state="running";
+    private static File dictionaryFile;
 
     public String getAnswer() {
         return answer;
@@ -29,9 +30,10 @@ public class wordleGameTest {
         return numberOfGuesses;
     }
 
-    wordleGameTest(String answerIn,newPanel panel){
+    wordleGameTest(String answerIn,File dictionaryFileIn,newPanel panel){
         answer = answerIn;
         numberOfGuesses = 0;
+        dictionaryFile = dictionaryFileIn;
         runWordleGame(panel);
 
     }
@@ -148,7 +150,7 @@ public class wordleGameTest {
 
     public static boolean checkGuessInDictionary(String guess) {
         try {
-            Scanner scanner = new Scanner(new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\dictionary.txt"));
+            Scanner scanner = new Scanner(dictionaryFile);
             while (scanner.hasNextLine()) {
                 if (scanner.nextLine().equals(guess.toLowerCase())) {
                     scanner.close();
