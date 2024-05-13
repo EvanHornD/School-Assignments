@@ -29,7 +29,7 @@ public class testCode {
         int arrIndex = 0;
             for(int i=0;i<arr1.length;i++){newArr[arrIndex]=arr1[i];arrIndex++;}
             for(int i=0;i<arr2.length;i++){newArr[arrIndex]=arr2[i];arrIndex++;}
-        return newArr;
+        return newArr; 
     }
 
     public static File[] addFileToArray(File[] arr1,File file){
