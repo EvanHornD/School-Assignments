@@ -113,7 +113,7 @@ public class Lab1_Horn_Difficult {
 
 
     public static void main(String[] args) {
-        int[][] orbits = readFileToArray("Lab1\\array_jagged.txt");
+        int[][] orbits = readFileToArray("CS2\\Lab1\\array_jagged.txt");
         print2DArray(orbits);
         int[][] orbitPattern = getOrbitPattern(orbits);
         print2DArray(orbitPattern);

@@ -99,7 +99,7 @@ public class Lab1_Horn {
 
 
     public static void main(String[] args) {
-        int[][] orbits = readFileToArray("Lab1\\array.txt");
+        int[][] orbits = readFileToArray("CS2\\Lab1\\array.txt");
         print2DArray(orbits);
         int[][] orbitPattern = getOrbitPattern(orbits);
         print2DArray(orbitPattern);
