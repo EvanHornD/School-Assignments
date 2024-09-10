@@ -1,6 +1,5 @@
 import java.io.File;
 import java.util.Scanner;
-import java.util.Arrays;
 public class Lab1_Horn_Difficult {
 
     public static int[][] readFileToArray(String fileName){
@@ -73,20 +72,27 @@ public class Lab1_Horn_Difficult {
         System.out.println();
     }
 
+    public static int getDistanceFromEdge(int index, int length){
+        //This gets how close an item is to the edge of a range when given the length of the range and its current index in the range 
+        return(Math.min(index,length-index));
+    }
+
     public static int[][] getOrbitPattern(int[][] array){
+        // This code loops over every item in the 2d array and gets the orbit it is apart of by finding how close it is to the edge of the array
         int numOfRows = array.length;
-        //this creates the orbit array with the correct number of rows
+        // This creates the orbits array and determines how many rows exist in it
         int[][] arrayOrbits = new int[numOfRows][];
-        //this assigns the correct length to each row in the orbit array
+        // this loops over every row in the array and gets the length of each row
         for (int i = 0; i < array.length; i++) {
             arrayOrbits[i] = new int[array[i].length];
         }
-
-        // this loops over every value in the input array calculating its distance from the closest edge and assigning that distance to the orbit that item is apart of
+        // this creates 2 variables for each item in the 
         for (int row = 0;row<numOfRows;row++) {
             int numOfCols = array[row].length;
             for(int col = 0;col<numOfCols;col++){
-                arrayOrbits[row][col] = Math.min(Math.min(row,(numOfRows-1)-row), Math.min(col,(numOfCols-1)-col))+1;
+                int verticalDist = getDistanceFromEdge(row, numOfRows-1);
+                int horizontalDist = getDistanceFromEdge(col, numOfCols-1);
+                arrayOrbits[row][col] = Math.min(verticalDist, horizontalDist)+1;
             }
         }
         return arrayOrbits;
@@ -95,18 +101,12 @@ public class Lab1_Horn_Difficult {
     public static int[] calculateOrbitTotals(int[][] orbit, int[][] orbitPattern){
         int numOfRows = orbit.length;
         int longestRow = 0;
-        // this finds out number of collumns by looping through the arrays and finding the longest row
         for (int[] row : orbit) {
             if (row.length > longestRow) {
                 longestRow = row.length;
             }
         }
-        // this creates an array which stores the final totals for each orbit 
-        // the number of orbits is calculated based on the number of rows and which row is the longest, but there may be less orbits total than calculated
-        
         int[] orbitTotals = new int[(int)Math.ceil(Math.min(numOfRows, longestRow)/2.)];
-
-        // this loops though the input array and adds each value to the corresponding orbit that was colculated in the orbit pattern array
         for (int row = 0;row<numOfRows;row++) {
             int numOfCols = orbit[row].length;
             for(int col = 0;col<numOfCols;col++){
@@ -118,42 +118,16 @@ public class Lab1_Horn_Difficult {
 
 
     public static void main(String[] args) {
-        // getting and printing the input array
-        int[][] orbits = readFileToArray("CS2\\Lab1\\array4x4-same.txt");
+        int[][] orbits = readFileToArray("CS2\\Lab1\\array_jagged.txt");
         print2DArray(orbits);
-
-        // getting and printing the orbit pattern
         int[][] orbitPattern = getOrbitPattern(orbits);
         print2DArray(orbitPattern);
-
-        // calculating and printing the orbit totals
         int[] orbitTotals = calculateOrbitTotals(orbits, orbitPattern);
-        System.out.println("Orbit Totals: ");
-        int numOfOrbits = 0;
+        System.out.println("Orbit Totals: \n");
         for(int i=0;i<orbitTotals.length;i++){
             if(orbitTotals[i]>0){
-                numOfOrbits++;
                 System.out.println((i+1)+": "+orbitTotals[i]);
             }
         }
-
-        // finding how many orbits have the same total by sorting them and then checking if the next item in the array has the same total
-        Arrays.sort(orbitTotals,0 ,numOfOrbits);
-        int numOfSameSum = 0;
-        // check the first orbit
-        if(orbitTotals[0]==orbitTotals[1]){
-            numOfSameSum++;
-        }
-        // check all of the middle orbits
-        for(int i=1;i<orbitTotals.length-1;i++){
-            if(orbitTotals[i]==orbitTotals[i+1]||orbitTotals[i]==orbitTotals[i-1]){
-                numOfSameSum++;
-            }
-        }
-        // check the last orbit
-        if(orbitTotals[orbitTotals.length-1]==orbitTotals[orbitTotals.length-2]){
-            numOfSameSum++;
-        }
-        System.out.println("\nThere are: "+numOfSameSum+" orbits with the same total");
     }
 }
