@@ -36,6 +36,11 @@ public class xmlReader {
                                 name+=line.charAt(i);
                                 i++;
                             }
+                            String info = "";
+                            while(line.charAt(i)!='"'){
+                                name+=line.charAt(i);
+                                i++;
+                            }
                         }
                     }
                     String[] n = {name,Long.toString(lineNumber)};
