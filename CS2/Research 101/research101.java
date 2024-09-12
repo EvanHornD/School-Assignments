@@ -47,6 +47,8 @@ public class research101 {
         lineIndex = new HashMap<>();
         indexFile();
         System.out.println(lineIndex.get(2));
-        for(int i=0; i<)
+        for(int i=0; i<weaknesses.size();i++){
+            System.out.println(weaknesses.get(i));
+        }
     }
 }
