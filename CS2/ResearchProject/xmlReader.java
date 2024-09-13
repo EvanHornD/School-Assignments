@@ -7,20 +7,20 @@ import java.util.*;
 public class xmlReader {
     private RandomAccessFile xmlFile;
     private String filePath;
-    private Map<Integer, Long> lineIndex;
-    private ArrayList<String[]> weaknesses;
+    private Map<Long, Long> lineIndex;
+    public ArrayList<weakness> weaknesses;
 
     public xmlReader(String filePath) throws IOException{
         this.filePath = filePath;
         this.xmlFile = new RandomAccessFile(filePath, "r");
         this.lineIndex = new HashMap<>();
-        this.weaknesses = new ArrayList<String[]>();
+        weaknesses = new ArrayList<>();
         indexFile();
     }
 
     private void indexFile() throws IOException {
         long fileIndexPointer = 0;
-        int lineNumber = 0;
+        long lineNumber = 0;
         String line;
 
         // Open a temporary BufferedReader to index the file
@@ -29,6 +29,7 @@ public class xmlReader {
                 if(line.contains("<Weakness ")){
                     lineIndex.put(lineNumber, fileIndexPointer);
                     String name = "";
+                    String info = "";
                     for(int i=0;i<line.length();i++){
                         if(line.charAt(i)=='N'){
                             i+=6;
@@ -36,10 +37,14 @@ public class xmlReader {
                                 name+=line.charAt(i);
                                 i++;
                             }
+                            i+=2;
+                            while(line.charAt(i)!='>'){
+                                info+=line.charAt(i);
+                                i++;
+                            }
                         }
                     }
-                    String[] n = {name,Long.toString(lineNumber)};
-                    weaknesses.add(n);
+                    weaknesses.add(new weakness(name, info, lineNumber));
                 }
                 fileIndexPointer += line.getBytes().length + System.lineSeparator().getBytes().length;
                 lineNumber++;
@@ -49,7 +54,8 @@ public class xmlReader {
     
     public void printWeaknessNames() {
         for(int i=0; i<weaknesses.size();i++){
-            System.out.println(Arrays.toString(weaknesses.get(i))+" "+lineIndex.get(Integer.parseInt(weaknesses.get(i)[1])));
+            weaknesses.get(i).printWeakness();
+            System.out.print(" charIndex: "+lineIndex.get(weaknesses.get(i).getLineNumber())+"\n");
         }
     }
 

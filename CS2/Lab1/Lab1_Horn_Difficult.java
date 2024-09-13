@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.Arrays;
 import java.util.Scanner;
 public class Lab1_Horn_Difficult {
 
@@ -99,14 +100,19 @@ public class Lab1_Horn_Difficult {
     }
 
     public static int[] calculateOrbitTotals(int[][] orbit, int[][] orbitPattern){
+        // finds the number of rows in the array
         int numOfRows = orbit.length;
         int longestRow = 0;
+        // finds the longest row and sets that to be the number of collumns
         for (int[] row : orbit) {
             if (row.length > longestRow) {
                 longestRow = row.length;
             }
         }
+        // uses the number of rows and collumns to calculate the largest number of orbits that could exist
         int[] orbitTotals = new int[(int)Math.ceil(Math.min(numOfRows, longestRow)/2.)];
+
+        // uses the orbit pattern and the input array to calculate the totals of each orbit
         for (int row = 0;row<numOfRows;row++) {
             int numOfCols = orbit[row].length;
             for(int col = 0;col<numOfCols;col++){
@@ -116,18 +122,64 @@ public class Lab1_Horn_Difficult {
         return orbitTotals;
     }
 
+    public static int calculateMatchingNumbers(int[] totals){
+        // calculates the number of orbits that arent empty
+        int numOrbits = 0;
+        for(int i = 0; i<totals.length;i++){
+            if(totals[i]>0){
+                numOrbits++;
+            }
+        }
+        // creates a new array with the value that was just calculated
+        int[] newTotals = new int[numOrbits];
+        
+        // fills in the array with the values that aren't empty
+        int j = 0;
+        for(int i = 0; i<totals.length;i++){
+            if(totals[i]>0){
+                newTotals[j] = totals[i];
+                j++;
+            }
+        }
+        // sorting the array into ascending order
+        Arrays.sort(newTotals);
+        int sameTotals = 0;
+        // checks each orbit to see if it is the same as the ones beside it in the array
+        if(newTotals.length>1){
+            if(newTotals[0]==newTotals[1]){
+                sameTotals++;
+            }
+            for (int i = 1; i < newTotals.length-1; i++) {
+                if(newTotals[i]==newTotals[i-1]||newTotals[i]==newTotals[i+1]){
+                    sameTotals++;
+                }
+            }
+            if(newTotals[newTotals.length-1]==newTotals[newTotals.length-2]){
+                sameTotals++;
+            }
+        }
+
+        return sameTotals;
+    }
+
 
     public static void main(String[] args) {
-        int[][] orbits = readFileToArray("CS2\\Lab1\\array_jagged.txt");
+
+        int[][] orbits = readFileToArray("School-Assignments\\CS2\\Lab1\\array4x4-same.txt");
         print2DArray(orbits);
+
         int[][] orbitPattern = getOrbitPattern(orbits);
         print2DArray(orbitPattern);
+
         int[] orbitTotals = calculateOrbitTotals(orbits, orbitPattern);
         System.out.println("Orbit Totals: \n");
+
+        // prints out the orbit totals and ignores any empty orbits that were caused in the calculate totals method
         for(int i=0;i<orbitTotals.length;i++){
             if(orbitTotals[i]>0){
                 System.out.println((i+1)+": "+orbitTotals[i]);
             }
         }
+        System.out.println(calculateMatchingNumbers(orbitTotals)+ " orbits are the same.");
     }
 }
