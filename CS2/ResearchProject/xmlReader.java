@@ -7,7 +7,7 @@ import java.util.*;
 public class xmlReader {
     private RandomAccessFile xmlFile;
     private String filePath;
-    private Map<Long, Long> lineIndex;
+    public static Map<Long, Long> lineIndex;
     public ArrayList<weakness> weaknesses;
 
     public xmlReader(String filePath) throws IOException{
@@ -51,6 +51,8 @@ public class xmlReader {
             }
         }
     }
+
+
     
     public void printWeaknessNames() {
         for(int i=0; i<weaknesses.size();i++){

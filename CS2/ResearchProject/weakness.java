@@ -4,6 +4,7 @@ public class weakness {
     String name;
     String info;
     Long lineNumber;
+    node nodeTree;
 
     public weakness(String name, String info,Long lineNumber){
         this.name = name;
