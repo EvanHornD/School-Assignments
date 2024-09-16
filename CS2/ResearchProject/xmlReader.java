@@ -71,7 +71,11 @@ public class xmlReader {
             }
         }
         return element;
-    }    
+    }
+
+    public String[][] getAttributes(int lineIndex, String line){
+        return new String[0][];
+    }
 
     public nodeTree createNodeTree(Long targetLine) throws IOException {
         Long filePosition = lineIndex.get(targetLine);
