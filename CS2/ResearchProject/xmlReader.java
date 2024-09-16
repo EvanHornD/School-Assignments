@@ -7,7 +7,7 @@ import java.util.*;
 public class xmlReader {
     private RandomAccessFile xmlFile;
     private String filePath;
-    public static Map<Long, Long> lineIndex;
+    public Map<Long, Long> lineIndex;
     public ArrayList<weakness> weaknesses;
 
     public xmlReader(String filePath) throws IOException{
@@ -51,14 +51,56 @@ public class xmlReader {
             }
         }
     }
+    
+    public static boolean checkIfElement(String element){
+        if(element.contains("xhtml:")){
+            return false;
+        }
+        return true;
+    }
+
+    public static String getElement(int lineIndex, String line){
+        String element = "";
+        for (int i = lineIndex; i < line.length(); i++) {
+            if(!" >".contains(String.valueOf(line.charAt(i)))){
+                if(line.charAt(i)!='/'){
+                    element+=line.charAt(i);
+                }
+            }else{
+                break;
+            }
+        }
+        return element;
+    }    
+
+    public nodeTree createNodeTree(Long targetLine) throws IOException {
+        Long filePosition = lineIndex.get(targetLine);
+        xmlFile.seek(filePosition);
+        String line = "";
+        String element = "";
+        line = xmlFile.readLine();
+        for (int i = 0; i < line.length(); i++) {
+            if(line.charAt(i)=='<'){
+                element = getElement(i+1, line);
+                break;
+            }
+        }
+        System.out.println(element);
+        nodeTree tree = new nodeTree(new node(null,element));
+        
+
+
+        return null;
+    }
 
 
     
-    public void printWeaknessNames() {
+    public void printWeaknessNames() throws IOException {
         for(int i=0; i<weaknesses.size();i++){
             weaknesses.get(i).printWeakness();
             System.out.print(" charIndex: "+lineIndex.get(weaknesses.get(i).getLineNumber())+"\n");
         }
+        createNodeTree(weaknesses.get(1).getLineNumber());
     }
 
     public void close() throws IOException {
