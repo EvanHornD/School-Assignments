@@ -59,18 +59,67 @@ public class xmlReader {
         return true;
     }
 
-    public static String getElement(int lineIndex, String line){
+    public static ArrayList<Object> getElement(int lineIndex, String line){
         String element = "";
-        for (int i = lineIndex; i < line.length(); i++) {
+        int lineCursor = lineIndex;
+        boolean isClosingTag = false;
+        for (int i = lineCursor; i < line.length(); i++) {
             if(!" >".contains(String.valueOf(line.charAt(i)))){
                 if(line.charAt(i)!='/'){
                     element+=line.charAt(i);
+                } else {
+                    isClosingTag = true;
                 }
             }else{
+                lineCursor = i;
                 break;
             }
         }
-        return element;
+        return new ArrayList<>(Arrays.asList(element,lineCursor,isClosingTag));
+    }    
+
+    public static ArrayList<Object> getElementAttributes(int lineIndex, String line){
+        ArrayList<String[]> Attributes = new ArrayList<>();
+        int lineCursor = lineIndex;
+        boolean isClosingTag = false;
+        boolean done = false;
+        int parity = 1;
+        String[] attribute = new String[2];
+        String text = "";
+
+        for (int i = lineCursor; i < line.length(); i++) {
+            switch (parity%2) {
+                case 1: // get the name of the attribute
+                if(line.charAt(i) != '"'){
+                    text+=line.charAt(i);
+                }else{
+                    parity++;
+                    attribute[0]=text;
+                    text = "";
+                    i++;
+                } 
+                    break;
+                case 0: // get the details of the attribute
+                    if(!"\"".contains(String.valueOf(line.charAt(i)))){
+                        text+=line.charAt(i);
+                    }else{
+                        parity++;
+                        attribute[1]=text;
+                        switch (line.charAt(i+1)) {
+                            case '/': isClosingTag = true; done = true; lineCursor = i+3; break;
+                            case '>': done = true; lineCursor = i+2; break;
+                            case ' ': text=""; i+=2; break;
+                            default:break;
+                        }
+                        Attributes.add(attribute);
+                        attribute = new String[2];
+                    } 
+                    break;
+                default: break;
+            }
+            if(done){break;}
+        }
+        return new ArrayList<>(Arrays.asList(Attributes,lineCursor,isClosingTag));
     }    
 
     public nodeTree createNodeTree(Long targetLine) throws IOException {
@@ -81,7 +130,9 @@ public class xmlReader {
         line = xmlFile.readLine();
         for (int i = 0; i < line.length(); i++) {
             if(line.charAt(i)=='<'){
-                element = getElement(i+1, line);
+                ArrayList<Object> parsedElement = getElement(i+1, line);
+                element = (String) parsedElement.get(0);
+                i = (Integer) parsedElement.get(1);
                 break;
             }
         }
