@@ -125,9 +125,8 @@ public class xmlReader {
     public nodeTree createNodeTree(Long targetLine) throws IOException {
         Long filePosition = lineIndex.get(targetLine);
         xmlFile.seek(filePosition);
-        String line = "";
+        String line = xmlFile.readLine();
         String element = "";
-        line = xmlFile.readLine();
         for (int i = 0; i < line.length(); i++) {
             if(line.charAt(i)=='<'){
                 ArrayList<Object> parsedElement = getElement(i+1, line);
@@ -138,7 +137,7 @@ public class xmlReader {
         }
         System.out.println(element);
         nodeTree tree = new nodeTree(new node(null,element));
-        
+        tree.activeNode.
 
 
         return null;
