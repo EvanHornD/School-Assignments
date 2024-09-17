@@ -1,0 +1,124 @@
+ID,Name,Rarity,Magical Abilities,Durability,Cost
+1,Sword of Emberflame,Rare,Emits fire,50,2
+2,Amulet of the Fallen,Very Rare,Grants invisibility for 1 hour per day,60,55
+3,Wand of Frostbite,Uncommon,Shoots a frost bolt 2d4 cold damage,20,80
+4,Staff of the Oracle,Legendary,Provides visions of the future +3 to wisdom-based rolls,100,120
+5,Cloak of Shadows,Rare,Grants advantage on stealth checks blends into darkness,40,300
+6,Dagger of Whispering,Common,Can send silent messages up to 60 feet,15,200
+7,Helm of the Guardian,Very Rare,Summons a magical shield absorbs up to 50 damage,80,750
+8,Ring of Featherfall,Uncommon,Slows falling speed negates fall damage,25,120
+9,Gauntlets of Giants,Rare,Increases strength to 22 while worn,60,450
+10,Orb of Arcane Storms,Legendary,Summons a storm dealing 4d6 lightning damage in 30 ft.,100,150
+11,Boots of Swiftness,Uncommon,Increases speed by 15 feet,35,100
+12,Shield of the Mountain,Rare,Grants +2 AC cannot be knocked down,80,600
+13,Pendant of Life,Very Rare,Heals 4d8 HP once per day,70,900
+14,Lantern of True Sight,Legendary,Reveals invisible creatures and illusions,50,130
+15,Bracers of Archery,Rare,Grants +2 to ranged attacks with bows,40,220
+16,Crown of Dominion,Legendary,Grants control over weak-minded beings,90,200
+17,Ring of Eternal Flame,Very Rare,Can create fire immune to fire damage,40,500
+18,Armor of the Eternal,Legendary,Grants resistance to all damage,120,180
+19,Gloves of Precision,Rare,Grants perfect accuracy on thrown weapons,50,275
+20,Belt of the Bear,Uncommon,Increases Constitution by +2,45,180
+21,Bow of Whispering Winds,Rare,Shoots silent arrows +1 to attack and damage rolls,60,350
+22,Chalice of Regeneration,Very Rare,Heals 2d8 HP when drinking from it once per short rest,30,800
+23,Cape of the Phoenix,Legendary,Grants flight and resurrects user once,90,250
+24,Scroll of Time-Warp,Very Rare,Allows user to rewind time by 10 seconds,1,150
+25,Necklace of the Depths,Rare,Allows breathing underwater and swim speed equal to walk speed,50,400
+26,Sword of the Planeswalker,Legendary,Can shift between dimensions deals 3d6 force damage,120,185
+27,Shield of Eternal Vigilance,Very Rare,Grants immunity to sleep and charm effects,85,900
+28,Rod of Thunder,Uncommon,Casts Thunderwave (2nd level spell),30,150
+29,Gauntlet of the Forge,Rare,Can melt metal and repair items,55,300
+30,Mask of the Wild Hunt,Very Rare,Grants advantage on tracking creatures and survival checks,40,650
+31,Mirror of the Lost,Legendary,Shows hidden or invisible creatures in its reflection,70,140
+32,Ring of Spell Storing,Very Rare,Can store up to 5 levels of spells,50,970
+33,Blade of the Blood Moon,Rare,Deals 1d6 extra necrotic damage under a full moon,65,500
+34,Cloak of the Bat,Rare,Grants flight in darkness and advantage on stealth checks,40,420
+35,Horn of Valhalla,Very Rare,Summons 1d4 spectral warriors to fight alongside you,80,125
+36,Ring of Elemental Mastery,Legendary,Grants control over all elements,100,250
+37,Belt of Dwarvenkind,Rare,Increases Constitution by +2,55,600
+38,Boots of Levitation,Uncommon,Grants levitation for up to 10 minutes,30,180
+39,Sword of Wounding,Rare,Inflicts a wound that prevents healing until next dawn,65,700
+40,Amulet of Health,Very Rare,Sets Constitution to 19,70,100
+41,Rod of Resurrection,Legendary,Can resurrect a dead creature once per week,90,300
+42,Bow of Winter�s Breath,Rare,Shoots arrows that deal 1d6 cold damage,50,550
+43,Gauntlets of Ogre Power,Rare,Sets Strength to 19,60,480
+44,Cloak of Displacement,Very Rare,Creates an illusion to make you appear to be in a different location,70,950
+45,Helm of Telepathy,Rare,Allows telepathic communication within 120 feet,55,700
+46,Ring of Regeneration,Very Rare,Heals 1d6 HP every 10 minutes,45,120
+47,Circlet of Blasting,Uncommon,Allows wearer to cast Scorching Ray spell,35,220
+48,Necklace of Fireballs,Rare,Can throw beads of fireball (level 3 spell),30,450
+49,Shield of Lightning,Very Rare,Grants resistance to lightning damage,70,980
+50,Staff of Frost,Legendary,Can cast Cone of Cold and other frost spells,90,220
+51,Sword of Sharpness,Rare,Can sever limbs on a critical hit,75,800
+52,Ring of Water Walking,Uncommon,Allows the wearer to walk on water,35,150
+53,Boots of Spider Climbing,Rare,Grants the ability to walk on walls and ceilings,40,350
+54,Horn of Blasting,Very Rare,Emits a powerful sonic blast that deals thunder damage,50,678
+55,Cloak of Mists,Rare,Can create a misty fog that obscures vision in a 20-foot radius,40,400
+56,Hammer of Thunderbolts,Legendary,Deals 3d6 extra thunder damage,120,250
+57,Amulet of the Sun,Very Rare,Deals radiant damage to undead,70,125
+58,Helm of the Minotaur,Rare,Grants advantage on charge attacks,50,508
+59,Ring of Earth Binding,Rare,Can summon a stone golem once per day,75,135
+60,Gloves of Swimming,Uncommon,Grants advantage on swimming checks and underwater combat,30,120
+61,Ring of Spell Turning,Very Rare,Reflects a spell cast against you back to the caster,70,140
+62,Staff of the Archmage,Legendary,Enhances spellcasting abilities,90,706
+63,Cloak of the Serpent,Rare,Grants poison resistance and advantage on saving throws,50,600
+64,Crystal of Mind Control,Legendary,Allows control over one creature of intelligence 10 or lower,60,185
+65,Amulet of the Storm,Very Rare,Summons a storm with 3d6 lightning damage in a 30-foot radius,75,100
+66,Boots of Silent Steps,Rare,Grants complete silence while moving,35,320
+67,Shield of the Phoenix,Legendary,Once destroyed resurrects user in a burst of fire,80,220
+68,Helm of the Beast,Rare,Grants the ability to speak with animals,45,420
+69,Lantern of Souls,Very Rare,Captures the soul of a fallen enemy for later interrogation,60,900
+70,Sword of Venom,Rare,Inflicts 1d4 poison damage target must make a saving throw,55,400
+71,Gauntlet of the Titans,Legendary,Increases strength to 25 ,100,200
+72,Pendant of Night Vision,Uncommon,Grants darkvision up to 60 feet,30,150
+73,Ring of Mind Shielding,Very Rare,Immune to mind-reading and psychic attacks,65,850
+74,Bow of the Stars,Legendary,Fires arrows of starlight,70,160
+75,Armor of the Unyielding,Very Rare,Grants immunity to non-magical damage,120,190
+76,Cloak of Dragon's Breath,Legendary,Can unleash a breath attack of the user's choice of element,80,235
+77,Orb of Light,Rare,Emits bright light in a 30-foot radius,40,459
+78,Boots of Endless Speed,Legendary,Grants the wearer double movement speed,90,200
+79,Staff of the Wild,Very Rare,Can summon animals or entangle enemies with vines,70,567
+80,Ring of the Fey,Rare,Grants advantage on charisma checks with fey creatures,45,500
+81,Shield of Time,Legendary,Can stop time for 10 seconds once per day,100,240
+82,Helm of Fire Resistance,Rare,Grants resistance to fire damage,55,786
+83,Dagger of Shadows,Very Rare,Can teleport up to 30 feet by throwing the dagger,50,900
+84,Gauntlet of Crushing,Rare,Grants advantage on grappling attacks,60,876
+85,Cloak of the Phoenix,Legendary,Can reincarnate the wearer once upon death,100,280
+86,Orb of Elemental Fury,Very Rare,Unleashes a storm of elemental damage ,85,180
+87,Sword of the Black Flame,Legendary,Burns with black fire,90,765
+88,Ring of Invisibility,Legendary,Grants invisibility at will,65,175
+89,Boots of Water Walking,Uncommon,Allows walking on water,25,200
+90,Staff of the Druid,Very Rare,Can transform into an animal once per day,75,130
+91,Helm of Truth,Rare,Grants the ability to detect lies,50,500
+92,Gloves of Flame,Rare,Can cast Firebolt at will,40,400
+93,Cape of the Wind,Very Rare,Grants flight and immunity to wind-based attacks,75,125
+94,Staff of Healing,Very Rare,Can cast Cure Wounds and Healing Word,80,457
+95,Ring of Teleportation,Legendary,Allows teleportation to any known location,60,180
+96,Shield of the Sea,Rare,Grants resistance to water-based attacks,50,600
+97,Sword of the Fallen King,Legendary,Deals 4d8 radiant damage,100,225
+98,Boots of the Desert,Uncommon,Grants resistance to fire and heat damage,40,300
+99,Helm of the Eternal Night,Very Rare,Grants darkvision and immunity to blindness,70,105
+100,Ring of Frost Resistance,Rare,Grants resistance to cold damage,55,627
+101,Amulet of True Speech,Very Rare,Grants the ability to understand and speak all languages,60,950
+102,Sword of the Sky,Legendary,Can summon a storm,85,210
+103,Gauntlet of Shattering,Rare,Can break through stone and metal,75,559
+104,Crown of the Undying,Legendary,Grants immortality,100,300
+105,Gloves of Healing,Rare,Can heal 2d8 HP once per short rest,50,500
+106,Amulet of the Wild,Very Rare,Grants the ability to summon and control animals,65,120
+107,Cloak of the Elements,Legendary,Grants immunity toelemental damage,90,260
+108,Sword of the War God,Legendary,Grants advantage on attack rolls,95,240
+109,Pendant of Time,Very Rare,Can slow time for 5 seconds once per day,60,135
+110,Boots of the Forest,Rare,Grants advantage on stealth checks in natural environments,40,450
+111,Ring of Fireball,Rare,Allows casting of Fireball once per day,55,700
+112,Staff of Illusions,Very Rare,Can cast major illusion spells,70,140
+113,Orb of the Sun,Legendary,Can summon a miniature sun,80,798
+114,Ring of Necromancy,Very Rare,Can raise a skeleton or zombie from the dead,60,105
+115,Gauntlet of Wind,Rare,Can summon a gust of wind to knock back enemies,50,657
+116,Helm of the Eagle,Uncommon,Grants the ability to see up to a mile away,30,250
+117,Boots of Frost Walking,Rare,Grants the ability to walk on ice without slipping,40,350
+118,Shield of the Eternal Flame,Very Rare,Grants immunity to fire damage,85,150
+119,Sword of the Tides,Rare,Deals extra damage to aquatic creatures,50,650
+120,Ring of the Nightwalker,Legendary,Grants invisibility in darkness,65,200
+121,Helm of Psychic Defense,Very Rare,Grants resistance to psychic damage and advantage on saving throws,70,100
+122,Gloves of Arcane Power,Legendary,Increases spell damage by 1d6,90,190
+123,Orb of the Void,Legendary,Summons a black hole,100,300
