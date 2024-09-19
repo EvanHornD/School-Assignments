@@ -5,8 +5,8 @@
  *  - Lab3_Lastname.java --- the java file of your program. 
  * 
  */
-
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class lab3Main{
@@ -17,9 +17,42 @@ public class lab3Main{
      * containing the value of every row in the "itemList.csv"
      * @return
      */
-    // public static String[][] scanItems(){
-    //     return;
-    // }
+    public static String[][] scanItems(File file) throws FileNotFoundException{
+        Scanner itemScanner = new Scanner(file);
+        String itemIDs = itemScanner.nextLine();
+
+        int numberOfItemIDs = 1;
+        for (int i = 0; i < itemIDs.length(); i++) {
+            if (itemIDs.charAt(i)==',') {
+                numberOfItemIDs++;
+            }
+        }
+
+        int numberOfItems = 0;
+        while(itemScanner.hasNextLine()){
+            itemScanner.nextLine();
+            numberOfItems++;
+        }
+        String[][] itemList = new String[numberOfItems][numberOfItemIDs];
+
+        itemScanner.close();
+        itemScanner = new Scanner(file);
+
+        String itemLine;
+
+        String[] itemInfo = new String[numberOfItemIDs];
+        String info = "";
+        for (String[] item : itemList) {
+            itemLine = itemScanner.nextLine();
+
+            for (int i = 0; i < itemLine.length(); i++) {
+                
+            }
+        }
+
+        itemScanner.close();
+        return null;
+    }
 
     /*
      * 
@@ -121,9 +154,18 @@ public class lab3Main{
 
     public static int moveCursor(int cursor,int input){
         switch (input) {
-            case 0:if(cursor-1>=0){return(cursor-1);}return(cursor);
-            case 1:if(cursor+1<=5){return(cursor+1);}return(cursor);
-            default:return(cursor);}
+            case 0: 
+                if(cursor-1>=0){
+                    return(cursor-1);
+                }
+                return(cursor);
+            case 1: 
+                if(cursor+1<=5){
+                    return(cursor+1);
+                }    
+                return(cursor);
+            default: return(cursor);
+        }
     }
 
     public static void main(String[] args) throws Exception{
@@ -134,19 +176,58 @@ public class lab3Main{
 
         Scanner userInputScanner = new Scanner(System.in);
         int menuCursor = 0;
+        int input = 0;
         String menuState = "Main menu";
         printMenu(menuCursor);
-        while(true){
+        while(true){ 
+            switch (menuState) {
+                case "Main menu":
+                    printMenu(menuCursor);
+                    input = getInput(userInputScanner);
+                    menuCursor = moveCursor(menuCursor,input);
+                    if(input == 2){
+                        menuState = menuItems[menuCursor];
+                    }                                   
+                break;
             
-            while(menuState=="Main menu"){
-                int input = getInput(userInputScanner);
-                menuCursor = moveCursor(menuCursor,input);
-                if(input == 4){
+                case "View shop":
+                    System.out.println(menuState);
+                    input = getInput(userInputScanner);
+                    menuState = "Main menu";
+                break;
 
-                }
-                printMenu(menuCursor);
+                case "View inventory":
+                    System.out.println(menuState);
+                    input = getInput(userInputScanner);
+                    menuState = "Main menu";
+                break;
+
+                case "Sell item":
+                    System.out.println(menuState);
+                    input = getInput(userInputScanner);
+                    menuState = "Main menu";
+                break;
+
+                case "Buy item":
+                    System.out.println(menuState);
+                    input = getInput(userInputScanner);
+                    menuState = "Main menu";
+                break;
+
+                case "View item stats":
+                    System.out.println(menuState);
+                    input = getInput(userInputScanner);
+                    menuState = "Main menu";
+                break;
+
+                default:
+                
+                break;
             }
-
+            printMenu(menuCursor);
+            if ("Exit".equals(menuState)) {
+                break;
+            }
         }
     }
 }
