@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.Scanner;
 
 public class lab3Main{
+
+    static String[] menuItems = {"View shop","View inventory","Sell item","Buy item","View item stats","Exit"};
     /**
      * TODO: Make a method that takes in a file name and returns a 2D String array
      * containing the value of every row in the "itemList.csv"
@@ -18,47 +20,6 @@ public class lab3Main{
     // public static String[][] scanItems(){
     //     return;
     // }
-
-    public static void main(String[] args) throws Exception{
-        //Read CSV file
-      
-        // Define your inventory
-        InventoryLL inventory = new InventoryLL();
-         while(true){
-            System.out.println("");
-            System.out.println("_______________________________________________");
-            System.out.println("__        __   _                ");                           
-            System.out.println("\\ \\      / /__| | ___ ___  _ __ ___   ___ ");
-            System.out.println(" \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\");
-            System.out.println("  \\ V  V /  __/ | (_| (_) | | | | | |  __/");
-            System.out.println("   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|");
-            System.out.println("_______________________________________________");
-            System.out.println("");
-            System.out.println("           Welcome to SHOP_NAME              ");
-            System.out.println("");
-            System.out.println("Please select one of the following options:");
-            System.out.println("1) View shop");
-            System.out.println("2) View inventory");
-            System.out.println("3) Sell item");
-            System.out.println("4) Buy item");
-            System.out.println("5) View item stats");
-            System.out.println("6) Exit");
-
-            // TODO: Create the Start Menu
-
-            // user presses 1
-
-            // user presses 2
-
-            // user presses 3
-
-            // user presses 4
-
-            // user presses 5
-
-            // user presses 6
-        }
-    }
 
     /*
      * 
@@ -76,7 +37,8 @@ public class lab3Main{
     int abilityWidth = 82;
     int hpWidth = 8;
     int costWidth = 7;
-    
+
+    clearconsole();
     System.out.println();
     // Print the top border
     System.out.println("+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
@@ -120,6 +82,73 @@ public class lab3Main{
      * 
      */
 
+    public static void printMenu(int menuCursor){
+        clearconsole();
+        System.out.println("");
+        System.out.println("_______________________________________________");
+        System.out.println("__        __   _                ");                           
+        System.out.println("\\ \\      / /__| | ___ ___  _ __ ___   ___ ");
+        System.out.println(" \\ \\ /\\ / / _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\");
+        System.out.println("  \\ V  V /  __/ | (_| (_) | | | | | |  __/");
+        System.out.println("   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|");
+        System.out.println("_______________________________________________");
+        System.out.println("");
+        System.out.println("           Welcome to SHOP_NAME              ");
+        System.out.println("");
+        System.out.println("enter W and S to traverse the menu, enter E to select the menu item:");
+        for (int i=0; i<menuItems.length;i++) {
+            if(menuCursor==i){
+                System.out.println("--> "+(i+1)+") "+menuItems[i]);
+            } else {
+                System.out.println("  "+(i+1)+") "+menuItems[i]);
+            }
+        }
+    }
+
+    public static void clearconsole(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush(); 
+    }
+
+    public static int getInput(Scanner userInput){
+        switch (userInput.nextLine().toLowerCase()) {
+            case "w": return(0);
+            case "s": return(1);
+            case "e": return(2);
+            default: return(-1);
+        }
+    }
+
+    public static int moveCursor(int cursor,int input){
+        switch (input) {
+            case 0:if(cursor-1>=0){return(cursor-1);}return(cursor);
+            case 1:if(cursor+1<=5){return(cursor+1);}return(cursor);
+            default:return(cursor);}
+    }
+
+    public static void main(String[] args) throws Exception{
+        //Read CSV file
+      
+        // Define your inventory
+        InventoryLL inventory = new InventoryLL();
+
+        Scanner userInputScanner = new Scanner(System.in);
+        int menuCursor = 0;
+        String menuState = "Main menu";
+        printMenu(menuCursor);
+        while(true){
+            
+            while(menuState=="Main menu"){
+                int input = getInput(userInputScanner);
+                menuCursor = moveCursor(menuCursor,input);
+                if(input == 4){
+
+                }
+                printMenu(menuCursor);
+            }
+
+        }
+    }
 }
 
 
