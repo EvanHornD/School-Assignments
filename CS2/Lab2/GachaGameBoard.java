@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.Random;
 
 public class GachaGameBoard {
     public static GachaHero currentGachaHero;
@@ -18,16 +19,21 @@ public class GachaGameBoard {
     public static GachaHero[] scanHero(String filename){
         try {
             Scanner fileReader = new Scanner(new File(filename));
+
+            // this gets the nuber of heroes that exist
             int numOfHeroes = -1;
             while(fileReader.hasNextLine()){
                 fileReader.nextLine();
                 numOfHeroes++;
             }
+            // this uses the total number of heroes to create an array
             GachaHero[] Heroes = new GachaHero[numOfHeroes];
             
+            // this resets the scanner
             fileReader.close();
             fileReader = new Scanner(new File(filename));
             fileReader.nextLine();
+            // this loops over every line in the csv and gets every piece of information as a string and adds them to an array
             for (int i = 0; i < Heroes.length; i++) {
                 String fileLine = fileReader.nextLine();
                 String heroData = "";
@@ -42,6 +48,7 @@ public class GachaGameBoard {
                         heroData+=fileLine.charAt(j);
                     }
                 }
+                // this parses the array of information into their respective data type and creates the hero object out of it
                 Heroes[i]= new GachaHero(dataArray[0],dataArray[1],Integer.parseInt(dataArray[2]),Integer.parseInt(dataArray[3]),Integer.parseInt(dataArray[4]),Integer.parseInt(dataArray[5]),Integer.parseInt(dataArray[6]),Integer.parseInt(dataArray[7]));
             }
             fileReader.close();
@@ -61,16 +68,21 @@ public class GachaGameBoard {
     public static GachaVillain[] scanVillain(String filename){
         try {
             Scanner fileReader = new Scanner(new File(filename));
+
+            // this gets the nuber of villains that exist
             int numOfVillains = -1;
             while(fileReader.hasNextLine()){
                 fileReader.nextLine();
                 numOfVillains++;
             }
+            // this uses the total number of villains to create an array
             GachaVillain[] Villains = new GachaVillain[numOfVillains];
             
+            // this resets the scanner
             fileReader.close();
             fileReader = new Scanner(new File(filename));
             fileReader.nextLine();
+            // this loops over every line in the csv and gets every piece of information as a string and adds them to an array
             for (int i = 0; i < Villains.length; i++) {
                 String fileLine = fileReader.nextLine();
                 String villainData = "";
@@ -85,6 +97,7 @@ public class GachaGameBoard {
                         villainData+=fileLine.charAt(j);
                     }
                 }
+                // this parses the array of information into their respective data type and creates the villain object out of it
                 Villains[i]= new GachaVillain(dataArray[0],dataArray[1],Integer.parseInt(dataArray[2]),Integer.parseInt(dataArray[3]),Integer.parseInt(dataArray[4]),Integer.parseInt(dataArray[5]));
             }
             fileReader.close();
@@ -103,8 +116,55 @@ public class GachaGameBoard {
     // [herosLife, VillainsLife] at the start both should be alive
     // true mean they are alive
     // false means they are dead
+    public static double runDamageCalc(int[] stats, int opponentDefense){
+        Random rng = new Random();
+        double critical = rng.nextDouble()+1;
+        int random = rng.nextInt(20);
+        //this line first checks if random is greater than 0, and if it is then it checks if random is less than 14, and if it is it sets it to 1 otherwise it sets it to 2
+        random = random > 0 ? (random < 14 ? 1 : 2) : random;
+
+        // here I am getting all of the info from the stats array and assigning them to variables with the type double so it is easier to read and to avoid using integer division in the damage formula
+        double rarity = (double)stats[0], attack = (double)stats[1], speed = (double)stats[3], luck = (double)stats[4];
+
+        // this is the damage calculation
+        return (((2*rarity*critical)/5)+.25)*attack*((luck*speed)/opponentDefense)*1.05*random;
+    }
+
     public static boolean[] attackSequence(){
-        return new boolean[0];
+        // the get important stats methods do what the getters would have done but I didnt want to have to get everything everytime
+        int[] heroStats = currentGachaHero.getImportantStats();
+        int[] villainStats = currentGachaVillain.getImportantStats();
+        currentGachaHero.printGachaHero();
+        currentGachaVillain.printGachaVillain();
+        int heroHP = currentGachaHero.getHp(),villainHP = currentGachaVillain.getHp();
+        boolean[] aliveStatus = {true,true};
+        //this is the attack sequence 
+        if(heroStats[3]>villainStats[3]){
+            // the (int)Math.round() functions are used to turn a double into an integer because the damage calculation uses a double and the hp values are integers
+            villainHP -= (int)Math.round(runDamageCalc(heroStats, villainStats[2]));
+            if(villainHP>0){
+                heroHP -= (int)Math.round(runDamageCalc(villainStats, heroStats[2]));
+                if(heroHP<=0){
+                    aliveStatus[0] = false;
+                }
+            }else{
+                aliveStatus[1] = false;
+            }
+        }else{
+            heroHP -= (int)Math.round(runDamageCalc(villainStats, heroStats[2]));
+            if(heroHP>0){
+                villainHP -= (int)Math.round(runDamageCalc(heroStats, villainStats[2]));
+                if(villainHP<=0){
+                    aliveStatus[1] = false;
+                }
+            }else{
+                aliveStatus[0] = false;
+            }
+        }
+        // this sets the final hp values and returns the status of the battle
+        currentGachaHero.setHp(heroHP);
+        currentGachaVillain.setHp(villainHP);
+        return aliveStatus;
     }
 
 
@@ -148,7 +208,7 @@ public class GachaGameBoard {
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        ImageIcon image = new ImageIcon("hero-sprite.png");
+        ImageIcon image = new ImageIcon("CS2\\Lab2\\hero-sprite.png");
         JLabel imageLabel = new JLabel(image);
 
         JLabel textLabel = new JLabel("<html>YOU HAVE DRAWN " + currentGachaHero.getName() + " He is a " + currentGachaHero.getRarity() +
@@ -225,7 +285,7 @@ public class GachaGameBoard {
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BorderLayout());
 
-        ImageIcon heroImage = new ImageIcon("hero-sprite.png");
+        ImageIcon heroImage = new ImageIcon("CS2\\Lab2\\hero-sprite.png");
         JLabel heroImageLabel = new JLabel(heroImage);
 
         JLabel heroHPLabel = new JLabel(currentGachaHero.getName() + " HP: " + currentGachaHero.getHp());
@@ -239,7 +299,7 @@ public class GachaGameBoard {
         JPanel rightPanel = new JPanel();
         rightPanel.setLayout(new BorderLayout());
 
-        ImageIcon villainImage = new ImageIcon("villain-sprite.png");
+        ImageIcon villainImage = new ImageIcon("CS2\\Lab2\\villain-sprite.png");
         JLabel villainImageLabel = new JLabel(villainImage);
 
         JLabel villainHPLabel = new JLabel(currentGachaVillain.getName() + " HP: " + currentGachaVillain.getHp());
@@ -283,22 +343,22 @@ public class GachaGameBoard {
         //Get the files name Here
 
         // GachaHero and GachaVillain arrays (Task 3 - 4) will be declared here
-        GachaHero[] heroes = scanHero("CS2\\Lab2\\CS2- Lab-2\\lab2-herodataset - Sheet1.csv");
-        GachaVillain[] villains = scanVillain("CS2\\Lab2\\CS2- Lab-2\\lab2-villaindataset - Sheet1.csv");
+        GachaHero[] gachaHeroArray = scanHero("CS2\\Lab2\\lab2-herodataset - Sheet1.csv");
+        GachaVillain[] gachaVillainArray = scanVillain("CS2\\Lab2\\lab2-villaindataset - Sheet1.csv");
         System.out.println("----------------\n  Gacha Heroes  \n----------------");
-        for (GachaHero gachaHero : heroes) {
+        for (GachaHero gachaHero : gachaHeroArray) {
             gachaHero.printGachaHero();
         }
         System.out.println("------------------\n  Gacha Villains  \n------------------");
-        for (GachaVillain gachaVillain : villains) {
+        for (GachaVillain gachaVillain : gachaVillainArray) {
             gachaVillain.printGachaVillain();
         }
         //Students may uncomment these line at Task 5
-        /**
-            GachaGame gachaPoolHero = new GachaGame();
-            GachaGame gachaPoolVillain = new GachaGame();
-            makeGame(gachaHeroArray, gachaVillainArray, gachaPoolHero, gachaPoolVillain);
-         */
+        
+        GachaGame gachaPoolHero = new GachaGame();
+        GachaGame gachaPoolVillain = new GachaGame();
+        makeGame(gachaHeroArray, gachaVillainArray, gachaPoolHero, gachaPoolVillain);
+        
 
 
     }

@@ -59,6 +59,10 @@ public class GachaHero {
         this.Luck = luck;
     }
 
+    public int[] getImportantStats(){
+        return new int[]{this.rarity.charAt(0)-'0',this.Attack,this.Defense,this.Speed,this.Luck};
+    }
+
     public GachaHero(String name,String rarity,int Hp,int attack,int defense,int speed,int Mp,int luck){
         this.name = name;
         this.rarity = rarity;

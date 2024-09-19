@@ -45,6 +45,10 @@ public class GachaVillain {
         this.Speed = speed;
     }
 
+    public int[] getImportantStats(){
+        return new int[]{this.rarity.charAt(0)-'0',this.Attack,this.Defense,this.Speed,3};
+    }
+
     public GachaVillain(String name,String rarity,int Hp,int attack,int defense,int speed){
         this.name = name;
         this.rarity = rarity;
