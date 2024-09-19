@@ -15,7 +15,7 @@ public class InventoryLL{
 
     // TODO
     public String[] removeItem(String itemName){
-        return;
+        return new String[0];
     }
 
  
@@ -26,7 +26,7 @@ public class InventoryLL{
     
     // TODO
     public String[] getFromInventory(int index) {
-        return;
+        return new String[0];
     }
 }
 
