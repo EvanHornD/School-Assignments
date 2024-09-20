@@ -40,18 +40,25 @@ public class lab3Main{
 
         String itemLine;
 
-        String[] itemInfo = new String[numberOfItemIDs];
-        String info = "";
-        for (String[] item : itemList) {
+        for (int r = 0; r<itemList.length;r++) {
             itemLine = itemScanner.nextLine();
-
-            for (int i = 0; i < itemLine.length(); i++) {
-                
+            String[] itemInfo = new String[numberOfItemIDs];
+            String info = "";
+            int infoNum = 0;
+            for (int c = 0; c <= itemLine.length(); c++) {
+                if(c==itemLine.length()||','== itemLine.charAt(c)){
+                    itemInfo[infoNum] = info;
+                    infoNum++;
+                    info = "";
+                } else{
+                    info+=itemLine.charAt(c);
+                }
             }
+            itemList[r] = itemInfo;
         }
 
         itemScanner.close();
-        return null;
+        return itemList;
     }
 
     /*
@@ -63,12 +70,12 @@ public class lab3Main{
      * 
      */
 
-    public static void displayShop(String[][] shop) {
+    public static void displayShop(String[][] shop,int menuCursor) {
     // Define column widths for each column (adjust these values to fit your data)
-    int nameWidth = 32;
-    int rarityWidth = 17;
-    int abilityWidth = 82;
-    int hpWidth = 8;
+    int nameWidth = 29;
+    int rarityWidth = 12;
+    int abilityWidth = 70;
+    int hpWidth = 12;
     int costWidth = 7;
 
     clearconsole();
@@ -77,8 +84,8 @@ public class lab3Main{
     System.out.println("+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
                          + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+");
 
-    // Print the header row
-    System.out.printf("| %-30s | %-15s | %-80s | %-5s | %-5s |%n", 
+    // Print the header rowe
+    System.out.printf("| %-27s | %-10s | %-68s | %-10s | %-5s |%n", 
                       "Name", "Rarity", "Magical Abilities", "HP", "Cost");
 
     // Print the separator after the header
@@ -91,12 +98,12 @@ public class lab3Main{
             i++;
         }
         else {  // Ensure the shop row is not null
-            System.out.printf("| %-30s | %-15s | %-80s | %-5s | %-5s |%n", 
-                              shop[i][1] ,    // Name
-                              shop[i][2] ,    // Rarity
-                              shop[i][3] ,    // Magical Abilities
-                              shop[i][4] ,    // HP
-                              shop[i][5]      // Cost
+            System.out.printf("| %-27s | %-10s | %-68s | %-10s | %-5s |%n", 
+            shop[i][1] ,    // Name
+            shop[i][2] ,    // Rarity
+            shop[i][3] ,    // Magical Abilities
+            shop[i][4] ,    // HP
+            shop[i][5]      // Cost
             );
         }
     }
@@ -152,7 +159,7 @@ public class lab3Main{
         }
     }
 
-    public static int moveCursor(int cursor,int input){
+    public static int moveCursor(int cursor,int input,int menuSize){
         switch (input) {
             case 0: 
                 if(cursor-1>=0){
@@ -160,7 +167,7 @@ public class lab3Main{
                 }
                 return(cursor);
             case 1: 
-                if(cursor+1<=5){
+                if(cursor+1<=menuSize-1){
                     return(cursor+1);
                 }    
                 return(cursor);
@@ -170,6 +177,7 @@ public class lab3Main{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
+        String [][] shop = scanItems(new File("School-Assignments\\CS2\\Lab 3\\itemList.csv"));
       
         // Define your inventory
         InventoryLL inventory = new InventoryLL();
@@ -184,16 +192,21 @@ public class lab3Main{
                 case "Main menu":
                     printMenu(menuCursor);
                     input = getInput(userInputScanner);
-                    menuCursor = moveCursor(menuCursor,input);
+                    menuCursor = moveCursor(menuCursor,input,menuItems.length);
                     if(input == 2){
                         menuState = menuItems[menuCursor];
+                        menuCursor = 0;
                     }                                   
                 break;
             
                 case "View shop":
-                    System.out.println(menuState);
+                    displayShop(shop, menuCursor);
                     input = getInput(userInputScanner);
-                    menuState = "Main menu";
+                    menuCursor = moveCursor(menuCursor,input,shop.length);
+                    if(input == 2){
+                        menuState = "Main menu";
+                        menuCursor = 0;
+                    }
                 break;
 
                 case "View inventory":
