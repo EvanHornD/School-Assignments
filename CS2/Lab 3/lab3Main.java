@@ -91,20 +91,17 @@ public class lab3Main{
     int costWidth = 7;
 
     clearconsole();
-    clearconsole();
-    clearconsole();
-    System.out.println();
+    String shopInterface = "";
     // Print the top border
-    System.out.println("+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
-                         + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+");
-
+    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
+                         + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
+    
     // Print the header rowe
-    System.out.printf("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", 
-                      "Name", "Rarity", "Magical Abilities", "HP", "Cost");
+    shopInterface+=String.format("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", "Name", "Rarity", "Magical Abilities", "HP", "Cost");
+    
 
     // Print the separator after the header
-    System.out.println("+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
-                         + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+");
+    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
     
     // Set the shop visual boundaries
     if(displayHeight>shop.length){
@@ -127,8 +124,9 @@ public class lab3Main{
             i++;
         }
         else {  // Ensure the shop row is not null
+
             if(menuCursor==i){
-                System.out.printf("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", 
+                shopInterface+=String.format("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", 
                 "--> "+shop[i][1] ,    // Name
                 shop[i][2] ,    // Rarity
                 shop[i][3] ,    // Magical Abilities
@@ -136,7 +134,7 @@ public class lab3Main{
                 shop[i][5]      // Cost
                 );
             }else{
-                System.out.printf("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", 
+                shopInterface+=String.format("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", 
                 shop[i][1] ,    // Name
                 shop[i][2] ,    // Rarity
                 shop[i][3] ,    // Magical Abilities
@@ -148,9 +146,9 @@ public class lab3Main{
     }
 
     // Print the bottom border
-    System.out.println("+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
-                         + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+");
-    System.out.println(" Use W and S to search the shop Press E to purchase an item and Q to leave the shop");
+    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
+    shopInterface+=" Use W and S to search the shop Press E to purchase an item and Q to leave the shop"+"\n";
+    System.out.print(shopInterface);
     }
      /*
      * 
@@ -328,6 +326,9 @@ public class lab3Main{
                     if(keyState){
                         keyState=false;
                         input = getInput(keyTextCodes,keyIndex);
+                        if(menuCursor==0){
+                            menuCursor=1;
+                        }
                         menuCursor = moveCursor(menuCursor,input,shop.length);
                         if(menuCursor==0){
                             menuCursor=1;
