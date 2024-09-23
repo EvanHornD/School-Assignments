@@ -61,6 +61,15 @@ public class lab3Main{
         return itemList;
     }
 
+    public static int parseShopItem(String input,String[][] shopItems){
+        for (String[] item : shopItems) {
+            if(item[1].toLowerCase().trim().equals(input)){
+                return Integer.parseInt(item[0])-1;
+            }
+        }
+        return -1;
+    }
+
     /*
      * 
      * 
@@ -111,7 +120,7 @@ public class lab3Main{
     // Print the bottom border
     System.out.println("+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
                          + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+");
-    System.out.println();
+    System.out.println(" Type the name of an Item to purchase it ");
     }
      /*
      * 
@@ -155,6 +164,7 @@ public class lab3Main{
             case "w": return(0);
             case "s": return(1);
             case "e": return(2);
+            case "q": return(3);
             default: return(-1);
         }
     }
@@ -177,15 +187,16 @@ public class lab3Main{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
-        String [][] shop = scanItems(new File("School-Assignments\\CS2\\Lab 3\\itemList.csv"));
+        String [][] shop = scanItems(new File("CS2\\Lab 3\\itemList.csv"));
       
         // Define your inventory
         InventoryLL inventory = new InventoryLL();
-
+        
         Scanner userInputScanner = new Scanner(System.in);
         int menuCursor = 0;
         int input = 0;
         String menuState = "Main menu";
+        String shopItem = "";
         printMenu(menuCursor);
         while(true){ 
             switch (menuState) {
@@ -201,11 +212,23 @@ public class lab3Main{
             
                 case "View shop":
                     displayShop(shop, menuCursor);
-                    input = getInput(userInputScanner);
-                    menuCursor = moveCursor(menuCursor,input,shop.length);
-                    if(input == 2){
-                        menuState = "Main menu";
-                        menuCursor = 0;
+                    if(shopItem.equals("")){
+                        shopItem = userInputScanner.nextLine().toLowerCase().trim();
+                    }
+                    if(parseShopItem(shopItem, shop)>=0){
+                        System.out.println(shopItem+" has been added to your inventory");
+                        System.out.println("input q to return to the main menu or input e to continue shopping");
+                        input = getInput(userInputScanner);
+                        if(input == 3){
+                            menuState = "Main menu";
+                            menuCursor = 0;
+                            shopItem = "";
+                        }  else if(input==2){
+                            shopItem = "";
+                        }
+                    } else{
+                        System.out.println("Invalid item name try again.");
+                        shopItem = userInputScanner.nextLine().toLowerCase().trim();
                     }
                 break;
 
@@ -239,6 +262,7 @@ public class lab3Main{
             }
             printMenu(menuCursor);
             if ("Exit".equals(menuState)) {
+                clearconsole();
                 break;
             }
         }
