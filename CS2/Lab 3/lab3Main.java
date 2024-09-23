@@ -5,12 +5,12 @@
  *  - Lab3_Lastname.java --- the java file of your program. 
  * 
  */
+import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
 
 public class lab3Main{
 
@@ -289,7 +289,7 @@ public class lab3Main{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
-        String [][] shop = scanItems(new File("CS2\\Lab 3\\itemList.csv"));
+        String [][] shop = scanItems(new File("School-Assignments\\CS2\\Lab 3\\itemList.csv"));
         int displayHeight = 24;
       
         //The program is run in a tread because threads have useful commands that allow for allowing for changing the fps
