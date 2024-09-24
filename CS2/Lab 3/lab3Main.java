@@ -11,15 +11,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import javax.swing.*;
+import java.util.Arrays;
 
 public class lab3Main{
 
-    static String[] menuItems = {"View shop","View inventory","Sell item","Buy item","View item stats","Exit"};
-    /**
-     * TODO: Make a method that takes in a file name and returns a 2D String array
-     * containing the value of every row in the "itemList.csv"
-     * @return
-     */
+    static String[] menuItems = {"View shop","View inventory","Exit"};
+    static String[] itemAttributes = {"Name", "Rarity", "Magical Abilities", "HP", "Cost"};
+
+    //#region file reading
+
     public static String[][] scanItems(File file) throws FileNotFoundException{
         Scanner itemScanner = new Scanner(file);
         String itemIDs = itemScanner.nextLine();
@@ -40,6 +40,7 @@ public class lab3Main{
 
         itemScanner.close();
         itemScanner = new Scanner(file);
+        itemScanner.nextLine();
 
         String itemLine;
 
@@ -59,7 +60,7 @@ public class lab3Main{
             }
             itemList[r] = itemInfo;
         }
-
+        System.out.println(numberOfItems);
         itemScanner.close();
         return itemList;
     }
@@ -72,16 +73,9 @@ public class lab3Main{
         }
         return -1;
     }
+    //#endregion
 
-    /*
-     * 
-     * 
-     * DO NOT CHANGE, DISPLAYS SHOP
-     * 
-     * 
-     * 
-     */
-
+    //#region menu displays
     public static void displayShop(String[][] shop,int menuCursor, int displayHeight) {
     // Define column widths for each column (adjust these values to fit your data)
     int nameWidth = 32;
@@ -93,10 +87,9 @@ public class lab3Main{
     clearconsole();
     String shopInterface = "";
     // Print the top border
-    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" 
-                         + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
+    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
     
-    // Print the header rowe
+    // Print the header row
     shopInterface+=String.format("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", "Name", "Rarity", "Magical Abilities", "HP", "Cost");
     
 
@@ -124,8 +117,8 @@ public class lab3Main{
             i++;
         }
         else {  // Ensure the shop row is not null
-
             if(menuCursor==i){
+                shopInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
                 shopInterface+=String.format("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", 
                 "--> "+shop[i][1] ,    // Name
                 shop[i][2] ,    // Rarity
@@ -133,6 +126,7 @@ public class lab3Main{
                 shop[i][4] ,    // HP
                 shop[i][5]      // Cost
                 );
+                shopInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
             }else{
                 shopInterface+=String.format("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", 
                 shop[i][1] ,    // Name
@@ -147,17 +141,9 @@ public class lab3Main{
 
     // Print the bottom border
     shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
-    shopInterface+=" Use W and S to search the shop Press E to purchase an item and Q to leave the shop"+"\n";
+    shopInterface+=" Press E to purchase an item and Q to leave the shop"+"\n";
     System.out.print(shopInterface);
     }
-     /*
-     * 
-     * 
-     * DO NOT CHANGE, DISPLAYS SHOP
-     * 
-     * 
-     * 
-     */
 
     public static void printMainMenu(int menuCursor){
         clearconsole();
@@ -182,24 +168,35 @@ public class lab3Main{
         }
     }
 
-    public static void displayMenu(int menuCursor, String[][] shop, int displayHeight){
+    public static void displayMenu(int menuCursor, String[][] shop, int displayHeight,InventoryLL inventory){
         switch (menuCursor) {
-            case 0: displayShop(shop, 1, displayHeight);break;
-            case 1: break;
-            case 2: break;
-            case 3: break;
-            case 4: break;
-            case 5: break;
-            case 6: break;
+            case 0: 
+                displayShop(shop, 0, displayHeight);
+            break;
+
+            case 1: 
+                clearconsole(); 
+                inventory.displayItems(0);
+                if(inventory.length>0){ 
+                    System.out.println("Select an item in your inventory to view its stats and potentially sell it");
+                }
+            break;
+
             default: break;
         }
     }
 
+    // excutes a console command moving the cursor to the top left position of the console then deleting everything after the cursor
+    // \033 is the code that tells the console that the next text it reads will be a code
+    // [H tells it to move to the top right
+    // [2J tells it to delete everything after the cursor
+    // the flush command instantly sends the print command whether or not anything else is in que
     public static void clearconsole(){
         System.out.print("\033[H\033[2J");
         System.out.flush(); 
     }
 
+    // increases and decreases the cursor based on the button that was pressed and wheather or not it would move the cursor out of the bounds of the menu
     public static int moveCursor(int cursor,int input,int menuSize){
         switch (input) {
             case 0: 
@@ -214,6 +211,7 @@ public class lab3Main{
                 return(cursor);
             default:return(cursor);}
     }
+    //#endregion
 
     //#region real time key listener
     public static int getInput(String[] inputMap,int input){
@@ -287,10 +285,10 @@ public class lab3Main{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
-        String [][] shop = scanItems(new File("School-Assignments\\CS2\\Lab 3\\itemList.csv"));
+        String [][] shop = scanItems(new File("CS2\\Lab 3\\itemList.csv"));
         int displayHeight = 24;
       
-        //The program is run in a tread because threads have useful commands that allow for allowing for changing the fps
+        //The program is run in a thread because threads have useful commands that allow for allowing for changing the fps
         String[] keyTextCodes = getKeyText();
         int[] screenDimensions = getScreenDimensions();
         int[] gameDimensions = {screenDimensions[0],50};
@@ -299,6 +297,7 @@ public class lab3Main{
 
         // Define your inventory
         InventoryLL inventory = new InventoryLL();
+        int selectedItem = -1;
         int menuCursor = 0;
         int input = 0;
         String menuState = "Main menu";
@@ -313,7 +312,7 @@ public class lab3Main{
                         menuCursor = moveCursor(menuCursor,input,menuItems.length);
                         if(input == 4){
                             menuState = menuItems[menuCursor];
-                            displayMenu(menuCursor, shop, displayHeight);
+                            displayMenu(menuCursor, shop, displayHeight,inventory);
                             menuCursor=0;
 
                         }else if(input!=-1){
@@ -326,17 +325,15 @@ public class lab3Main{
                     if(keyState){
                         keyState=false;
                         input = getInput(keyTextCodes,keyIndex);
-                        if(menuCursor==0){
-                            menuCursor=1;
-                        }
                         menuCursor = moveCursor(menuCursor,input,shop.length);
-                        if(menuCursor==0){
-                            menuCursor=1;
-                        }
                         switch (input) {
                             case 0: displayShop(shop, menuCursor, displayHeight); break;
                             case 2: displayShop(shop, menuCursor, displayHeight); break;
-                            case 4: System.out.println("You purchased the: "+shop[menuCursor][1]); break;
+                            case 4: 
+                                System.out.println(menuCursor+Arrays.toString(shop[menuCursor]));
+                                inventory.addToInventory(shop[menuCursor]);
+                                System.out.println("You purchased the: "+shop[menuCursor][1]); 
+                            break;
                             case 5: menuState = "Main menu"; menuCursor=0; printMainMenu(menuCursor); break;
                             default:break;
                         }
@@ -344,29 +341,54 @@ public class lab3Main{
                 break;
 
                 case "View inventory":
-                    System.out.println(menuState);
-                    input = getInput(keyTextCodes,keyIndex);
-                    menuState = "Main menu";
+                    if(keyState){
+                        keyState=false;
+                        input = getInput(keyTextCodes,keyIndex);
+                        menuCursor = moveCursor(menuCursor,input,inventory.length);
+                        clearconsole();
+                        switch (input) {
+                            case 0: // move up in inventory
+                                inventory.displayItems(menuCursor);
+                                if(inventory.length>0){ 
+                                    System.out.println("Select an item in your inventory to view its stats and potentially sell it");
+                                }
+                                selectedItem = -1; break;
+                            case 2: // move up in inventory
+                                inventory.displayItems(menuCursor); 
+                                if(inventory.length>0){ 
+                                    System.out.println("Select an item in your inventory to view its stats and potentially sell it");
+                                }
+                                selectedItem = -1;break;
+                            case 4: // select / sell item
+                                if(inventory.length>0){ 
+                                    if(selectedItem>=0){
+                                        String[] soldItem = inventory.removeItem(inventory.getFromInventory(menuCursor).attributes[1]);
+                                        if(menuCursor>0){
+                                            menuCursor--;
+                                        }
+                                        inventory.displayItems(menuCursor);
+                                        System.out.println("You sold the: "+ soldItem[1]);
+                                        selectedItem = -1;
+                                    }else{
+                                        inventory.displayItems(menuCursor);
+                                        inventory.getFromInventory(selectedItem).displayAttributes(itemAttributes);
+                                        System.out.println("Press E again to sell this item.");
+                                        selectedItem = menuCursor;
+                                    }
+                                } else{
+                                    inventory.displayItems(menuCursor);
+                                    System.out.println("You have nothing to select");
+                                }
+                            break;
+                            case 5: // return to main menu
+                                menuState = "Main menu";
+                                menuCursor=0;
+                                printMainMenu(menuCursor); 
+                            break;
+                            default:break;
+                        }
+                    }   
                 break;
-
-                case "Sell item":
-                    System.out.println(menuState);
-                    input = getInput(keyTextCodes,keyIndex);
-                    menuState = "Main menu";
-                break;
-
-                case "Buy item":
-                    System.out.println(menuState);
-                    input = getInput(keyTextCodes,keyIndex);
-                    menuState = "Main menu";
-                break;
-
-                case "View item stats":
-                    System.out.println(menuState);
-                    input = getInput(keyTextCodes,keyIndex);
-                    menuState = "Main menu";
-                break;
-
                 default:
                 
                 break;
