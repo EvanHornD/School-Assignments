@@ -4,8 +4,8 @@ public class InventoryLL{
     // TODO: Create a Linked List with the correct Attributes
     static Map<String, String> rarityColors = Map.of("Common", "\u001b[37m","Uncommon", "\u001b[32m","Rare", "\u001b[34m","Very Rare", "\u001b[35m","Legendary", "\u001b[31m");
     int length = 0;
-    Node head;
-    Node tail;
+    Item head;
+    Item tail;
 
     // TODO: Create a Linked List Constructor 
     public InventoryLL(){
@@ -14,13 +14,13 @@ public class InventoryLL{
 
     // TODO
     public void addToInventory(String[] item){
-        Node itemNode = new Node(item);
+        Item itemItem = new Item(item);
         if(this.head == null){
-            this.head = itemNode;
-            this.tail = itemNode;
+            this.head = itemItem;
+            this.tail = itemItem;
         } else{
-            this.tail.next = itemNode;
-            this.tail = itemNode;
+            this.tail.next = itemItem;
+            this.tail = itemItem;
         }
         this.length++;
     } 
@@ -30,12 +30,12 @@ public class InventoryLL{
         if(this.head == null){
             return false;
         }
-        Node currNode = this.head;
+        Item currItem = this.head;
         for (int i = 0; i < this.length; i++) {
-            if (currNode.attributes[1].equals(itemName)) {
+            if (currItem.attributes[1].equals(itemName)) {
                 return true;
             }
-            currNode = currNode.next;
+            currItem = currItem.next;
         }
         return false;
     }
@@ -48,34 +48,34 @@ public class InventoryLL{
         }
         this.length--;
         // check if the first item is the one being removed
-        Node currNode = this.head;
-        if (currNode.attributes[1].equals(itemName)) {
+        Item currItem = this.head;
+        if (currItem.attributes[1].equals(itemName)) {
             // checks if the list only has one item
             // sets the attributes of the item we are removing because it wont be accessible if it is the tail of the list
-            String[] attributes = currNode.attributes;
+            String[] attributes = currItem.attributes;
             if(this.tail == this.head){
                 this.head = null;
                 this.tail = null;
             } else {
-                this.head = currNode.next;
+                this.head = currItem.next;
             }
             return attributes;
         }
 
-        // checks every node after the first one if it is being removed
-        while(currNode.next!=null){
-            if (currNode.next.attributes[1].equals(itemName)) {
+        // checks every Item after the first one if it is being removed
+        while(currItem.next!=null){
+            if (currItem.next.attributes[1].equals(itemName)) {
                 // sets the attributes of the item we are removing because it wont be accessible if it is the tail of the list
-                String[] attributes = currNode.next.attributes;
-                if(currNode.next == this.tail){
-                    this.tail = currNode;
+                String[] attributes = currItem.next.attributes;
+                if(currItem.next == this.tail){
+                    this.tail = currItem;
                     this.tail.next = null;
                 } else {
-                    currNode.next = currNode.next.next;
+                    currItem.next = currItem.next.next;
                 }
                 return attributes;
             }
-            currNode = currNode.next;
+            currItem = currItem.next;
         }
 
         System.out.println("There was an error");
@@ -86,31 +86,66 @@ public class InventoryLL{
         System.out.print("\033[H\033[2J" + frame);
         System.out.flush(); 
     }
+
+    public static String getScrollBar(int totalMenuItems, int menuSize, int menuTopIndex, int menuBottomIndex, int currentIndex){
+        double itemsPerBar = totalMenuItems/((menuSize)*1.0);
+        double scrollBarTopIndex = Math.round(menuTopIndex/itemsPerBar);
+        double scrollBarBottomIndex = Math.round(menuBottomIndex/itemsPerBar);
+        double scrollBarIndex = currentIndex-menuTopIndex;
+        if(scrollBarIndex+.5>=scrollBarTopIndex && scrollBarIndex+.5<=scrollBarBottomIndex){
+            return "\u001b[37;47m \u001b[37;40m";
+        }
+        return "|";
+    }
  
     // TODO
-    public void displayItems(int cursor) {
+    public void displayItems(int cursor, int displayHeight) {
         int nameWidth = 32;
         int rarityWidth = 12;
         int hpWidth = 12;
         String inventoryInterface = "";
-        inventoryInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
-        inventoryInterface+=String.format("| %-30s | %-10s | %-10s |%n", "Name", "Rarity", "HP");
-        inventoryInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
+        inventoryInterface+="  +" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
+        inventoryInterface+=String.format("  | %-30s | %-10s | %-10s |%n", "Name", "Rarity", "HP");
+        inventoryInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
+
+            // Set the shop visual boundaries
+        if(displayHeight>this.length){
+            displayHeight=this.length;
+        }
+        int topIndex = cursor-displayHeight/2;
+        int bottomIndex = (int)Math.ceil(cursor+(displayHeight/2.));
+        if(topIndex<0){
+            bottomIndex-=topIndex; 
+            topIndex=0;
+        }
+        if(bottomIndex>this.length){
+            topIndex+=this.length-bottomIndex;
+            bottomIndex = this.length;
+        }
 
         if(this.head==null){
-            inventoryInterface+=String.format("| %-56s |%n", "Nothing to see here");
-            inventoryInterface+="+" + "-".repeat(nameWidth+rarityWidth+hpWidth+2) + "+"+"\n";
+            inventoryInterface+=String.format("  | %-56s |%n", "Nothing to see here");
+            inventoryInterface+="--+" + "-".repeat(nameWidth+rarityWidth+hpWidth+2) + "+"+"\n";
         }else{
-            Node currNode = this.head;
-            for (int i = 0; i < this.length; i++) {
+            Item currItem = this.head;
+            for (int i = topIndex; i < bottomIndex; i++) {
                 if(cursor==i){
-                    inventoryInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(hpWidth) + "+"+"\n";
-                    inventoryInterface+=String.format("| %-35s | %-10s | %-15s |%n", "--> "+rarityColors.get(currNode.attributes[2])+currNode.attributes[1], currNode.attributes[2], currNode.attributes[4]+"\u001b[37m");
-                    inventoryInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(hpWidth) + "+"+"\n";
+                    String scrollBar = getScrollBar(this.length, displayHeight+2, topIndex, bottomIndex, i);
+                    inventoryInterface+=scrollBar+" +" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(hpWidth) + "+"+"\n";
+                    scrollBar = getScrollBar(this.length, displayHeight+2, topIndex, bottomIndex, i+1);
+                    inventoryInterface+=String.format(scrollBar+" | %-35s | %-10s | %-15s |%n", "--> "+rarityColors.get(currItem.attributes[2])+currItem.attributes[1], currItem.attributes[2], currItem.attributes[4]+"\u001b[37m");
+                    scrollBar = getScrollBar(this.length, displayHeight+2, topIndex, bottomIndex, i+2);
+                    inventoryInterface+=scrollBar+" +" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(hpWidth) + "+"+"\n";
                 }else{
-                    inventoryInterface+=String.format("| %-35s | %-10s | %-15s |%n", rarityColors.get(currNode.attributes[2])+currNode.attributes[1], currNode.attributes[2], currNode.attributes[4]+"\u001b[37m");
+                    String scrollBar = "";
+                    if(i>cursor){
+                        scrollBar = getScrollBar(this.length, displayHeight+2, topIndex, bottomIndex, i+2);
+                    } else {
+                        scrollBar = getScrollBar(this.length, displayHeight+2, topIndex, bottomIndex, i);
+                    }
+                    inventoryInterface+=String.format(scrollBar+" | %-35s | %-10s | %-15s |%n", rarityColors.get(currItem.attributes[2])+currItem.attributes[1], currItem.attributes[2], currItem.attributes[4]+"\u001b[37m");
                 }
-                currNode=currNode.next;
+                currItem=currItem.next;
             }
             inventoryInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
         }
@@ -118,13 +153,13 @@ public class InventoryLL{
     }
     
     // TODO
-    public Node getFromInventory(int index) {
-        Node currNode = this.head;
+    public Item getFromInventory(int index) {
+        Item currItem = this.head;
         for (int i = 0; i < index; i++) {
             
-            currNode = currNode.next;
+            currItem = currItem.next;
         }
-        return currNode;
+        return currItem;
     }
 }
 

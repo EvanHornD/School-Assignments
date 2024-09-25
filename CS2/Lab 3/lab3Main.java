@@ -1,6 +1,6 @@
 /* CS2401
  * Files needed to complete Lab 3:
- * 	- Node.java
+ * 	- Item.java
  * 	- LinkedList.java
  *  - Lab3_Lastname.java --- the java file of your program. 
  * 
@@ -77,6 +77,17 @@ public class lab3Main{
     //#endregion
 
     //#region menu displays
+    public static String getScrollBar(int totalMenuItems, int menuSize, int menuTopIndex, int menuBottomIndex, int currentIndex){
+        double itemsPerBar = totalMenuItems/((menuSize)*1.0);
+        double scrollBarTopIndex = Math.round(menuTopIndex/itemsPerBar);
+        double scrollBarBottomIndex = Math.round(menuBottomIndex/itemsPerBar);
+        double scrollBarIndex = currentIndex-menuTopIndex;
+        if(scrollBarIndex+.5>=scrollBarTopIndex && scrollBarIndex+.5<=scrollBarBottomIndex){
+            return "\u001b[37;47m \u001b[37;40m";
+        }
+        return "|";
+    }
+
     public static void displayShop(String[][] shop,int menuCursor, int displayHeight) {
     // Define column widths for each column (adjust these values to fit your data)
     int nameWidth = 32;
@@ -87,21 +98,21 @@ public class lab3Main{
 
     String shopInterface = "";
     // Print the top border
-    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
+    shopInterface+="  +" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
     
     // Print the header row
-    shopInterface+=String.format("| %-30s | %-10s | %-68s | %-10s | %-5s |%n", "Name", "Rarity", "Magical Abilities", "HP", "Cost");
+    shopInterface+=String.format("  | %-30s | %-10s | %-68s | %-10s | %-5s |%n", "Name", "Rarity", "Magical Abilities", "HP", "Cost");
     
 
     // Print the separator after the header
-    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
+    shopInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
     
     // Set the shop visual boundaries
     if(displayHeight>shop.length){
         displayHeight=shop.length;
     }
     int topIndex = menuCursor-displayHeight/2;
-    int bottomIndex = menuCursor+(displayHeight/2);
+    int bottomIndex = (int)Math.ceil(menuCursor+(displayHeight/2.));
     if(topIndex<0){
         bottomIndex-=topIndex; 
         topIndex=0;
@@ -118,17 +129,26 @@ public class lab3Main{
         }
         else {  // Ensure the shop row is not null
             if(menuCursor==i){
-                shopInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
-                shopInterface+=String.format("| %-35s | %-10s | %-68s | %-10s | %-10s |%n", 
+                String scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i);
+                shopInterface+=scrollBar+" +" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
+                scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i+1);
+                shopInterface+=String.format(scrollBar+" | %-35s | %-10s | %-68s | %-10s | %-10s |%n", 
                 "--> "+rarityColors.get(shop[i][2])+shop[i][1] ,    // Name
                 shop[i][2] ,    // Rarity
                 shop[i][3] ,    // Magical Abilities
                 shop[i][4] ,    // HP
                 shop[i][5] + "\u001b[37m"     // Cost
                 );
-                shopInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
+                scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i+2);
+                shopInterface+=scrollBar+" +" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
             }else{
-                shopInterface+=String.format("| %-35s | %-10s | %-68s | %-10s | %-10s |%n", 
+                String scrollBar = "";
+                if(i>menuCursor){
+                    scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i+2);
+                } else {
+                    scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i);
+                }
+                shopInterface+=String.format(scrollBar+" | %-35s | %-10s | %-68s | %-10s | %-10s |%n", 
                 rarityColors.get(shop[i][2])+shop[i][1] ,    // Name
                 shop[i][2] ,    // Rarity
                 shop[i][3] ,    // Magical Abilities
@@ -140,7 +160,7 @@ public class lab3Main{
     }
 
     // Print the bottom border
-    shopInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
+    shopInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
     shopInterface+=" Press E to purchase an item and Q to leave the shop"+"\n";
     drawNextFrame(shopInterface);
     }
@@ -175,7 +195,7 @@ public class lab3Main{
             break;
 
             case 1:  
-                inventory.displayItems(0);
+                inventory.displayItems(0,7);
                 if(inventory.length>0){ 
                     System.out.println("Select an item in your inventory to view its stats and potentially sell it");
                 }
@@ -284,8 +304,8 @@ public class lab3Main{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
-        String [][] shop = scanItems(new File("itemList.csv"));
-        int displayHeight = 12;
+        String [][] shop = scanItems(new File("CS2\\Lab 3\\itemList.csv"));
+        int displayHeight = 13;
       
         //The program is run in a thread because threads have useful commands that allow for allowing for changing the fps
         String[] keyTextCodes = getKeyText();
@@ -346,13 +366,13 @@ public class lab3Main{
                         menuCursor = moveCursor(menuCursor,input,inventory.length);
                         switch (input) {
                             case 0: // move up in inventory
-                                inventory.displayItems(menuCursor);
+                                inventory.displayItems(menuCursor,7);
                                 if(inventory.length>0){ 
                                     System.out.println("Select an item in your inventory to view its stats and potentially sell it");
                                 }
                                 selectedItem = -1; break;
                             case 2: // move up in inventory
-                                inventory.displayItems(menuCursor); 
+                                inventory.displayItems(menuCursor,7); 
                                 if(inventory.length>0){ 
                                     System.out.println("Select an item in your inventory to view its stats and potentially sell it");
                                 }
@@ -364,17 +384,17 @@ public class lab3Main{
                                         if(menuCursor>0){
                                             menuCursor--;
                                         }
-                                        inventory.displayItems(menuCursor);
+                                        inventory.displayItems(menuCursor,7);
                                         System.out.println("You sold the: "+ soldItem[1]);
                                         selectedItem = -1;
                                     }else{
-                                        inventory.displayItems(menuCursor);
+                                        inventory.displayItems(menuCursor,7);
                                         inventory.getFromInventory(selectedItem).displayAttributes(itemAttributes);
                                         System.out.println("Press E again to sell this item.");
                                         selectedItem = menuCursor;
                                     }
                                 } else{
-                                    inventory.displayItems(menuCursor);
+                                    inventory.displayItems(menuCursor,7);
                                     System.out.println("You have nothing to select");
                                 }
                             break;

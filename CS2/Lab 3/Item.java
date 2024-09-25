@@ -1,9 +1,9 @@
 import java.util.Arrays;
-public class Node {
-    Node next;
+public class Item {
+    Item next;
     String[] attributes;
 
-    public Node(String[] attributes){
+    public Item(String[] attributes){
         this.attributes = attributes;
     }
 

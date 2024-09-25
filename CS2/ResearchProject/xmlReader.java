@@ -137,7 +137,7 @@ public class xmlReader {
         }
         System.out.println(element);
         nodeTree tree = new nodeTree(new node(null,element));
-        tree.activeNode.
+        //tree.activeNode.
 
 
         return null;
