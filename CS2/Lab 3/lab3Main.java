@@ -304,7 +304,7 @@ public class lab3Main{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
-        String [][] shop = scanItems(new File("CS2\\Lab 3\\itemList.csv"));
+        String [][] shop = scanItems(new File("School-Assignments\\CS2\\Lab 3\\itemList.csv"));
         int displayHeight = 13;
       
         //The program is run in a thread because threads have useful commands that allow for allowing for changing the fps
@@ -389,9 +389,10 @@ public class lab3Main{
                                         selectedItem = -1;
                                     }else{
                                         inventory.displayItems(menuCursor,7);
+                                        selectedItem = menuCursor;
                                         inventory.getFromInventory(selectedItem).displayAttributes(itemAttributes);
                                         System.out.println("Press E again to sell this item.");
-                                        selectedItem = menuCursor;
+                                        
                                     }
                                 } else{
                                     inventory.displayItems(menuCursor,7);

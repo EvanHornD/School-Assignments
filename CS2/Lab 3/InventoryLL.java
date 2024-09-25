@@ -128,6 +128,9 @@ public class InventoryLL{
             inventoryInterface+="--+" + "-".repeat(nameWidth+rarityWidth+hpWidth+2) + "+"+"\n";
         }else{
             Item currItem = this.head;
+            for(int i = 0;i<topIndex;i++){
+                currItem=currItem.next;
+            }
             for (int i = topIndex; i < bottomIndex; i++) {
                 if(cursor==i){
                     String scrollBar = getScrollBar(this.length, displayHeight+2, topIndex, bottomIndex, i);
@@ -147,7 +150,7 @@ public class InventoryLL{
                 }
                 currItem=currItem.next;
             }
-            inventoryInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
+            inventoryInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
         }
         drawNextFrame(inventoryInterface);
     }
