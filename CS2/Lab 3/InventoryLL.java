@@ -1,7 +1,8 @@
-import java.util.Arrays;
+import java.util.Map;
 
 public class InventoryLL{
     // TODO: Create a Linked List with the correct Attributes
+    static Map<String, String> rarityColors = Map.of("Common", "\u001b[37m","Uncommon", "\u001b[32m","Rare", "\u001b[34m","Very Rare", "\u001b[35m","Legendary", "\u001b[31m");
     int length = 0;
     Node head;
     Node tail;
@@ -81,6 +82,10 @@ public class InventoryLL{
         return null;
     }
 
+    public static void drawNextFrame(String frame){
+        System.out.print("\033[H\033[2J" + frame);
+        System.out.flush(); 
+    }
  
     // TODO
     public void displayItems(int cursor) {
@@ -100,16 +105,16 @@ public class InventoryLL{
             for (int i = 0; i < this.length; i++) {
                 if(cursor==i){
                     inventoryInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(hpWidth) + "+"+"\n";
-                    inventoryInterface+=String.format("| %-30s | %-10s | %-10s |%n", "--> "+currNode.attributes[1], currNode.attributes[2], currNode.attributes[4]);
+                    inventoryInterface+=String.format("| %-35s | %-10s | %-15s |%n", "--> "+rarityColors.get(currNode.attributes[2])+currNode.attributes[1], currNode.attributes[2], currNode.attributes[4]+"\u001b[37m");
                     inventoryInterface+="+" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(hpWidth) + "+"+"\n";
                 }else{
-                    inventoryInterface+=String.format("| %-30s | %-10s | %-10s |%n", "--> "+currNode.attributes[1], currNode.attributes[2], currNode.attributes[4]);
+                    inventoryInterface+=String.format("| %-35s | %-10s | %-15s |%n", rarityColors.get(currNode.attributes[2])+currNode.attributes[1], currNode.attributes[2], currNode.attributes[4]+"\u001b[37m");
                 }
                 currNode=currNode.next;
             }
             inventoryInterface+="+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
         }
-        System.out.println(inventoryInterface);
+        drawNextFrame(inventoryInterface);
     }
     
     // TODO
