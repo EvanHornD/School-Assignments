@@ -2,10 +2,12 @@ public class Item {
     Item next;
     String[] attributes;
 
+    // constructor
     public Item(String[] attributes){
         this.attributes = attributes;
     }
 
+    // displays the items information 
     public void displayAttributes(String[] attributeNames){
         int attributeNameWidth = 20;
         int attributeWidth = 70;

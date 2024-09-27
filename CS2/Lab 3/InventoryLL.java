@@ -1,18 +1,14 @@
 import java.util.Map;
 
 public class InventoryLL{
-    // TODO: Create a Linked List with the correct Attributes
+    // initialized the attributes and the colors used for drawing the inventory
     static Map<String, String> rarityColors = Map.of("Common", "\u001b[37m","Uncommon", "\u001b[32m","Rare", "\u001b[34m","Very Rare", "\u001b[35m","Legendary", "\u001b[31m");
     int length = 0;
     Item head;
     Item tail;
+ 
+    public InventoryLL(){}
 
-    // TODO: Create a Linked List Constructor 
-    public InventoryLL(){
-
-    }
-
-    // TODO
     public void addToInventory(String[] item){
         Item itemItem = new Item(item);
         if(this.head == null){
@@ -25,7 +21,6 @@ public class InventoryLL{
         this.length++;
     } 
 
-    // TODO
     public boolean inInventory(String itemName){
         if(this.head == null){
             return false;
@@ -40,7 +35,6 @@ public class InventoryLL{
         return false;
     }
 
-    // TODO
     public String[] removeItem(String itemName){
 
         if(this.head == null){
@@ -82,11 +76,13 @@ public class InventoryLL{
         return null;
     }
 
+    // same method as in main
     public static void drawNextFrame(String frame){
         System.out.print("\033[H\033[2J" + frame);
         System.out.flush(); 
     }
 
+    // same method as in main
     public static String getScrollBar(int totalMenuItems, int menuSize, int menuTopIndex, int menuBottomIndex, int currentIndex){
         double itemsPerBar = totalMenuItems/((menuSize)*1.0);
         double scrollBarTopIndex = Math.round(menuTopIndex/itemsPerBar);
@@ -98,7 +94,7 @@ public class InventoryLL{
         return "|";
     }
  
-    // TODO
+    // same menu drawing code but the loops are a bit different because it is looping through a linked list
     public void displayItems(int cursor, int displayHeight) {
         int nameWidth = 32;
         int rarityWidth = 12;
@@ -108,7 +104,6 @@ public class InventoryLL{
         inventoryInterface+=String.format("  | %-30s | %-10s | %-10s |%n", "Name", "Rarity", "HP");
         inventoryInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(hpWidth) + "+"+"\n";
 
-            // Set the shop visual boundaries
         if(displayHeight>this.length){
             displayHeight=this.length;
         }
@@ -155,7 +150,6 @@ public class InventoryLL{
         drawNextFrame(inventoryInterface);
     }
     
-    // TODO
     public Item getFromInventory(int index) {
         Item currItem = this.head;
         for (int i = 0; i < index; i++) {
