@@ -14,8 +14,9 @@ import java.util.Map;
 import java.util.Scanner;
 import javax.swing.*;
 
-public class lab3Main{
+public class Lab3_Horn{
 
+    // initializing arrays which are referenced during the main loop and menu drawing
     static String[] menuItems = {"View shop","View inventory","Exit"};
     static String[] itemAttributes = {"Name", "Rarity", "Magical Abilities", "HP", "Cost"};
     static Map<String, String> rarityColors = Map.of("Common", "\u001b[37m","Uncommon", "\u001b[32m","Rare", "\u001b[34m","Very Rare", "\u001b[35m","Legendary", "\u001b[31m");
@@ -23,9 +24,11 @@ public class lab3Main{
     //#region file reading
 
     public static String[][] scanItems(File file) throws FileNotFoundException{
+        // initializing the scanner and loading the header
         Scanner itemScanner = new Scanner(file);
         String itemIDs = itemScanner.nextLine();
 
+        // gets the total categories in the header based on how many commas there are
         int numberOfItemIDs = 1;
         for (int i = 0; i < itemIDs.length(); i++) {
             if (itemIDs.charAt(i)==',') {
@@ -33,13 +36,17 @@ public class lab3Main{
             }
         }
 
+        // gets the total number of items by looping over every line after the header
         int numberOfItems = 0;
         while(itemScanner.hasNextLine()){
             itemScanner.nextLine();
             numberOfItems++;
         }
+
+        // creates the 2d array that will hold every item and their information
         String[][] itemList = new String[numberOfItems][numberOfItemIDs];
 
+        // reinitializing the scanner and skipping the header
         itemScanner.close();
         itemScanner = new Scanner(file);
         itemScanner.nextLine();
@@ -47,10 +54,12 @@ public class lab3Main{
         String itemLine;
 
         for (int r = 0; r<itemList.length;r++) {
+            // create each item one by one from each line in the file
             itemLine = itemScanner.nextLine();
             String[] itemInfo = new String[numberOfItemIDs];
             String info = "";
             int infoNum = 0;
+            // getting the information of the item by looping over each character in the line until there is a comma then adding it until there isnt anything left in the line
             for (int c = 0; c <= itemLine.length(); c++) {
                 if(c==itemLine.length()||','== itemLine.charAt(c)){
                     itemInfo[infoNum] = info;
@@ -62,21 +71,17 @@ public class lab3Main{
             }
             itemList[r] = itemInfo;
         }
+
+        // closing the scanner and returning
         itemScanner.close();
         return itemList;
     }
 
-    public static int parseShopItem(String input,String[][] shopItems){
-        for (String[] item : shopItems) {
-            if(item[1].toLowerCase().trim().equals(input)){
-                return Integer.parseInt(item[0])-1;
-            }
-        }
-        return -1;
-    }
     //#endregion
 
     //#region menu displays
+    
+    // performs the calculation needed to display the scroll bar in the inventory and shop menues
     public static String getScrollBar(int totalMenuItems, int menuSize, int menuTopIndex, int menuBottomIndex, int currentIndex){
         double itemsPerBar = totalMenuItems/((menuSize)*1.0);
         double scrollBarTopIndex = Math.round(menuTopIndex/itemsPerBar);
@@ -88,6 +93,7 @@ public class lab3Main{
         return "|";
     }
 
+    // I changed the a lot from how you originally had it
     public static void displayShop(String[][] shop,int menuCursor, int displayHeight) {
     // Define column widths for each column (adjust these values to fit your data)
     int nameWidth = 32;
@@ -97,17 +103,17 @@ public class lab3Main{
     int costWidth = 7;
 
     String shopInterface = "";
-    // Print the top border
+    // add the top border to the shop string
     shopInterface+="  +" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
     
-    // Print the header row
+    // add the header row
     shopInterface+=String.format("  | %-30s | %-10s | %-68s | %-10s | %-5s |%n", "Name", "Rarity", "Magical Abilities", "HP", "Cost");
     
 
-    // Print the separator after the header
+    // add the the separator after the header
     shopInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
     
-    // Set the shop visual boundaries
+    // Set the top and bottom indexes based on the cursor position and the size of the display height
     if(displayHeight>shop.length){
         displayHeight=shop.length;
     }
@@ -122,13 +128,14 @@ public class lab3Main{
         bottomIndex = shop.length;
     }
 
-    // Loop through the 2D array and print each row
+    // Loop through the 2D array and add each row
     for (int i = topIndex; i < bottomIndex; i++) {
-        if(shop[i][1] == null){
+        if(shop[i][1] == null){ // Ensure the shop row is not null
             i++;
         }
-        else {  // Ensure the shop row is not null
+        else {  
             if(menuCursor==i){
+                // this adds the item the cursor is highlighting with 2 extra boundaries on the top and bottom
                 String scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i);
                 shopInterface+=scrollBar+" +" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
                 scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i+1);
@@ -142,6 +149,7 @@ public class lab3Main{
                 scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i+2);
                 shopInterface+=scrollBar+" +" + "=".repeat(nameWidth) + "+" + "=".repeat(rarityWidth) + "+" + "=".repeat(abilityWidth) + "+" + "=".repeat(hpWidth) + "+" + "=".repeat(costWidth) + "+"+"\n";
             }else{
+                // this adds every item in the display window that isnt highlighted by the cursor
                 String scrollBar = "";
                 if(i>menuCursor){
                     scrollBar = getScrollBar(shop.length, displayHeight+2, topIndex, bottomIndex, i+2);
@@ -159,11 +167,13 @@ public class lab3Main{
         }
     }
 
-    // Print the bottom border
+    // add the bottom border
     shopInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
+    // sends the shop String to the drawing method
     drawNextFrame(shopInterface);
     }
 
+    // prints the main menu
     public static void printMainMenu(int menuCursor){
         drawNextFrame("");
         System.out.println("");
@@ -186,6 +196,7 @@ public class lab3Main{
         }
     }
 
+    // takes in all the need information about each menu, and calls the appropriate draw method based on the menu cursor
     public static void displayMenu(int menuCursor, String[][] shop, int displayHeight,InventoryLL inventory){
         switch (menuCursor) {
             case 0: 
@@ -207,6 +218,7 @@ public class lab3Main{
     // \033 is the code that tells the console that the next text it reads will be a code
     // [H tells it to move to the top right
     // [2J tells it to delete everything after the cursor
+    // the input frame is drawn immediately after the console is cleared
     // the flush command instantly sends the print command whether or not anything else is in que
     public static void drawNextFrame(String frame){
         System.out.print("\033[H\033[2J" + frame);
@@ -231,6 +243,8 @@ public class lab3Main{
     //#endregion
 
     //#region real time key listener
+
+    // takes in the input and pairs it with an integer
     public static int getInput(String[] inputMap,int input){
         switch (inputMap[input].toLowerCase()) {
             case "w": return(0);
@@ -243,24 +257,28 @@ public class lab3Main{
         }
     }
 
+    // gets the screens dimmensions using a built in command
     public static int[] getScreenDimensions(){
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int[] dimensions = {(int)screenSize.getWidth(),(int)screenSize.getHeight()};
         return (dimensions);
     }
 
+    // applys a delay to the main thread
     public static void applyFrameDelay(int ms){
         try {Thread.sleep(ms);} 
         catch (InterruptedException e) {e.printStackTrace();}
     }
 
+    // initializing the JFrame and also the information about the user input
     static JFrame window;
     static int keyIndex = -1;
     public static boolean keyState = false;
-    public static void createWindow(int[] screenDimensions,int[] gameDimensions) {
+    // inistializing the window with a key listener
+    public static void createWindow(int[] screenDimensions) {
             window = new JFrame("shop");
-            window.setSize(0,gameDimensions[1]); // Set size screen width
-            window.setLocation(0, screenDimensions[1]-(gameDimensions[1]+40)); // Position at bottom of screen
+            window.setSize(0,0);
+            window.setLocation(0, screenDimensions[1]); // Position bellow the screen
             window.setFocusable(true);
             window.requestFocus();
             window.setResizable(false);
@@ -273,21 +291,13 @@ public class lab3Main{
                 keyState = true;
                 keyIndex = e.getKeyCode();
             }});
-
-            window.addFocusListener( new FocusListener() {
-                public void focusGained(FocusEvent e) {
-                    window.setLocation(0, screenDimensions[1]);
-                }
-                public void focusLost(FocusEvent e) {
-                    window.setLocation(0, screenDimensions[1]-(gameDimensions[1]+40));
-                }
-            });
     }
 
     public static void closeWindow() {
         window.dispose();
     }
 
+    // uses the built in key codes to create an array with every keybinding
     public static String[] getKeyText(){
         String[] codeToString = new String[227];
         for(int i=0;i<codeToString.length;i++){
@@ -302,16 +312,14 @@ public class lab3Main{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
-        String [][] shop = scanItems(new File("School-Assignments\\CS2\\Lab 3\\itemList.csv"));
+        String [][] shop = scanItems(new File("CS2\\Lab 3\\itemList.csv"));
         int displayHeight = 13;
       
         //The program is run in a thread separate from the JFrame because threads have useful commands that allow for allowing for changing the fps
         //and the program is unable to both detect input and run the main program at the same time
         String[] keyTextCodes = getKeyText();
         int[] screenDimensions = getScreenDimensions();
-        int[] gameDimensions = {screenDimensions[0],50};
-        createWindow(screenDimensions,gameDimensions);
-
+        createWindow(screenDimensions);
 
         //creates the thread
         Thread gameThread = new Thread(() -> {
@@ -333,6 +341,8 @@ public class lab3Main{
                       
                         PRESS E TO CONTINUE
                        """);
+
+        // waits for the user to press a key
         boolean b = true;
         while (b) {
             applyFrameDelay(10);
@@ -344,7 +354,7 @@ public class lab3Main{
             }
         }
 
-        // Define your inventory
+        // Define your inventory and key information
         InventoryLL inventory = new InventoryLL();
         int selectedItem = -1;
         int menuCursor = 0;
@@ -353,6 +363,8 @@ public class lab3Main{
         printMainMenu(menuCursor);
         while(true){ 
             applyFrameDelay(10);
+            // the menu system works by checking every frame for the menu state and running the code under each menu
+            // each menu only runs any code if an input has been detected
             switch (menuState) {
                 case "Main menu":
                     if(keyState){
@@ -376,14 +388,21 @@ public class lab3Main{
                         input = getInput(keyTextCodes,keyIndex);
                         menuCursor = moveCursor(menuCursor,input,shop.length);
                         switch (input) {
-                            case 0: displayShop(shop, menuCursor, displayHeight); break;
-                            case 2: displayShop(shop, menuCursor, displayHeight); break;
+                            case 0: 
+                                displayShop(shop, menuCursor, displayHeight); 
+                            break;
+                            case 2: 
+                                displayShop(shop, menuCursor, displayHeight); 
+                            break;
                             case 4: 
-                                //System.out.println(menuCursor+Arrays.toString(shop[menuCursor]));
                                 inventory.addToInventory(shop[menuCursor]);
                                 System.out.println("You purchased the: "+shop[menuCursor][1]); 
                             break;
-                            case 5: menuState = "Main menu"; menuCursor=0; printMainMenu(menuCursor); break;
+                            case 5: 
+                                menuState = "Main menu"; 
+                                menuCursor=0; 
+                                printMainMenu(menuCursor); 
+                            break;
                             default:break;
                         }
                     }   
