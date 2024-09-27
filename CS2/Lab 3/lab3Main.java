@@ -61,7 +61,6 @@ public class lab3Main{
             }
             itemList[r] = itemInfo;
         }
-        System.out.println(numberOfItems);
         itemScanner.close();
         return itemList;
     }
@@ -161,7 +160,6 @@ public class lab3Main{
 
     // Print the bottom border
     shopInterface+="--+" + "-".repeat(nameWidth) + "+" + "-".repeat(rarityWidth) + "+" + "-".repeat(abilityWidth) + "+" + "-".repeat(hpWidth) + "+" + "-".repeat(costWidth) + "+"+"\n";
-    shopInterface+=" Press E to purchase an item and Q to leave the shop"+"\n";
     drawNextFrame(shopInterface);
     }
 
@@ -176,9 +174,8 @@ public class lab3Main{
         System.out.println("   \\_/\\_/ \\___|_|\\___\\___/|_| |_| |_|\\___|");
         System.out.println("_______________________________________________");
         System.out.println("");
-        System.out.println("           Welcome to SHOP_NAME              ");
+        System.out.println("           Welcome to The Shop              ");
         System.out.println("");
-        System.out.println("press W and S to traverse the menu, and E to select an item in the menu");
         for (int i=0; i<menuItems.length;i++) {
             if(menuCursor==i){
                 System.out.println("--> "+(i+1)+") "+menuItems[i]);
@@ -258,7 +255,7 @@ public class lab3Main{
 
     static JFrame window;
     static int keyIndex = -1;
-    static boolean keyState = false;
+    public static boolean keyState = false;
     public static void createWindow(int[] screenDimensions,int[] gameDimensions) {
             window = new JFrame("shop");
             window.setSize(0,gameDimensions[1]); // Set size screen width
@@ -307,12 +304,44 @@ public class lab3Main{
         String [][] shop = scanItems(new File("School-Assignments\\CS2\\Lab 3\\itemList.csv"));
         int displayHeight = 13;
       
-        //The program is run in a thread because threads have useful commands that allow for allowing for changing the fps
+        //The program is run in a thread separate from the JFrame because threads have useful commands that allow for allowing for changing the fps
+        //and the program is unable to both detect input and run the main program at the same time
         String[] keyTextCodes = getKeyText();
         int[] screenDimensions = getScreenDimensions();
         int[] gameDimensions = {screenDimensions[0],50};
         createWindow(screenDimensions,gameDimensions);
+
+
+        //creates the thread
         Thread gameThread = new Thread(() -> {
+
+
+
+        //prints the instructions on how the program works
+        drawNextFrame("\n".repeat(7)+"""
+                                                 ==========PLEASE READ==========
+                        The programs input detection is run in an invisible Window which is automatically put into focus,
+                        if the Window goes out of focus, you will lose control of the program
+                        click on the programs icon on the task bar to be able to continue using the program.
+                      
+                      ---CONTROLS---
+                       W - up
+                       S - down
+                       E - select
+                       Q - back
+                      
+                        PRESS E TO CONTINUE
+                       """);
+        boolean b = true;
+        while (b) {
+            applyFrameDelay(10);
+            if(keyState){
+                if(getInput(keyTextCodes,keyIndex)==4){
+                    b=false;
+                }
+                keyState=false;
+            }
+        }
 
         // Define your inventory
         InventoryLL inventory = new InventoryLL();
