@@ -1,9 +1,9 @@
 package GraphicsTest;
 
 import java.awt.*;
-import java.util.Scanner;
 import java.io.File;
 import java.util.Random;
+import java.util.Scanner;
 
 public class testCode {
     final static Color green = new Color(84,140,78);
@@ -13,8 +13,8 @@ public class testCode {
     final static Color darkGrey = new Color(58,58,60,255);
     final static Color white = new Color(248,248,248);
 
-    static File answersFile = new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\answers.txt");
-    static File dictionaryFile = new File("C:\\Users\\ehorn\\GitRepositories\\School-Assignments\\GraphicsTest\\dictionary.txt");
+    static File answersFile = new File("School-Assignments\\GraphicsTest\\answers.txt");
+    static File dictionaryFile = new File("School-Assignments\\GraphicsTest\\dictionary.txt");
 
 
 

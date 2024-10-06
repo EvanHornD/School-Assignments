@@ -312,7 +312,7 @@ public class Lab3_Horn{
 
     public static void main(String[] args) throws Exception{
         //Read CSV file
-        String [][] shop = scanItems(new File("CS2\\Lab 3\\itemList.csv"));
+        String [][] shop = scanItems(new File("itemList.csv"));
         int displayHeight = 13;
       
         //The program is run in a thread separate from the JFrame because threads have useful commands that allow for allowing for changing the fps
