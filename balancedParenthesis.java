@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 
 public class balancedParenthesis {
@@ -51,9 +52,35 @@ public class balancedParenthesis {
         }
         return false;
     }
+
+    public static int[] mergeSortedArrarys(int[] num1,int[] num2,int m,int n) {
+        for (int i = num1.length-1; i>=0; i--) {
+            if(m-1>=0&&n-1>=0){
+                if(num1[m-1]>num2[n-1]){
+                    num1[i]=num1[m-1];
+                    m--;
+                } else {
+                    num1[i]=num2[n-1];
+                    n--;
+                }
+            } else {
+                if(m-1>=0){
+                    num1[i]=num1[m-1];
+                    m--;
+                }
+                if(n-1>=0){
+                    num1[i]=num2[n-1];
+                    n--;
+                }
+            }
+        }
+        return num1;
+    }
+
     public static void main(String[] args) {
         System.out.println(balanced("(())()()"));
         System.out.println(doubleDecker(new int[]{1,2,1,2,1,2}));
         System.out.println(stringContains("Hlello", "ello"));
+        System.out.println(Arrays.toString(mergeSortedArrarys(new int[]{0,0,1,1,0,0}, new int[]{5,6}, 4, 2)));
     }
 }
