@@ -3,14 +3,14 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 
-public class Lab5_LastName{
+public class Lab5_Horn{
     //Task 1
     public static int[] createArr(String filePath){
         return null;
     }
 
     public static void printArray(int[] arr){
-
+        
     }
 
     //Task 2

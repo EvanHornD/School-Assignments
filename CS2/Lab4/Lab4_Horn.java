@@ -2,9 +2,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.random.*;
 
-public class Lab4_Lastname {
+public class Lab4_Horn {
     // TODO Task 0: Scan text file
     public static String[] buildArray(String filepath) {
         String[] words = {};
@@ -12,52 +11,99 @@ public class Lab4_Lastname {
             // Step 1: Create a Scanner object to read the file
             File file = new File(filepath);
             Scanner scanner = new Scanner(file);
-            // TODO Step 2: Read the entire file content
-            while(scanner.hasNextLine()){
-                
-            }
 
-            // TODO Step 3: Split the string into an array of words
+            // read the file into a string
+            String fileString = scanner.nextLine();
+            scanner.close();
+
+            // get number of strings in file
+            int fileLength = 1;
+            for (int i = 0; i < fileString.length(); i++) {
+                if (fileString.charAt(i)==',') {
+                    fileLength++;
+                }
+            }
+            words = new String[fileLength];
+
+            // read the fileString and split it into its distinct words
+            String word = "";
+            int wordIndex = 0;
+            for (int i = 0; i < fileString.length(); i++) {
+                if (fileString.charAt(i)==',') {
+                    words[wordIndex]=word;
+                    word="";
+                    wordIndex++;
+                } else{ 
+                    word+=fileString.charAt(i);
+                }
+            }
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
             e.printStackTrace();
         }
+
         return words;
     }
 
     // TODO Task 1: Reverse a string
     public static String reverseString(String s) {
         // Base case(s)
+        if (s.length() <= 1) {
+            return s;
+        }
         // Recursive case(s)
-        return "";
+        return reverseString(s.substring(1)) + s.charAt(0);
     }
 
     // TODO Task 2: Count number of char, c, in a string
     public static int countChar(String s, char c) {
         // Base case(s)
+        if (s.length() == 0) {
+            return 0;
+        }
         // Recursive case(s)
-        return 0;
+        if(s.charAt(0)==c){
+            return 1+countChar(s.substring(1), c);
+        }
+        return countChar(s.substring(1), c);
     }
 
     // TODO Task 3: Check if word is a palindrome
     public static boolean isPalindrome(String s) {
         // Base case(s)
+        if (s.length() <= 1) {
+            return true;
+        }
         // Recursive case(s)
+        if (s.charAt(0) == s.charAt(s.length() - 1)) {
+            return isPalindrome(s.substring(1, s.length() - 1));
+        }
         return false;
     }
 
     // TODO Task 4: Recursive method to print the linked list in reverse order
     public static void printReverse(ListNode head) {
         // Base case(s)
-        // Recursive case(s)
+        if (head == null) {
+            return;
+        }
+        // Recursive case(s) calls the print method on the rest of the nodes in the list so that it prints in reverse order
+        printReverse(head.next);
         // Print current node
+        System.out.print(head.value + " ");
     }
 
     // TODO Task 5: Compute the nth Fibonacci number
     public static int fibonacci(int n) {
         // Base case(s)
+        if (n == 0) {
+            return 0;
+        }
+        if (n == 1) {
+            return 1;
+        }
         // Recursive case(s)
-        return 0;
+        return fibonacci(n - 1) + fibonacci(n - 2);
     }
 
     /** --------------------- DO NOT TOUCH CODE ------------------------------- */
@@ -90,7 +136,7 @@ public class Lab4_Lastname {
 
     public static void main(String[] args) {
         Random rndm = new Random();
-        String filename = "./WordList.txt";
+        String filename = "CS2\\Lab4\\WordList.txt";
         String testString = "";
         int randomIndex = 1;
         char testChar = 'a';
@@ -117,6 +163,7 @@ public class Lab4_Lastname {
         System.out.println("\nTask 2 ########################");
         for (int i = 0; i < 12; i++) {
             testString = words[rndm.nextInt(words.length)].trim();
+            System.out.println(testString.length());
             randomIndex = rndm.nextInt(testString.length());
             testChar = testString.charAt(randomIndex);
             System.out.println("Occurrences of '" + testChar + "' in " +
