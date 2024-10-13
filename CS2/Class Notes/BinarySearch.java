@@ -18,7 +18,7 @@ public class BinarySearch {
         while (left<=right){
 
             //the middle value is the center between the left and right boundaries
-            int middle = (right-left)/2;
+            int middle = left + (right - left) / 2;
 
             // check if the value is in the middle of the array
             if(arr[middle]==value){
@@ -28,7 +28,7 @@ public class BinarySearch {
             }
 
             // check if the value is less than the middle value
-            if(arr[middle]<value){
+            if(arr[middle]>value){
 
                 // move the right boundary to the left of the middle value
                 right = middle-1;
@@ -42,6 +42,6 @@ public class BinarySearch {
         return -1;
     }
     public static void main(String[] args) {
-        System.out.println(binarySearch(new int[]{1,2,3,4,5,6,7,8,9}, 10));
+        System.out.println(binarySearch(new int[]{1,2,3,4,5,6,7,8,9}, 6));
     }
 }

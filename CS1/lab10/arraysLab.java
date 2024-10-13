@@ -1,6 +1,6 @@
 package lab10;
 
-public class Arrays{
+public class arraysLab{
 	public static void main(String[] args){
 		int[] nums = {10, 27, 91, 42, 12, 72, 39};
 		printArray(nums);
