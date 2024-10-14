@@ -1,3 +1,5 @@
+package participationProblems;
+
 public class problem1 {
     public static int countEvens(int[][] arr){
         int numEvens = 0;

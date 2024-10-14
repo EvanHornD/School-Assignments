@@ -1,3 +1,5 @@
+package participationProblems;
+
 public class groupProblems {
     public static int oneDigit(int val){
         if(val<10){

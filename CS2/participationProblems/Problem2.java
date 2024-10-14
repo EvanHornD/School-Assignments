@@ -1,3 +1,4 @@
+package participationProblems;
 
 public class Problem2 {
     public static int pointToIndex(Node head, int index){
