@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Stats_1 {
+public class Stats1 {
     public static int[][][] generatePermutations(int numOfPeople) {
         
         // Calculate the total number of permutations (factorial of numOfPeople)

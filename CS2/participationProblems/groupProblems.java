@@ -19,10 +19,7 @@ public class groupProblems {
 
     public static boolean hasThreeAndFive(int val){
         String value = ""+val;
-        if(value.contains("3")&&value.contains("5")){
-            return true;
-        }
-        return false;
+        return value.contains("3")&&value.contains("5");
     }
     
 
