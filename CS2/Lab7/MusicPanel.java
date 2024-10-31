@@ -6,14 +6,17 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
+import Lab7.gameTimer;
+
 public class MusicPanel extends JPanel {
 
     //#region   Class attributes
-    Time gameTimer;
+    gameTimer gameTimer;
     static KeyBindsManager keyBinds;
     static GraphicsRenderer renderer;
 
-    ArrayList<Renderable> music = new ArrayList<>();
+    ShapeEntity backGround = new ShapeEntity(new Color(24,24,24));
+    static ArrayList<Concert> concerts = new ArrayList<>();
     //#endregion
 
     MusicPanel(Dimension dimensions){
@@ -22,18 +25,32 @@ public class MusicPanel extends JPanel {
         this.requestFocus();
         keyBinds = new KeyBindsManager(this);
         renderer = new GraphicsRenderer(this);
+        gameTimer = new gameTimer();
+        concerts.add(new Concert(1,"test",2000,100,400,new int[]{(int)dimensions.getWidth(),(int)dimensions.getHeight()}));
+        startGameTimer();
     }
 
     public void startGameTimer() {
-        // Update game state
+        gameTimer.start(deltaTime -> {
+            // Update game state
+            runGameLoop(deltaTime);
 
-        runGameLoop();
-
-        // Trigger the repaint
-        renderer.triggerRepaint();
+            // Trigger the repaint
+            renderer.triggerRepaint();
+        });
     }
 
-    public static void runGameLoop(){
+    public static void runGameLoop(double dt){
+        Map<String, Integer> keyActions = keyBinds.getKeyActions();
+        Map<String, Integer> keyFrames = keyBinds.getKeyFrames();
+        if(keyActions.get("Down")==1&& keyFrames.get("Down")==1){
+            Concert concert = concerts.get(0);
+            concert.setID(concert.getID()+1);
+        }
+        if(keyActions.get("Up")==1&& keyFrames.get("Up")==1){
+            Concert concert = concerts.get(0);
+            concert.setID(concert.getID()-1);
+        }
 
         //updates all of the scenes entities making use of which keys are being pressed and for how long
         Object[][] Actions = keyBinds.getInformation();
@@ -58,7 +75,8 @@ public class MusicPanel extends JPanel {
     }
 
     public void render(Graphics2D g2d) {
-        for (Renderable entity : music) {
+        backGround.render(g2d);
+        for (Renderable entity : concerts) {
             entity.render(g2d);
         }
     }

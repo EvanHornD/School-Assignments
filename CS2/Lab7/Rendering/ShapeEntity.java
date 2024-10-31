@@ -3,18 +3,20 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class ShapeEntity extends RenderableEntity {
-    public Color defaultColor = new Color(31,31,31);
+    public Color defaultColor = new Color(32,32,32);
+    public Color defaultOutline = new Color(42,42,42);
     private String shape;
     private int[] coordinates;
     private int[] dimensions;
     private Color color;
+    private Color outLineColor;
 
     public ShapeEntity(String shape, int[] dimensions, int layer) {
-
         this.shape = shape;
         this.coordinates = new int[]{0, 0};
         this.dimensions = dimensions;
         this.color = defaultColor;
+        this.outLineColor = defaultOutline;
     }
 
     public ShapeEntity(String shape, int[] coordinates, int[] dimensions, Color color, int layer) {
@@ -22,6 +24,7 @@ public class ShapeEntity extends RenderableEntity {
         this.coordinates = coordinates;
         this.dimensions = dimensions;
         this.color = color;
+        this.outLineColor = defaultOutline;
     }
 
     public ShapeEntity(String shape, int[] coordinates, int[] dimensions) {
@@ -29,6 +32,7 @@ public class ShapeEntity extends RenderableEntity {
         this.coordinates = coordinates;
         this.dimensions = dimensions;
         this.color = defaultColor;
+        this.outLineColor = defaultOutline;
     }
 
     public ShapeEntity(String shape, int[] coordinates, int[] dimensions, Color color) {
@@ -36,6 +40,14 @@ public class ShapeEntity extends RenderableEntity {
         this.coordinates = coordinates;
         this.dimensions = dimensions;
         this.color = color;
+        this.outLineColor = defaultOutline;
+    }
+    public ShapeEntity(Color color) {
+        this.shape = "Rectangle";
+        this.coordinates = new int[]{0,0};
+        this.dimensions = new int[]{20000,20000};
+        this.color = color;
+        this.outLineColor = color;
     }
 
     public String getShape() {
@@ -54,8 +66,9 @@ public class ShapeEntity extends RenderableEntity {
         return color;
     }
 
-    public void setCoords(int[] coordinates){
-        this.coordinates = coordinates;
+    public void moveShape(int x, int y){
+        coordinates[0] += x;
+        coordinates[1] += y;
     }
 
     @Override
@@ -64,6 +77,8 @@ public class ShapeEntity extends RenderableEntity {
         switch (shape) {
             case "Rectangle":
                 g2d.fillRect(coordinates[0], coordinates[1], dimensions[0], dimensions[1]);
+                g2d.setColor(outLineColor);
+                g2d.drawRect(coordinates[0], coordinates[1], dimensions[0], dimensions[1]);
                 break;
             default:
                 break;

@@ -10,6 +10,7 @@ public class TextEntity extends RenderableEntity {
     private String text;
     private Font font;
     private int[] coordinates;
+    private int[] shapeDimensions;
     private String alignment;
 
     public TextEntity(String text, int layer) {
@@ -33,6 +34,14 @@ public class TextEntity extends RenderableEntity {
         this.alignment = alignment;
     }
 
+    public TextEntity(String text,int textSize,int[] coordinates, String alignment, int[] dimensions) {
+        this.text = text;
+        this.font = new Font("Arial", 0, textSize);
+        this.coordinates = coordinates;
+        this.alignment = alignment;
+        this.shapeDimensions = dimensions;
+    }
+
     public TextEntity(String text,int[] coordinates, String alignment) {
         this.text = text;
         this.font = new Font("Arial", 0, 20);
@@ -50,6 +59,11 @@ public class TextEntity extends RenderableEntity {
         return metrics.getHeight();
     }
 
+    public int getStringSize(Graphics2D g2d){
+        FontMetrics metrics = g2d.getFontMetrics(font);
+        return metrics.charWidth('W');
+    }
+
     public String getText() {
         return text;
     }
@@ -62,6 +76,11 @@ public class TextEntity extends RenderableEntity {
         return coordinates;
     }
 
+    public void moveText(int x, int y){
+        coordinates[0] += x;
+        coordinates[1] += y;
+    }
+
     @Override
     public void render(Graphics2D g2d) {
         g2d.setFont(font);
@@ -71,9 +90,15 @@ public class TextEntity extends RenderableEntity {
             case "Centered":
             int width = getStringWidth(g2d);
             int height = getStringHeight(g2d);
-            int xCentered = (coordinates[0]-width/2);
-            int yCentered = (coordinates[1]+height/2);
+            int xCentered = (coordinates[0]+shapeDimensions[0]/2-width/2);
+            int yCentered = (coordinates[1]+shapeDimensions[1]/2+height/3);
             g2d.drawString(text, xCentered, yCentered);
+            break;
+
+            case "Left":
+            height = getStringHeight(g2d);
+            yCentered = (coordinates[1]+(shapeDimensions[1]/2)+height/3);
+            g2d.drawString(text, coordinates[0]+getStringSize(g2d), yCentered);
             break;
         
             default:

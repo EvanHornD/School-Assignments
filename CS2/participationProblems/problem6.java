@@ -1,3 +1,5 @@
+package participationProblems;
+
 public class problem6 {
 
     public static boolean binarySearch(binarySearchTree bst, int key){
