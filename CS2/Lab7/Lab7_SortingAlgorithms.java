@@ -289,7 +289,6 @@ public class Lab7_SortingAlgorithms {
             allConcerts[j+1] = temp;
         }
 		setIDs(allConcerts);
-		printConcerts(allConcerts);
 	}
 
 	public static void InsertionSortByCapacity(Concert[] allConcerts) {
@@ -303,7 +302,6 @@ public class Lab7_SortingAlgorithms {
             allConcerts[j+1] = temp;
         }
 		setIDs(allConcerts);
-		printConcerts(allConcerts);
 	}
 
 	public static void InsertionSortByArtist(Concert[] allConcerts) {
@@ -317,7 +315,6 @@ public class Lab7_SortingAlgorithms {
             allConcerts[j+1] = temp;
         }
 		setIDs(allConcerts);
-		printConcerts(allConcerts);
 	}
 
 	//#endregion

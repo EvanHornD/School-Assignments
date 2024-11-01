@@ -10,11 +10,12 @@ public class MusicPanel extends JPanel {
 
     //#region   Class attributes
     static final String[] sortingTypes = new String[]{"Selection","Insertion","Merge"};
+    static final int[][] collisions = new int[][]{{0,1,3},{0,1,3},{1,3}};
     gameTimer gameTimer;
     static KeyBindsManager keyBinds;
     static GraphicsRenderer renderer;
     static Concert[] concerts = new Concert[10];
-    static HUDElement[] header = new HUDElement[5];
+    static HUDElement[] header = new HUDElement[6];
     static int collision = -1;
     static int sortingType = 0;
     static int panelWidth;
@@ -123,6 +124,10 @@ public class MusicPanel extends JPanel {
                         header[4].changeText("Sort Type: "+sortingTypes[sortingType]);
                     break;
 
+                    case 5:
+                        createConcertArray();
+                    break;
+
                     default:
                     break;
                 }
@@ -161,6 +166,7 @@ public class MusicPanel extends JPanel {
         header[2] = new HUDElement(new ShapeEntity("Rectangle", new int[]{7*(gridX),1}, new int[]{3*(gridX),gridY}), "StartTime-EndTime", (int)(40*(screenRatio)), "Centered");
         header[3] = new HUDElement(new ShapeEntity("Rectangle", new int[]{10*(gridX),1}, new int[]{2*(gridX),gridY}), "Duration", (int)(40*(screenRatio)), "Centered");
         header[4] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/4,panelHeight-panelHeight/7}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: "+sortingTypes[sortingType], (int)(60*(screenRatio)), "Centered");
+        header[5] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/3,panelHeight-2*panelHeight/7}, new int[]{panelWidth/3,panelHeight/16}), "Reset", (int)(60*(screenRatio)), "Centered");
     }
 
     // -------------
@@ -179,14 +185,17 @@ public class MusicPanel extends JPanel {
                         header[collision].highlightEntity(true);
                     }
                     collision = i;
-                    //System.out.println(i+"  "+collision);
                     if(collision<4){
-                        for (int j = 0; j < concerts.length; j++) {
-                            concerts[j].highlightEntity(i, false);
+                        for (int j = 0; j < collisions[sortingType].length; j++) {
+                            if(collisions[sortingType][j]==collision){
+                                for (int k = 0; k < concerts.length; k++) {
+                                    concerts[k].highlightEntity(i, false);
+                                }
+                                header[i].highlightEntity(false);
+                            }
                         }
-                        header[i].highlightEntity(false);
                     } else{
-                        header[4].highlightEntity(false);
+                        header[collision].highlightEntity(false);
                     }
                 }
                 return;
@@ -198,8 +207,8 @@ public class MusicPanel extends JPanel {
             }
             header[collision].highlightEntity(true);
         }
-        if(collision == 4){
-            header[4].highlightEntity(true);
+        if(collision >3){
+            header[collision].highlightEntity(true);
         }
         collision = -1;
     }
