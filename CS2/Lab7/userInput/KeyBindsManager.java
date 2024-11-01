@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
-public final class KeyBindsManager {
+public final class KeyBindsManager { 
 
     private KeyBoardManager keyBoard;
     private MouseInputManager mouse;
