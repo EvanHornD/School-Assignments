@@ -3,6 +3,7 @@ package Lab7;
 // Evan Horn
 //[CS2401]
 
+import Lab7.UI.*;
 public class Lab7_SortingAlgorithms {
 
 	public static void setIDs(Concert[] concerts){

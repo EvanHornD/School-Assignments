@@ -1,4 +1,4 @@
-package Lab7;
+package Lab7.UI;
 
 import javax.swing.*;
 

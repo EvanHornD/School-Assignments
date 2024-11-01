@@ -1,9 +1,9 @@
-package Lab7;
+package Lab7.UI;
 import java.awt.Graphics2D;
 
 import Lab7.Rendering.*;
 
-class Concert extends RenderableEntity {
+public class Concert extends RenderableEntity {
 	static int[] screenDimensions;
 	static double screenRatio;
 
@@ -17,7 +17,7 @@ class Concert extends RenderableEntity {
 	private int currentY = 0;
 	private LabeledShapeEntity[] concertInfo = new LabeledShapeEntity[4];
 
-	Concert(String artist, int c, int s, int e, int[] Dimensions) {
+	public Concert(String artist, int c, int s, int e, int[] Dimensions) {
 		this.Artist = artist;
 		this.capacity = c;
 		this.startTime = s;
@@ -31,7 +31,7 @@ class Concert extends RenderableEntity {
 		concertInfo[3] = createEntity(textSize, endTime-startTime+"",10, 2);
 	}
 
-	Concert(Concert c) {
+	public Concert(Concert c) {
 		this.currentY = c.getCurrentY();
 		this.targetY = c.getTargetY();
 		this.lastY = c.getLastY();

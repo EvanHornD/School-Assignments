@@ -1,16 +1,16 @@
-package Lab7;
+package Lab7.UI;
 
 import java.awt.Graphics2D;
 
 import Lab7.Rendering.*;
 
-class HUDElement extends LabeledShapeEntity {
+public class HUDElement extends LabeledShapeEntity {
 
     public HUDElement(ShapeEntity shape, String text, int textSize, String textAlignment) {
         super(shape, text, textSize, textAlignment);
     }
 
-    boolean isWithinBounds(int[] coords) {
+    public boolean isWithinBounds(int[] coords) {
         int[] shapeCoords = getShape().getCoords();       
         int[] dimensions = getShape().getDimensions(); 
 

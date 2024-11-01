@@ -166,7 +166,7 @@ public class MusicPanel extends JPanel {
         header[1] = new HUDElement(new ShapeEntity("Rectangle", new int[]{5*(gridX),1}, new int[]{2*(gridX),gridY}), "Capacity", (int)(40*(screenRatio)), "Centered");
         header[2] = new HUDElement(new ShapeEntity("Rectangle", new int[]{7*(gridX),1}, new int[]{3*(gridX),gridY}), "StartTime-EndTime", (int)(40*(screenRatio)), "Centered");
         header[3] = new HUDElement(new ShapeEntity("Rectangle", new int[]{10*(gridX),1}, new int[]{2*(gridX),gridY}), "Duration", (int)(40*(screenRatio)), "Centered");
-        header[4] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/4,panelHeight-3*panelHeight/14}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: "+sortingTypes[sortingType], (int)(60*(screenRatio)), "Centered");
+        header[4] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/4,panelHeight-4*panelHeight/21}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: "+sortingTypes[sortingType], (int)(60*(screenRatio)), "Centered");
         header[5] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/3,panelHeight-2*panelHeight/7}, new int[]{panelWidth/3,panelHeight/16}), "Reset", (int)(60*(screenRatio)), "Centered");
     }
 
