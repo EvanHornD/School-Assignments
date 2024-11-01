@@ -9,13 +9,14 @@ import javax.swing.*;
 public class MusicPanel extends JPanel {
 
     //#region   Class attributes
+    static final String[] sortingTypes = new String[]{"Selection","Insertion","Merge"};
     gameTimer gameTimer;
     static KeyBindsManager keyBinds;
     static GraphicsRenderer renderer;
     static Concert[] concerts = new Concert[10];
     static HUDElement[] header = new HUDElement[5];
     static int collision = -1;
-    static String sortingType = "selection";
+    static int sortingType = 0;
     static int panelWidth;
     static int panelHeight;
     static double screenRatio;
@@ -68,11 +69,66 @@ public class MusicPanel extends JPanel {
             Concert concert = concerts[0];
             concert.setID(concert.getID()-1);
         }
+        if(collision>-1){
+            if(keyActions.get("Input")==1&& keyFrames.get("Input")==1){
+                switch (collision) {
+                    case 0:
+                        switch(sortingTypes[sortingType]){
+                            case "Selection":
+                                Lab7_SortingAlgorithms.SelectionSortByArtist(concerts);
+                            break;
 
-        switch(sortingType){
-            case "":
-            break;
+                            case "Insertion":
+                            Lab7_SortingAlgorithms.InsertionSortByArtist(concerts);
+                            break;
+                        }
+                    break;
+                    case 1:
+                        switch(sortingTypes[sortingType]){
+                            case "Selection":
+                                Lab7_SortingAlgorithms.SelectionSortByCapacity(concerts);
+                            break;
+
+                            case "Insertion":
+                            Lab7_SortingAlgorithms.InsertionSortByCapacity(concerts);
+                            break;
+
+                            case "Merge":
+                            Lab7_SortingAlgorithms.MergeSortByCapacity(concerts);
+                            break;
+                        }
+                    break;
+                    case 3:
+                        switch(sortingTypes[sortingType]){
+                            case "Selection":
+                                Lab7_SortingAlgorithms.SelectionSortByDuration(concerts);
+                            break;
+
+                            case "Insertion":
+                            Lab7_SortingAlgorithms.InsertionSortByDuration(concerts);
+                            break;
+
+                            case "Merge":
+                            Lab7_SortingAlgorithms.MergeSortByDuration(concerts);
+                            break;
+                        }
+                    break;
+
+                    case 4:
+                        if(sortingType >= sortingTypes.length-1){
+                            sortingType = 0;
+                        } else {
+                            sortingType++;
+                        }
+                        header[4].changeText("Sort Type: "+sortingTypes[sortingType]);
+                    break;
+
+                    default:
+                    break;
+                }
+            }
         }
+
     }
 
     // -------------
@@ -104,7 +160,7 @@ public class MusicPanel extends JPanel {
         header[1] = new HUDElement(new ShapeEntity("Rectangle", new int[]{5*(gridX),1}, new int[]{2*(gridX),gridY}), "Capacity", (int)(40*(screenRatio)), "Centered");
         header[2] = new HUDElement(new ShapeEntity("Rectangle", new int[]{7*(gridX),1}, new int[]{3*(gridX),gridY}), "StartTime-EndTime", (int)(40*(screenRatio)), "Centered");
         header[3] = new HUDElement(new ShapeEntity("Rectangle", new int[]{10*(gridX),1}, new int[]{2*(gridX),gridY}), "Duration", (int)(40*(screenRatio)), "Centered");
-        header[4] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/4,panelHeight-panelHeight/7}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: Selection", (int)(60*(screenRatio)), "Centered");
+        header[4] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/4,panelHeight-panelHeight/7}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: "+sortingTypes[sortingType], (int)(60*(screenRatio)), "Centered");
     }
 
     // -------------

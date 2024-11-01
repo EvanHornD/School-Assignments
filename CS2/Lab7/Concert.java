@@ -4,19 +4,14 @@ import java.awt.Graphics2D;
 import Lab7.Rendering.*;
 
 class Concert extends RenderableEntity {
+	static int[] screenDimensions;
+	static double screenRatio;
+
 	private int id = 0;
 	private String Artist;
 	private int capacity;
-
-	/*
-	 * 24-hour format without a
-	 * colon, 8:00 am is 800, 5:30 pm
-	 * is 1730
-	 */
 	private int startTime;
 	private int endTime;
-	static int[] screenDimensions;
-	static double screenRatio;
 	private int targetY = 0;
 	private int lastY = 0;
 	private int currentY = 0;
@@ -36,8 +31,24 @@ class Concert extends RenderableEntity {
 		concertInfo[3] = createEntity(textSize, endTime-startTime+"",10, 2);
 	}
 
+	Concert(Concert c) {
+		this.currentY = c.getCurrentY();
+		this.targetY = c.getTargetY();
+		this.lastY = c.getLastY();
+		this.id = c.getID();
+		this.Artist = c.getArtist();
+		this.capacity = c.getCapacity();
+		this.startTime = c.getStartTime();
+		this.endTime = c.getEndTime();
+		this.concertInfo = c.getEntities();
+	}
+
 	LabeledShapeEntity createEntity(int textSize, String text, int x, int width){
 		return new LabeledShapeEntity(new ShapeEntity("Rectangle", new int[]{x*(screenDimensions[0]/12),targetY}, new int[]{width*(screenDimensions[0]/12),screenDimensions[1]/16}), text, textSize, "Left");
+	}
+
+	public LabeledShapeEntity[] getEntities(){
+		return concertInfo;
 	}
 
 	void moveEntities(){
@@ -57,8 +68,16 @@ class Concert extends RenderableEntity {
 		}
 	}
 
+	public int getCurrentY() {
+        return currentY;
+    }
+
+	public int getTargetY() {
+        return targetY;
+    }
+
 	public int getLastY(){
-		return this.lastY;
+		return lastY;
 	}
 
 	public int getCapacity() {
@@ -68,6 +87,14 @@ class Concert extends RenderableEntity {
 	public String getArtist() {
 		return Artist;
 	}
+
+	public int getStartTime() {
+        return startTime;
+    }
+
+	public int getEndTime() {
+        return endTime;
+    }
 
 	public int getDuration() {
         return endTime - startTime;
@@ -79,16 +106,26 @@ class Concert extends RenderableEntity {
 
 	public void setID(int ID){
 		id = ID;
-		targetY = id*screenDimensions[1]/32;
+		targetY = (int)(id*screenDimensions[1]/32.);
 	}
 
 	@Override
 	public void render(Graphics2D g2d) {
+		
 		lastY = currentY;
 		currentY = currentY+((targetY-currentY)/2);
+		if(Math.abs(targetY-currentY)<2){
+			currentY = targetY;
+		}
 		moveEntities();
 		for (LabeledShapeEntity labeledShapeEntity : concertInfo) {
 			labeledShapeEntity.render(g2d);
 		}
+	}
+
+	@Override
+	public String toString() {
+		
+		return String.format("| %-20s | %-7s | %-6s | %-4s |", this.getArtist(),this.getCapacity(),this.getDuration(),this.getID());
 	}
 }

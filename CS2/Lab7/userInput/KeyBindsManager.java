@@ -22,7 +22,7 @@ public final class KeyBindsManager {
     ));
 
     public Map<String, String> defaultMouseBindings = new HashMap<>(Map.of(
-        "BUTTON1", "input"
+        "BUTTON1", "Input"
     ));
 
     public Map<String, Integer> keyActions = new HashMap<>(Map.of(
@@ -30,7 +30,7 @@ public final class KeyBindsManager {
         "Down", 0,
         "Left", 0,
         "Right", 0,
-        "input", 0
+        "Input", 0
     ));
     public Map<String, Integer> keyFrames = new HashMap<>();
 
