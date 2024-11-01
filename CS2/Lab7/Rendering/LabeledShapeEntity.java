@@ -14,6 +14,14 @@ public class LabeledShapeEntity extends RenderableEntity {
         this.text = new TextEntity(text,textSize,coords,textAlignment,dimensions);
     }
 
+    public ShapeEntity getShape() {
+        return shape;
+    }
+
+    public TextEntity getText() {
+        return text;
+    }
+
     public void moveEntity(int x, int y){
         text.moveText(x, y);
         shape.moveShape(x, y);

@@ -2,6 +2,9 @@ package Lab7;
 
 import javax.swing.*;
 
+// I do not know how or even if this class works as I generated it with chat gpt.
+// I probably wont fix it because I have a better version in a different game engine project
+
 public class gameTimer {
     private Timer timer;
     private long lastFrameTime;

@@ -4,7 +4,7 @@ import Lab7.MusicPanel;
 import java.awt.Graphics2D;
 import javax.swing.*;
 
- public class GraphicsRenderer {
+public class GraphicsRenderer {
  
     private MusicPanel panel;
  
@@ -12,13 +12,12 @@ import javax.swing.*;
         this.panel = panel;
     }
  
-    // Draw all entities in the current scene
     public void draw(Graphics2D g2d) {
-        panel.render(g2d);  // The scene handles rendering all entities
+        panel.render(g2d);
     }
  
     public void triggerRepaint() {
         SwingUtilities.invokeLater(panel::repaint);
     }
- }
+}
  

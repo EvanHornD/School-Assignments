@@ -6,17 +6,20 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
-import Lab7.gameTimer;
-
 public class MusicPanel extends JPanel {
 
     //#region   Class attributes
     gameTimer gameTimer;
     static KeyBindsManager keyBinds;
     static GraphicsRenderer renderer;
-
+    static Concert[] concerts = new Concert[10];
+    static HUDElement[] header = new HUDElement[5];
+    static int collision = -1;
+    static String sortingType = "selection";
+    static int panelWidth;
+    static int panelHeight;
+    static double screenRatio;
     ShapeEntity backGround = new ShapeEntity(new Color(24,24,24));
-    static ArrayList<Concert> concerts = new ArrayList<>();
     //#endregion
 
     MusicPanel(Dimension dimensions){
@@ -26,61 +29,139 @@ public class MusicPanel extends JPanel {
         keyBinds = new KeyBindsManager(this);
         renderer = new GraphicsRenderer(this);
         gameTimer = new gameTimer();
-        concerts.add(new Concert(1,"test",2000,100,400,new int[]{(int)dimensions.getWidth(),(int)dimensions.getHeight()}));
+        panelWidth = (int)dimensions.getWidth();
+        panelHeight = (int)dimensions.getHeight();
+        screenRatio = panelWidth/(1920.);
+        createConcertArray();
+        createHud();
         startGameTimer();
     }
+
+    // -------------
+    // Start Game
+    // -------------
 
     public void startGameTimer() {
         gameTimer.start(deltaTime -> {
             // Update game state
             runGameLoop(deltaTime);
+            keyBinds.updateFrameInformation();
 
             // Trigger the repaint
             renderer.triggerRepaint();
         });
     }
 
+    // -------------
+    // Run Game Logic
+    // -------------
     public static void runGameLoop(double dt){
         Map<String, Integer> keyActions = keyBinds.getKeyActions();
         Map<String, Integer> keyFrames = keyBinds.getKeyFrames();
+
+        runHUDCollisions();
         if(keyActions.get("Down")==1&& keyFrames.get("Down")==1){
-            Concert concert = concerts.get(0);
+            Concert concert = concerts[0];
             concert.setID(concert.getID()+1);
         }
         if(keyActions.get("Up")==1&& keyFrames.get("Up")==1){
-            Concert concert = concerts.get(0);
+            Concert concert = concerts[0];
             concert.setID(concert.getID()-1);
         }
 
-        //updates all of the scenes entities making use of which keys are being pressed and for how long
-        Object[][] Actions = keyBinds.getInformation();
-        for (Object[] Action : Actions) {
-            Integer state = (Integer)Action[1];
-            if(state>0){
-                String action = (String)Action[0];
-                Integer framesPressed = (Integer)Action[2];
-                switch (state) {
-                    case 1 -> {
-                        if (framesPressed==0) {
-                            System.out.println(action+" Pressed");
-                        } else {
-                            System.out.println(framesPressed);
+        switch(sortingType){
+            case "":
+            break;
+        }
+    }
+
+    // -------------
+    // Create Concerts
+    // -------------
+
+    static void createConcertArray() {
+        Random rand = new Random();
+        String[] artists = {"Beyoncé", "Coldplay", "Drake", "Taylor Swift", "Kendrick Lamar", "Adele", "The Weeknd", 
+        "Billie Eilish", "Post Malone", "Bruno Mars", "Sabrina Carpenter", "Chappell Roan", "Noah Khan"};
+        for (int i = 0; i < 10; i++) {
+            int capacity = rand.nextInt(100,1000) + 1;
+            int startTime = rand.nextInt(2300);
+            int endTime = startTime + rand.nextInt(2400 - startTime) + 1;
+            String artist = artists[rand.nextInt(artists.length)];
+            concerts[i] = new Concert(artist,capacity,startTime,endTime,new int[]{panelWidth,panelHeight});
+            concerts[i].setID(i+1);
+        }
+    }
+
+    // -------------
+    // Create each HUD element
+    // -------------
+
+    static void createHud(){
+        int gridX = panelWidth/12;
+        int gridY = panelHeight/16;
+        header[0] = new HUDElement(new ShapeEntity("Rectangle", new int[]{0*(gridX),1}, new int[]{5*(gridX),gridY}), "Artist", (int)(40*(screenRatio)), "Centered");
+        header[1] = new HUDElement(new ShapeEntity("Rectangle", new int[]{5*(gridX),1}, new int[]{2*(gridX),gridY}), "Capacity", (int)(40*(screenRatio)), "Centered");
+        header[2] = new HUDElement(new ShapeEntity("Rectangle", new int[]{7*(gridX),1}, new int[]{3*(gridX),gridY}), "StartTime-EndTime", (int)(40*(screenRatio)), "Centered");
+        header[3] = new HUDElement(new ShapeEntity("Rectangle", new int[]{10*(gridX),1}, new int[]{2*(gridX),gridY}), "Duration", (int)(40*(screenRatio)), "Centered");
+        header[4] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/4,panelHeight-panelHeight/7}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: Selection", (int)(60*(screenRatio)), "Centered");
+    }
+
+    // -------------
+    // Check for mouse collisions with HUD elements and highlight them accordingly
+    // -------------
+
+    static void runHUDCollisions(){
+        int[] mouseCoords = keyBinds.mouseCoords;
+        for (int i = 0; i<header.length;i++) {
+            if(header[i].isWithinBounds(mouseCoords)){
+                if(collision != i){
+                    if(collision>-1&&collision<4){
+                        for (int j = 0; j < concerts.length; j++) {
+                            concerts[j].highlightEntity(collision, true);
                         }
+                        header[collision].highlightEntity(true);
                     }
-                    case 2 -> System.out.println(action+" Released");
+                    collision = i;
+                    //System.out.println(i+"  "+collision);
+                    if(collision<4){
+                        for (int j = 0; j < concerts.length; j++) {
+                            concerts[j].highlightEntity(i, false);
+                        }
+                        header[i].highlightEntity(false);
+                    } else{
+                        header[4].highlightEntity(false);
+                    }
                 }
+                return;
             }
         }
-        keyBinds.updateFrameInformation();
+        if(collision !=-1&&collision<4){
+            for (int i = 0; i < concerts.length; i++) {
+                concerts[i].highlightEntity(collision, true);
+            }
+            header[collision].highlightEntity(true);
+        }
+        if(collision == 4){
+            header[4].highlightEntity(true);
+        }
+        collision = -1;
     }
+
+    // -------------
+    // calls each entities render method
+    // -------------
 
     public void render(Graphics2D g2d) {
         backGround.render(g2d);
-        for (Renderable entity : concerts) {
-            entity.render(g2d);
+        for (int i = 0; i < concerts.length;i++) {
+            concerts[i].render(g2d);
+        }
+        for (int i = 0; i < header.length; i++) {
+            header[i].render(g2d);
         }
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

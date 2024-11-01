@@ -1,12 +1,11 @@
 package Lab7;
-
 import java.awt.Graphics2D;
 
 import Lab7.Rendering.*;
 
 class Concert extends RenderableEntity {
-	private static int id;
-	String Artist;
+	private int id = 0;
+	private String Artist;
 	private int capacity;
 
 	/*
@@ -16,38 +15,50 @@ class Concert extends RenderableEntity {
 	 */
 	private int startTime;
 	private int endTime;
-	int orderInList;
 	static int[] screenDimensions;
-	private static int targetY;
-	private static int lastY;
-	private static int currentY;
-	static LabeledShapeEntity[] concertInfo = new LabeledShapeEntity[4];
+	static double screenRatio;
+	private int targetY = 0;
+	private int lastY = 0;
+	private int currentY = 0;
+	private LabeledShapeEntity[] concertInfo = new LabeledShapeEntity[4];
 
-	Concert(int i, String artist, int c, int s, int e, int[] Dimensions) {
-		id = i;
-		Artist = artist;
-		capacity = c;
-		startTime = s;
-		endTime = e;
+	Concert(String artist, int c, int s, int e, int[] Dimensions) {
+		this.Artist = artist;
+		this.capacity = c;
+		this.startTime = s;
+		this.endTime = e;
 		screenDimensions = Dimensions;
-		targetY = id*screenDimensions[1]/16;
-		currentY = targetY;
-		int textSize = 40*(screenDimensions[0]/(1920));
+		screenRatio = screenDimensions[0]/(1920.);
+		int textSize = (int)(40*screenRatio);
 		concertInfo[0] = createEntity(textSize, artist,0, 5);
-		concertInfo[1] = createEntity(textSize, c+"",5, 3);
-		concertInfo[2] = createEntity(textSize, s+" - "+e,8, 2);
+		concertInfo[1] = createEntity(textSize, c+"",5, 2);
+		concertInfo[2] = createEntity(textSize, s+" - "+e,7, 3);
 		concertInfo[3] = createEntity(textSize, endTime-startTime+"",10, 2);
 	}
 
-	static LabeledShapeEntity createEntity(int textSize, String text, int x, int width){
+	LabeledShapeEntity createEntity(int textSize, String text, int x, int width){
 		return new LabeledShapeEntity(new ShapeEntity("Rectangle", new int[]{x*(screenDimensions[0]/12),targetY}, new int[]{width*(screenDimensions[0]/12),screenDimensions[1]/16}), text, textSize, "Left");
 	}
 
-	static void moveEntities(){
+	void moveEntities(){
 		int changeInY = currentY-lastY;
 		for (LabeledShapeEntity entity : concertInfo) {
 			entity.moveEntity(0, changeInY);
 		}
+	}
+
+	public void highlightEntity(int i, boolean isHighlighted){
+		if(!isHighlighted){
+			concertInfo[i].getShape().setColor(concertInfo[i].getShape().defaultOutline);
+			concertInfo[i].getShape().setOutLineColor(concertInfo[i].getShape().highlightedOutLine);
+		} else {
+			concertInfo[i].getShape().setColor(concertInfo[i].getShape().defaultColor);
+			concertInfo[i].getShape().setOutLineColor(concertInfo[i].getShape().defaultOutline);
+		}
+	}
+
+	public int getLastY(){
+		return this.lastY;
 	}
 
 	public int getCapacity() {

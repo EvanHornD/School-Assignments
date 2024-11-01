@@ -5,27 +5,12 @@ import java.awt.Graphics2D;
 public class ShapeEntity extends RenderableEntity {
     public Color defaultColor = new Color(32,32,32);
     public Color defaultOutline = new Color(42,42,42);
+    public Color highlightedOutLine = new Color(52,52,52);
     private String shape;
     private int[] coordinates;
     private int[] dimensions;
     private Color color;
     private Color outLineColor;
-
-    public ShapeEntity(String shape, int[] dimensions, int layer) {
-        this.shape = shape;
-        this.coordinates = new int[]{0, 0};
-        this.dimensions = dimensions;
-        this.color = defaultColor;
-        this.outLineColor = defaultOutline;
-    }
-
-    public ShapeEntity(String shape, int[] coordinates, int[] dimensions, Color color, int layer) {
-        this.shape = shape;
-        this.coordinates = coordinates;
-        this.dimensions = dimensions;
-        this.color = color;
-        this.outLineColor = defaultOutline;
-    }
 
     public ShapeEntity(String shape, int[] coordinates, int[] dimensions) {
         this.shape = shape;
@@ -35,13 +20,6 @@ public class ShapeEntity extends RenderableEntity {
         this.outLineColor = defaultOutline;
     }
 
-    public ShapeEntity(String shape, int[] coordinates, int[] dimensions, Color color) {
-        this.shape = shape;
-        this.coordinates = coordinates;
-        this.dimensions = dimensions;
-        this.color = color;
-        this.outLineColor = defaultOutline;
-    }
     public ShapeEntity(Color color) {
         this.shape = "Rectangle";
         this.coordinates = new int[]{0,0};
@@ -64,6 +42,14 @@ public class ShapeEntity extends RenderableEntity {
 
     public Color getColor() {
         return color;
+    }
+
+    public void setColor(Color newColor) {
+        this.color = newColor;
+    }
+
+    public void setOutLineColor(Color newColor) {
+        this.outLineColor = newColor;
     }
 
     public void moveShape(int x, int y){
