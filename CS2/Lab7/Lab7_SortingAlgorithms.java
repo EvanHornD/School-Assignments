@@ -6,6 +6,83 @@ package Lab7;
 import Lab7.UI.*;
 public class Lab7_SortingAlgorithms {
 
+	public static String sortingType = "Null";
+	public static int currentFrame = -1;
+	public static int sortingIteration = 0;
+	public static int animationSpeed = 30;
+
+	public static void setSortingType(String sortingtype, Concert[] concerts){
+		finishSortingAlgorithms(concerts);
+		sortingType = sortingtype;
+		currentFrame = -1;
+		if(sortingType.contains("Insertion")){
+			sortingIteration = 1;
+			return;
+		}
+		sortingIteration = 0;
+	}
+
+	public static void runSortingAlgorithms(Concert[] concerts){
+		// check if there is a sorting type
+		if(sortingType == "Null"){
+			return;
+		}
+
+		// increment animation frame counter
+		currentFrame++;
+
+		// check if the animation frame matches the speed
+		if(currentFrame%animationSpeed!=0){
+			return;
+		}
+
+		// run the sorting algorithm which matches the sorting type
+		Sort(concerts);
+	}
+
+	public static void Sort(Concert[] concerts){
+		switch (sortingType) {
+			case "SelectionArtist":
+				SelectionSortByArtist(concerts);
+			break;
+			case "SelectionCapacity":
+				SelectionSortByCapacity(concerts);
+			break;
+			case "SelectionDuration":
+				SelectionSortByDuration(concerts);
+			break;
+			case "InsertionArtist":
+				InsertionSortByArtist(concerts);
+			break;
+			case "InsertionCapacity":
+				InsertionSortByCapacity(concerts);
+			break;
+			case "InsertionDuration":
+				InsertionSortByDuration(concerts);
+			break;
+			case "MergeCapacity":
+				MergeSortByCapacity(concerts);
+			break;
+			case "MergeDuration":
+				MergeSortByDuration(concerts);
+			break;
+		}
+	}
+
+	public static void finishSortingAlgorithms(Concert[] concerts){
+		while (sortingType!="Null") {
+			Sort(concerts);
+		}
+		finishAnimations(concerts);
+	}
+
+	private static void finishAnimations(Concert[] concerts){
+		for (Concert concert : concerts) {
+			concert.moveToFinalPos();
+		}
+	}
+
+
 	public static void setIDs(Concert[] concerts){
 		for (int i = 0; i < concerts.length; i++) {
 			concerts[i].setID(i+1);
@@ -73,42 +150,66 @@ public class Lab7_SortingAlgorithms {
     }
 
 	public static void SelectionSortByDuration(Concert[] allConcerts) {
-		for (int i = 0; i < allConcerts.length-1; i++) {
-            int minElement = i;
-            for (int j = i + 1; j < allConcerts.length; j++) {
-                if (allConcerts[j].getDuration() < allConcerts[minElement].getDuration()) {
-                    minElement = j;
-                }
-            }
-			swap(allConcerts, i, minElement);
-        }
+		//check if animation ended
+		if(sortingIteration>=allConcerts.length-1){
+			sortingType = "Null";
+			return;
+		}
+
+		// run 1 iteration of swapping
+		int minElement = sortingIteration;
+		for (int j = sortingIteration + 1; j < allConcerts.length; j++) {
+			if (allConcerts[j].getDuration() < allConcerts[minElement].getDuration()) {
+				minElement = j;
+			}
+		}
+		swap(allConcerts, sortingIteration, minElement);
 		setIDs(allConcerts);
+
+		// iteratate the animation
+		sortingIteration++;
 	}
 
 	public static void SelectionSortByCapacity(Concert[] allConcerts) {
-		for (int i = 0; i < allConcerts.length-1; i++) {
-            int minElement = i;
-            for (int j = i + 1; j < allConcerts.length; j++) {
-                if (allConcerts[j].getCapacity() < allConcerts[minElement].getCapacity()) {
-                    minElement = j;
-                }
-            }
-			swap(allConcerts, i, minElement);
-        }
+		//check if animation ended
+		if(sortingIteration>=allConcerts.length-1){
+			sortingType = "Null";
+			return;
+		}
+		
+		// run 1 iteration of swapping
+		int minElement = sortingIteration;
+		for (int j = sortingIteration + 1; j < allConcerts.length; j++) {
+			if (allConcerts[j].getCapacity() < allConcerts[minElement].getCapacity()) {
+				minElement = j;
+			}
+		}
+		swap(allConcerts, sortingIteration, minElement);
 		setIDs(allConcerts);
+
+		// iteratate the animation
+		sortingIteration++;
 	}
 
 	public static void SelectionSortByArtist(Concert[] allConcerts) {
-		for (int i = 0; i < allConcerts.length-1; i++) {
-            int minElement = i;
-            for (int j = i + 1; j < allConcerts.length; j++) {
-                if (artistIsLessThan(allConcerts[j].getArtist(), allConcerts[minElement].getArtist())) {
-                    minElement = j;
-                }
-            }
-			swap(allConcerts, i, minElement);
-        }
+		//check if animation ended
+		if(sortingIteration>=allConcerts.length-1){
+			sortingType = "Null";
+			return;
+		}
+		
+		// run 1 iteration of swapping
+		int minElement = sortingIteration;
+		for (int j = sortingIteration + 1; j < allConcerts.length; j++) {
+			if (artistIsLessThan(allConcerts[j].getArtist(), allConcerts[minElement].getArtist())) {
+				minElement = j;
+			}
+		}
+		swap(allConcerts, sortingIteration, minElement);
 		setIDs(allConcerts);
+
+		// iteratate the animation
+		sortingIteration++;
 	}
 	//#endregion
 
@@ -127,6 +228,7 @@ public class Lab7_SortingAlgorithms {
 	 public static void MergeSortByDuration(Concert[] allConcerts) {
 		mergeSort(allConcerts, 0, allConcerts.length - 1);
 		setIDs(allConcerts);
+		sortingType = "Null";
 	}
 
 	static void mergeSort(Concert[] allConcerts, int left, int right) {
@@ -185,6 +287,7 @@ public class Lab7_SortingAlgorithms {
 	public static void MergeSortByCapacity(Concert[] allConcerts) {
 		mergeSortByCapacity(allConcerts, 0, allConcerts.length - 1);
 		setIDs(allConcerts);
+		sortingType = "Null";
 	}
 	
 	static void mergeSortByCapacity(Concert[] allConcerts, int left, int right) {
@@ -280,42 +383,66 @@ public class Lab7_SortingAlgorithms {
     }
 
 	public static void InsertionSortByDuration(Concert[] allConcerts) {
-		for (int i = 1; i < allConcerts.length; i++) {
-            Concert temp = new Concert(allConcerts[i]);
-            int j = i-1;
-            while(j>=0&&allConcerts[j].getDuration()>temp.getDuration()){
-				allConcerts[j+1] = allConcerts[j];
-                j--;
-            }
-            allConcerts[j+1] = temp;
-        }
+		//check if animation ended
+		if(sortingIteration>=allConcerts.length){
+			sortingType = "Null";
+			return;
+		}
+
+		// run 1 iteration of inserting
+		Concert temp = allConcerts[sortingIteration];
+		int j = sortingIteration-1;
+		while(j>=0&&allConcerts[j].getDuration()>temp.getDuration()){
+			allConcerts[j+1] = allConcerts[j];
+			j--;
+		}
+		allConcerts[j+1] = temp;
 		setIDs(allConcerts);
+
+		// iteratate the animation
+		sortingIteration++;
 	}
 
 	public static void InsertionSortByCapacity(Concert[] allConcerts) {
-		for (int i = 1; i < allConcerts.length; i++) {
-            Concert temp = new Concert(allConcerts[i]);
-            int j = i-1;
-            while(j>=0&&allConcerts[j].getCapacity()>temp.getCapacity()){
-				allConcerts[j+1] = allConcerts[j];
-                j--;
-            }
-            allConcerts[j+1] = temp;
-        }
+		//check if animation ended
+		if(sortingIteration>=allConcerts.length){
+			sortingType = "Null";
+			return;
+		}
+
+		// run 1 iteration of inserting
+		Concert temp = allConcerts[sortingIteration];
+		int j = sortingIteration-1;
+		while(j>=0&&allConcerts[j].getCapacity()>temp.getCapacity()){
+			allConcerts[j+1] = allConcerts[j];
+			j--;
+		}
+		allConcerts[j+1] = temp;
 		setIDs(allConcerts);
+
+		// iteratate the animation
+		sortingIteration++;
 	}
 
 	public static void InsertionSortByArtist(Concert[] allConcerts) {
-		for (int i = 1; i < allConcerts.length; i++) {
-            Concert temp = new Concert(allConcerts[i]);
-            int j = i-1;
-            while(j>=0&&artistIsGreaterThan(allConcerts[j].getArtist(), temp.getArtist())){
-				allConcerts[j+1] = allConcerts[j];
-                j--;
-            }
-            allConcerts[j+1] = temp;
-        }
+		//check if animation ended
+		if(sortingIteration>=allConcerts.length){
+			sortingType = "Null";
+			return;
+		}
+
+		// run 1 iteration of inserting
+		Concert temp = allConcerts[sortingIteration];
+		int j = sortingIteration-1;
+		while(j>=0&&artistIsGreaterThan(allConcerts[j].getArtist(), temp.getArtist())){
+			allConcerts[j+1] = allConcerts[j];
+			j--;
+		}
+		allConcerts[j+1] = temp;
 		setIDs(allConcerts);
+
+		// iteratate the animation
+		sortingIteration++;
 	}
 
 	//#endregion

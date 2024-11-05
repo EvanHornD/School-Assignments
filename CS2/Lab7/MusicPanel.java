@@ -11,6 +11,7 @@ public class MusicPanel extends JPanel {
 
     //#region   Class attributes
     static final String[] sortingTypes = new String[]{"Selection","Insertion","Merge"};
+    static final String[] sortingCategories = new String[]{"Artist","Capacity","Null","Duration","Null","Null"};
     static final int[][] collisions = new int[][]{{0,1,3},{0,1,3},{1,3}};
     gameTimer gameTimer;
     static KeyBindsManager keyBinds;
@@ -59,82 +60,57 @@ public class MusicPanel extends JPanel {
     // Run Game Logic
     // -------------
     public static void runGameLoop(double dt){
+        runButtonCollisions();
+        Lab7_SortingAlgorithms.runSortingAlgorithms(concerts);
+    }
+
+    // -------------
+    // Checks for collisions and then activates code based on the button pressed
+    // -------------
+    public static void runButtonCollisions(){
         Map<String, Integer> keyActions = keyBinds.getKeyActions();
         Map<String, Integer> keyFrames = keyBinds.getKeyFrames();
 
+        // check collisions
         runHUDCollisions();
-        if(keyActions.get("Down")==1&& keyFrames.get("Down")==1){
-            Concert concert = concerts[0];
-            concert.setID(concert.getID()+1);
+        if(collision==-1){
+            return;
         }
-        if(keyActions.get("Up")==1&& keyFrames.get("Up")==1){
-            Concert concert = concerts[0];
-            concert.setID(concert.getID()-1);
+
+        // check if the user first frame of a mouse input is happening
+        if(keyActions.get("Input")!=1|| keyFrames.get("Input")!=1){
+            return;
         }
-        if(collision>-1){
-            if(keyActions.get("Input")==1&& keyFrames.get("Input")==1){
-                switch (collision) {
-                    case 0:
-                        switch(sortingTypes[sortingType]){
-                            case "Selection":
-                                Lab7_SortingAlgorithms.SelectionSortByArtist(concerts);
-                            break;
 
-                            case "Insertion":
-                            Lab7_SortingAlgorithms.InsertionSortByArtist(concerts);
-                            break;
-                        }
-                    break;
-                    case 1:
-                        switch(sortingTypes[sortingType]){
-                            case "Selection":
-                                Lab7_SortingAlgorithms.SelectionSortByCapacity(concerts);
-                            break;
-
-                            case "Insertion":
-                            Lab7_SortingAlgorithms.InsertionSortByCapacity(concerts);
-                            break;
-
-                            case "Merge":
-                            Lab7_SortingAlgorithms.MergeSortByCapacity(concerts);
-                            break;
-                        }
-                    break;
-                    case 3:
-                        switch(sortingTypes[sortingType]){
-                            case "Selection":
-                                Lab7_SortingAlgorithms.SelectionSortByDuration(concerts);
-                            break;
-
-                            case "Insertion":
-                            Lab7_SortingAlgorithms.InsertionSortByDuration(concerts);
-                            break;
-
-                            case "Merge":
-                            Lab7_SortingAlgorithms.MergeSortByDuration(concerts);
-                            break;
-                        }
-                    break;
-
-                    case 4:
-                        if(sortingType >= sortingTypes.length-1){
-                            sortingType = 0;
-                        } else {
-                            sortingType++;
-                        }
-                        header[4].changeText("Sort Type: "+sortingTypes[sortingType]);
-                    break;
-
-                    case 5:
-                        createConcertArray();
-                    break;
-
-                    default:
-                    break;
+        // run collisions on extra menu buttons EX: the reset button is case 5
+        switch (collision) {
+            case 4:
+                if(sortingType >= sortingTypes.length-1){
+                    sortingType = 0;
+                } else {
+                    sortingType++;
                 }
-            }
+                header[4].changeText("Sort Type: "+sortingTypes[sortingType]);
+            return;
+
+            case 5:
+                Lab7_SortingAlgorithms.finishSortingAlgorithms(concerts);
+                createConcertArray();
+            return;
         }
 
+        // check if the collision is with an inactive sorting button
+        if(sortingCategories[collision]=="Null"){
+            return;
+        }
+
+        //handle the case of trying to merge sort by artist
+        if(sortingType==3&&collision==0){
+            return;
+        }
+
+        //set the sorting categorys
+        Lab7_SortingAlgorithms.setSortingType(sortingTypes[sortingType]+sortingCategories[collision], concerts);
     }
 
     // -------------
@@ -221,6 +197,7 @@ public class MusicPanel extends JPanel {
     public void render(Graphics2D g2d) {
         backGround.render(g2d);
         for (int i = 0; i < concerts.length;i++) {
+            concerts[i].move(.5);
             concerts[i].render(g2d);
         }
         for (int i = 0; i < header.length; i++) {

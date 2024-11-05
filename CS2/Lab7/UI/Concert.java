@@ -108,15 +108,21 @@ public class Concert extends RenderableEntity {
 		targetY = (int)(id*screenDimensions[1]/32.);
 	}
 
-	@Override
-	public void render(Graphics2D g2d) {
-		
+	public void moveToFinalPos(){
+		move(4.);
+	}
+
+	public void move(Double speed){
 		lastY = currentY;
-		currentY = currentY+((targetY-currentY)/8);
+		currentY = currentY+((targetY-currentY)/(4*(1/speed)));
 		if(Math.abs(targetY-currentY)<1){
 			currentY = targetY;
 		}
 		moveEntities();
+	}
+
+	@Override
+	public void render(Graphics2D g2d) {
 		for (LabeledShapeEntity labeledShapeEntity : concertInfo) {
 			labeledShapeEntity.render(g2d);
 		}
