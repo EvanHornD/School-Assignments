@@ -1,8 +1,7 @@
 package Lab7.UI;
 
-import java.awt.Graphics2D;
-
 import Lab7.Rendering.*;
+import java.awt.Graphics2D;
 
 public class HUDElement extends LabeledShapeEntity {
 
@@ -11,11 +10,11 @@ public class HUDElement extends LabeledShapeEntity {
     }
 
     public boolean isWithinBounds(int[] coords) {
-        int[] shapeCoords = getShape().getCoords();       
+        double[] shapeCoords = getShape().getCoords();       
         int[] dimensions = getShape().getDimensions(); 
 
-        int x = shapeCoords[0];
-        int y = shapeCoords[1];
+        double x = shapeCoords[0];
+        double y = shapeCoords[1];
         int width = dimensions[0];
         int height = dimensions[1];
 

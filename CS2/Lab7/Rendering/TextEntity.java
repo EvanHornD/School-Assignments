@@ -9,11 +9,11 @@ import java.awt.Graphics2D;
 public class TextEntity extends RenderableEntity {
     private String text;
     private Font font;
-    private int[] coordinates;
+    private double[] coordinates;
     private int[] shapeDimensions;
     private String alignment;
 
-    public TextEntity(String text,int textSize,int[] coordinates, String alignment, int[] dimensions) {
+    public TextEntity(String text,int textSize,double[] coordinates, String alignment, int[] dimensions) {
         this.text = text;
         this.font = new Font("Arial", 0, textSize);
         this.coordinates = coordinates;
@@ -44,11 +44,11 @@ public class TextEntity extends RenderableEntity {
         return font;
     }
 
-    public int[] getCoords() {
+    public double[] getCoords() {
         return coordinates;
     }
 
-    public void moveText(int x, int y){
+    public void moveText(double x, double y){
         coordinates[0] += x;
         coordinates[1] += y;
     }
@@ -70,19 +70,19 @@ public class TextEntity extends RenderableEntity {
             case "Centered":
             width = getStringWidth(g2d);
             height = getStringHeight(g2d);
-            xCentered = (coordinates[0]+shapeDimensions[0]/2-width/2);
-            yCentered = (coordinates[1]+(shapeDimensions[1]/2)+height/3);
+            xCentered = ((int)coordinates[0]+shapeDimensions[0]/2-width/2);
+            yCentered = ((int)coordinates[1]+(shapeDimensions[1]/2)+height/3);
             g2d.drawString(text, xCentered, yCentered);
             break;
 
             case "Left":
             height = getStringHeight(g2d);
-            yCentered = (coordinates[1]+(shapeDimensions[1]/2)+height/3);
-            g2d.drawString(text, coordinates[0]+getStringSize(g2d), yCentered);
+            yCentered = ((int)coordinates[1]+(shapeDimensions[1]/2)+height/3);
+            g2d.drawString(text, (int)coordinates[0]+getStringSize(g2d), yCentered);
             break;
         
             default:
-            g2d.drawString(text, coordinates[0], coordinates[1]);
+            g2d.drawString(text, (int)coordinates[0], (int)coordinates[1]);
             break;
         }
     }

@@ -1,7 +1,6 @@
 package Lab7.UI;
-import java.awt.Graphics2D;
-
 import Lab7.Rendering.*;
+import java.awt.Graphics2D;
 
 public class Concert extends RenderableEntity {
 	static int[] screenDimensions;
@@ -12,9 +11,9 @@ public class Concert extends RenderableEntity {
 	private int capacity;
 	private int startTime;
 	private int endTime;
-	private int targetY = 0;
-	private int lastY = 0;
-	private int currentY = 0;
+	private double targetY = 0;
+	private double lastY = 0;
+	private double currentY = 0;
 	private LabeledShapeEntity[] concertInfo = new LabeledShapeEntity[4];
 
 	public Concert(String artist, int c, int s, int e, int[] Dimensions) {
@@ -44,7 +43,7 @@ public class Concert extends RenderableEntity {
 	}
 
 	LabeledShapeEntity createEntity(int textSize, String text, int x, int width){
-		return new LabeledShapeEntity(new ShapeEntity("Rectangle", new int[]{x*(screenDimensions[0]/12),targetY}, new int[]{width*(screenDimensions[0]/12),screenDimensions[1]/16}), text, textSize, "Left");
+		return new LabeledShapeEntity(new ShapeEntity("Rectangle", new double[]{x*(screenDimensions[0]/12),targetY}, new int[]{width*(screenDimensions[0]/12),screenDimensions[1]/16}), text, textSize, "Left");
 	}
 
 	public LabeledShapeEntity[] getEntities(){
@@ -52,7 +51,7 @@ public class Concert extends RenderableEntity {
 	}
 
 	void moveEntities(){
-		int changeInY = currentY-lastY;
+		double changeInY = currentY-lastY;
 		for (LabeledShapeEntity entity : concertInfo) {
 			entity.moveEntity(0, changeInY);
 		}
@@ -68,15 +67,15 @@ public class Concert extends RenderableEntity {
 		}
 	}
 
-	public int getCurrentY() {
+	public double getCurrentY() {
         return currentY;
     }
 
-	public int getTargetY() {
+	public double getTargetY() {
         return targetY;
     }
 
-	public int getLastY(){
+	public double getLastY(){
 		return lastY;
 	}
 
@@ -113,8 +112,8 @@ public class Concert extends RenderableEntity {
 	public void render(Graphics2D g2d) {
 		
 		lastY = currentY;
-		currentY = currentY+((targetY-currentY)/2);
-		if(Math.abs(targetY-currentY)<2){
+		currentY = currentY+((targetY-currentY)/8);
+		if(Math.abs(targetY-currentY)<1){
 			currentY = targetY;
 		}
 		moveEntities();

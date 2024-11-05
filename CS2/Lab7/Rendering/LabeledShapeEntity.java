@@ -9,7 +9,7 @@ public class LabeledShapeEntity extends RenderableEntity {
 
     public LabeledShapeEntity(ShapeEntity shape, String text,int textSize, String textAlignment){
         this.shape = shape;
-        int[] coords = shape.getCoords();
+        double[] coords = shape.getCoords();
         int[] dimensions = shape.getDimensions();
         this.text = new TextEntity(text,textSize,coords,textAlignment,dimensions);
     }
@@ -22,7 +22,7 @@ public class LabeledShapeEntity extends RenderableEntity {
         return text;
     }
 
-    public void moveEntity(int x, int y){
+    public void moveEntity(double x, double y){
         text.moveText(x, y);
         shape.moveShape(x, y);
     }

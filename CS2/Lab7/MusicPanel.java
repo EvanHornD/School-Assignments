@@ -1,8 +1,8 @@
 package Lab7;
 
 import Lab7.Rendering.*;
-import Lab7.userInput.*;
 import Lab7.UI.*;
+import Lab7.userInput.*;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
@@ -162,12 +162,12 @@ public class MusicPanel extends JPanel {
     static void createHud(){
         int gridX = panelWidth/12;
         int gridY = panelHeight/16;
-        header[0] = new HUDElement(new ShapeEntity("Rectangle", new int[]{0*(gridX),1}, new int[]{5*(gridX),gridY}), "Artist", (int)(40*(screenRatio)), "Centered");
-        header[1] = new HUDElement(new ShapeEntity("Rectangle", new int[]{5*(gridX),1}, new int[]{2*(gridX),gridY}), "Capacity", (int)(40*(screenRatio)), "Centered");
-        header[2] = new HUDElement(new ShapeEntity("Rectangle", new int[]{7*(gridX),1}, new int[]{3*(gridX),gridY}), "StartTime-EndTime", (int)(40*(screenRatio)), "Centered");
-        header[3] = new HUDElement(new ShapeEntity("Rectangle", new int[]{10*(gridX),1}, new int[]{2*(gridX),gridY}), "Duration", (int)(40*(screenRatio)), "Centered");
-        header[4] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/4,panelHeight-4*panelHeight/21}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: "+sortingTypes[sortingType], (int)(60*(screenRatio)), "Centered");
-        header[5] = new HUDElement(new ShapeEntity("Rectangle", new int[]{panelWidth/3,panelHeight-2*panelHeight/7}, new int[]{panelWidth/3,panelHeight/16}), "Reset", (int)(60*(screenRatio)), "Centered");
+        header[0] = new HUDElement(new ShapeEntity("Rectangle", new double[]{0*(gridX),1}, new int[]{5*(gridX),gridY}), "Artist", (int)(40*(screenRatio)), "Centered");
+        header[1] = new HUDElement(new ShapeEntity("Rectangle", new double[]{5*(gridX),1}, new int[]{2*(gridX),gridY}), "Capacity", (int)(40*(screenRatio)), "Centered");
+        header[2] = new HUDElement(new ShapeEntity("Rectangle", new double[]{7*(gridX),1}, new int[]{3*(gridX),gridY}), "StartTime-EndTime", (int)(40*(screenRatio)), "Centered");
+        header[3] = new HUDElement(new ShapeEntity("Rectangle", new double[]{10*(gridX),1}, new int[]{2*(gridX),gridY}), "Duration", (int)(40*(screenRatio)), "Centered");
+        header[4] = new HUDElement(new ShapeEntity("Rectangle", new double[]{panelWidth/4,panelHeight-4*panelHeight/21}, new int[]{panelWidth/2,panelHeight/16}), "Sort Type: "+sortingTypes[sortingType], (int)(60*(screenRatio)), "Centered");
+        header[5] = new HUDElement(new ShapeEntity("Rectangle", new double[]{panelWidth/3,panelHeight-2*panelHeight/7}, new int[]{panelWidth/3,panelHeight/16}), "Reset", (int)(60*(screenRatio)), "Centered");
     }
 
     // -------------

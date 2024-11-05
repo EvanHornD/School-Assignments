@@ -7,12 +7,12 @@ public class ShapeEntity extends RenderableEntity {
     public Color defaultOutline = new Color(42,42,42);
     public Color highlightedOutLine = new Color(52,52,52);
     private String shape;
-    private int[] coordinates;
+    private double[] coordinates;
     private int[] dimensions;
     private Color color;
     private Color outLineColor;
 
-    public ShapeEntity(String shape, int[] coordinates, int[] dimensions) {
+    public ShapeEntity(String shape, double[] coordinates, int[] dimensions) {
         this.shape = shape;
         this.coordinates = coordinates;
         this.dimensions = dimensions;
@@ -22,7 +22,7 @@ public class ShapeEntity extends RenderableEntity {
 
     public ShapeEntity(Color color) {
         this.shape = "Rectangle";
-        this.coordinates = new int[]{0,0};
+        this.coordinates = new double[]{0.,0.};
         this.dimensions = new int[]{20000,20000};
         this.color = color;
         this.outLineColor = color;
@@ -32,7 +32,7 @@ public class ShapeEntity extends RenderableEntity {
         return shape;
     }
 
-    public int[] getCoords() {
+    public double[] getCoords() {
         return coordinates;
     }
 
@@ -52,7 +52,7 @@ public class ShapeEntity extends RenderableEntity {
         this.outLineColor = newColor;
     }
 
-    public void moveShape(int x, int y){
+    public void moveShape(double x, double y){
         coordinates[0] += x;
         coordinates[1] += y;
     }
@@ -62,9 +62,9 @@ public class ShapeEntity extends RenderableEntity {
         g2d.setColor(color);
         switch (shape) {
             case "Rectangle":
-                g2d.fillRect(coordinates[0], coordinates[1], dimensions[0], dimensions[1]);
+                g2d.fillRect((int)coordinates[0], (int)coordinates[1], dimensions[0], dimensions[1]);
                 g2d.setColor(outLineColor);
-                g2d.drawRect(coordinates[0], coordinates[1], dimensions[0], dimensions[1]);
+                g2d.drawRect((int)coordinates[0], (int)coordinates[1], dimensions[0], dimensions[1]);
                 break;
             default:
                 break;
