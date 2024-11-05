@@ -26,6 +26,7 @@ public class MusicPanel extends JPanel {
     ShapeEntity backGround = new ShapeEntity(new Color(24,24,24));
     //#endregion
 
+    @SuppressWarnings("OverridableMethodCallInConstructor")
     MusicPanel(Dimension dimensions){
         this.setPreferredSize(dimensions);
         this.setFocusable(true);
@@ -68,14 +69,14 @@ public class MusicPanel extends JPanel {
     // Checks for collisions and then activates code based on the button pressed
     // -------------
     public static void runButtonCollisions(){
-        Map<String, Integer> keyActions = keyBinds.getKeyActions();
-        Map<String, Integer> keyFrames = keyBinds.getKeyFrames();
-
         // check collisions
         runHUDCollisions();
+        // if there wasnt a collision then exit the method
         if(collision==-1){
             return;
         }
+        Map<String, Integer> keyActions = keyBinds.getKeyActions();
+        Map<String, Integer> keyFrames = keyBinds.getKeyFrames();
 
         // check if the user first frame of a mouse input is happening
         if(keyActions.get("Input")!=1|| keyFrames.get("Input")!=1){
@@ -100,7 +101,7 @@ public class MusicPanel extends JPanel {
         }
 
         // check if the collision is with an inactive sorting button
-        if(sortingCategories[collision]=="Null"){
+        if("Null".equals(sortingCategories[collision])){
             return;
         }
 
@@ -151,43 +152,75 @@ public class MusicPanel extends JPanel {
     // -------------
 
     static void runHUDCollisions(){
+        // get the mouse coords
         int[] mouseCoords = keyBinds.mouseCoords;
+        
+        // check for collisions on every element
         for (int i = 0; i<header.length;i++) {
-            if(header[i].isWithinBounds(mouseCoords)){
-                if(collision != i){
-                    if(collision>-1&&collision<4){
-                        for (int j = 0; j < concerts.length; j++) {
-                            concerts[j].highlightEntity(collision, true);
-                        }
-                        header[collision].highlightEntity(true);
-                    }
-                    collision = i;
-                    if(collision<4){
-                        for (int j = 0; j < collisions[sortingType].length; j++) {
-                            if(collisions[sortingType][j]==collision){
-                                for (int k = 0; k < concerts.length; k++) {
-                                    concerts[k].highlightEntity(i, false);
-                                }
-                                header[i].highlightEntity(false);
-                            }
-                        }
-                    } else{
-                        header[collision].highlightEntity(false);
-                    }
-                }
+
+            // if the mouse collided with an element then exit the method
+            if(checkCollision(i, mouseCoords)){
                 return;
             }
         }
-        if(collision !=-1&&collision<4){
-            for (int i = 0; i < concerts.length; i++) {
-                concerts[i].highlightEntity(collision, true);
-            }
+        // check if the mouse's last collision was with nothing
+        if(collision == -1){
+            return;
+        }
+
+        // if the last collision was with one of the header UI elements unhighlight it
+        if(collision<4){
+            highlightCollumn(true);
+        }
+        // if the last collision was with one of the other buttons unhighlight it
+        if(collision>3){
             header[collision].highlightEntity(true);
         }
-        if(collision >3){
-            header[collision].highlightEntity(true);
-        }
+        // set the collision to be with nothing
         collision = -1;
+    }
+
+    public static boolean checkCollision(int i, int[] mouseCoords){
+        // check if the mouse is hovering the button
+        if(!header[i].isWithinBounds(mouseCoords)){
+            return false;
+        }
+
+        // check if the mouse is hovering the same button it was before
+        if(collision == i){
+            return true;
+        }
+
+        // unhighlight the previous collumn
+        if(collision>-1&&collision<4){
+            highlightCollumn(true);
+        }
+
+        // update the collision variable
+        collision = i;
+
+        // highlight the UI element if it isn't a header element
+        if(collision>4){
+            header[collision].highlightEntity(false);
+            return true;
+        }
+
+        // highlight the new collumn if it is a valid collumn for the current sorting type
+        for (int j = 0; j < collisions[sortingType].length; j++) {
+            if(collisions[sortingType][j]==collision){
+                highlightCollumn(false);
+            }
+        }
+        return true;
+    }
+
+    public static void highlightCollumn(boolean isHighlighted){
+        // highlight each of the concerts cooresponding element
+        for (Concert concert : concerts) {
+            concert.highlightEntity(collision, isHighlighted);
+        }
+        // highlight the collumn header
+        header[collision].highlightEntity(isHighlighted);
     }
 
     // -------------
@@ -196,12 +229,12 @@ public class MusicPanel extends JPanel {
 
     public void render(Graphics2D g2d) {
         backGround.render(g2d);
-        for (int i = 0; i < concerts.length;i++) {
-            concerts[i].move(.5);
-            concerts[i].render(g2d);
+        for (Concert concert : concerts) {
+            concert.move(1.);
+            concert.render(g2d);
         }
-        for (int i = 0; i < header.length; i++) {
-            header[i].render(g2d);
+        for (HUDElement element : header) {
+            element.render(g2d);
         }
     }
 

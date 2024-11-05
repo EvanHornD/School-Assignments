@@ -9,7 +9,7 @@ public class Lab7_SortingAlgorithms {
 	public static String sortingType = "Null";
 	public static int currentFrame = -1;
 	public static int sortingIteration = 0;
-	public static int animationSpeed = 30;
+	public static int animationSpeed = 15;
 
 	public static void setSortingType(String sortingtype, Concert[] concerts){
 		finishSortingAlgorithms(concerts);
